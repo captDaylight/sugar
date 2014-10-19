@@ -7,7 +7,9 @@
     "start": "node index.js"
   },
   "dependencies": {
+    "browserify": "^6.1.0",
     "express": "~4.9.x",
+    "gulp-browserify": "^0.5.0",
     "jade": "^1.7.0"
   },
   "engines": {
