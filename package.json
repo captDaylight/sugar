@@ -9,7 +9,6 @@
   "dependencies": {
     "browserify": "^6.1.0",
     "express": "~4.9.x",
-    "gulp-browserify": "^0.5.0",
     "jade": "^1.7.0"
   },
   "engines": {
@@ -26,6 +25,7 @@
   ],
   "license": "MIT",
   "devDependencies": {
+    "gulp-browserify": "^0.5.0",
     "gulp-concat": "^2.4.1",
     "gulp-jshint": "^1.8.5",
     "gulp-rename": "^1.2.0",
