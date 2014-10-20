@@ -9,6 +9,7 @@
   "dependencies": {
     "browserify": "^6.1.0",
     "express": "~4.9.x",
+    "gulp-sass": "^1.2.0",
     "jade": "^1.7.0",
     "serve-favicon": "^2.1.6",
     "three": "^0.66.4"
