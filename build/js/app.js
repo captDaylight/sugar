@@ -39268,6 +39268,7 @@ if (typeof exports !== 'undefined') {
 },{"buffer":1,"oMfpAn":4}],6:[function(require,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
 /*jslint browser: true*/
+
 'use strict';
 
 var THREE = require('three');
@@ -39276,7 +39277,7 @@ var container;
 var camera, scene, projector, renderer;
 
 var PI2 = Math.PI * 2;
-console.log('here');
+
 var programFill = function ( context ) {
 
 	context.beginPath();
@@ -39295,9 +39296,6 @@ var programStroke = function ( context ) {
 }
 
 var mouse = { x: 0, y: 0 }, INTERSECTED;
-
-init();
-animate();
 
 function init() {
 
@@ -39323,7 +39321,7 @@ function init() {
 	projector = new THREE.Projector();
 
 	renderer = new THREE.CanvasRenderer();
-	renderer.setClearColor( 0xf0f0f0 );
+	renderer.setClearColor( 0xffffff );
 	renderer.setSize( window.innerWidth, window.innerHeight );
 	container.appendChild( renderer.domElement );
 
@@ -39410,5 +39408,8 @@ function render() {
 	renderer.render( scene, camera );
 
 }
-}).call(this,require("oMfpAn"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_2cf24248.js","/")
+
+init();
+animate();
+}).call(this,require("oMfpAn"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_16bb2136.js","/")
 },{"buffer":1,"oMfpAn":4,"three":5}]},{},[6])

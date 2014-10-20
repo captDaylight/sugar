@@ -52,7 +52,7 @@ function init() {
 	projector = new THREE.Projector();
 
 	renderer = new THREE.CanvasRenderer();
-	renderer.setClearColor( 0xf0f0f0 );
+	renderer.setClearColor( 0xffffff );
 	renderer.setSize( window.innerWidth, window.innerHeight );
 	container.appendChild( renderer.domElement );
 
