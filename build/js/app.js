@@ -39272,60 +39272,81 @@ if (typeof exports !== 'undefined') {
 'use strict';
 
 var THREE = require('three');
+var test = require('./test');
 
-var container;
-var camera, scene, projector, renderer;
+var camera, scene, renderer;
 
-var PI2 = Math.PI * 2;
+var texture_placeholder,
+isUserInteracting = false,
+lon = 90, onMouseDownLon = 0,
+lat = 0, onMouseDownLat = 0,
+phi = 0, theta = 0,
+target = new THREE.Vector3();
 
-var programFill = function ( context ) {
+init();
+animate();
 
-	context.beginPath();
-	context.arc( 0, 0, 0.5, 0, PI2, true );
-	context.fill();
 
+function getSkyboxImageArray(location){
+	var path = 'images/skyboxes/' + location + '/';
+    var format = '.jpg';
+    var urls = [
+    	path + 'px' + format, path + 'nx' + format,
+    	path + 'py' + format, path + 'ny' + format,
+    	path + 'pz' + format, path + 'nz' + format
+	];
+	return urls;
 }
-
-var programStroke = function ( context ) {
-
-	context.lineWidth = 0.025;
-	context.beginPath();
-	context.arc( 0, 0, 0.5, 0, PI2, true );
-	context.stroke();
-
-}
-
-var mouse = { x: 0, y: 0 }, INTERSECTED;
 
 function init() {
 
-	container = document.createElement( 'div' );
-	document.body.appendChild( container );
+	var container, mesh;
 
-	camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 1, 10000 );
-	camera.position.set( 0, 300, 500 );
+	container = document.getElementById( 'container' );
+
+	camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 1100 );
 
 	scene = new THREE.Scene();
 
-	for ( var i = 0; i < 100; i ++ ) {
+	texture_placeholder = document.createElement( 'canvas' );
+	texture_placeholder.width = 128;
+	texture_placeholder.height = 128;
 
-		var particle = new THREE.Sprite( new THREE.SpriteCanvasMaterial( { color: Math.random() * 0x808080 + 0x808080, program: programStroke } ) );
-		particle.position.x = Math.random() * 800 - 400;
-		particle.position.y = Math.random() * 800 - 400;
-		particle.position.z = Math.random() * 800 - 400;
-		particle.scale.x = particle.scale.y = Math.random() * 20 + 20;
-		scene.add( particle );
+	var context = texture_placeholder.getContext( '2d' );
+	context.fillStyle = 'rgb( 200, 200, 200 )';
+	context.fillRect( 0, 0, texture_placeholder.width, texture_placeholder.height );
 
-	}
+    var hemiLight1 = new THREE.HemisphereLight( 0xffffff, 0xffffff, 1 );
 
-	projector = new THREE.Projector();
+    hemiLight1.color.setHSL( 0.6, 1, 0.6 );
+    hemiLight1.groundColor.setHSL( .01, 0, 0.2 );
+    hemiLight1.position.set( 0, 500, 0 );
+    scene.add( hemiLight1 );
 
-	renderer = new THREE.CanvasRenderer();
-	renderer.setClearColor( 0xffffff );
+	var textureCube = THREE.ImageUtils.loadTextureCube( getSkyboxImageArray('Cube'), new THREE.CubeRefractionMapping());
+
+    var shader = THREE.ShaderLib.cube;
+    shader.uniforms.tCube.value = textureCube;
+    var material = new THREE.ShaderMaterial( {
+
+        fragmentShader: shader.fragmentShader,
+        vertexShader: shader.vertexShader,
+        uniforms: shader.uniforms,
+        depthWrite: false,
+        side: THREE.BackSide
+
+    } );
+
+    mesh = new THREE.Mesh( new THREE.BoxGeometry( 100, 100, 100 ), material );
+console.log(mesh);
+    scene.add( mesh );
+
+
+    renderer = new THREE.WebGLRenderer({ antialiasing: true });
 	renderer.setSize( window.innerWidth, window.innerHeight );
+    renderer.autoClear = false;
+	
 	container.appendChild( renderer.domElement );
-
-	document.addEventListener( 'mousemove', onDocumentMouseMove, false );
 
 	//
 
@@ -39342,74 +39363,55 @@ function onWindowResize() {
 
 }
 
-function onDocumentMouseMove( event ) {
+function loadTexture( path ) {
 
-	event.preventDefault();
+	var texture = new THREE.Texture( texture_placeholder );
+	var material = new THREE.MeshBasicMaterial( { map: texture, overdraw: 0.5 } );
 
-	mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
-	mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+	var image = new Image();
+	image.onload = function () {
+
+		texture.image = this;
+		texture.needsUpdate = true;
+
+	};
+	image.src = path;
+
+	return material;
 
 }
-
-//
 
 function animate() {
 
 	requestAnimationFrame( animate );
-
-	render();
+	update();
 
 }
 
-var radius = 600;
-var theta = 0;
+function update() {
 
-function render() {
+	if ( isUserInteracting === false ) {
 
-	// rotate camera
-
-	theta += 0.1;
-
-	camera.position.x = radius * Math.sin( THREE.Math.degToRad( theta ) );
-	camera.position.y = radius * Math.sin( THREE.Math.degToRad( theta ) );
-	camera.position.z = radius * Math.cos( THREE.Math.degToRad( theta ) );
-	camera.lookAt( scene.position );
-
-	// find intersections
-
-	camera.updateMatrixWorld();
-
-	var vector = new THREE.Vector3( mouse.x, mouse.y, 0.5 );
-	projector.unprojectVector( vector, camera );
-
-	var raycaster = new THREE.Raycaster( camera.position, vector.sub( camera.position ).normalize() );
-
-	var intersects = raycaster.intersectObjects( scene.children );
-
-	if ( intersects.length > 0 ) {
-
-		if ( INTERSECTED !== intersects[ 0 ].object ) {
-
-			if ( INTERSECTED ) INTERSECTED.material.program = programStroke;
-
-			INTERSECTED = intersects[ 0 ].object;
-			INTERSECTED.material.program = programFill;
-
-		}
-
-	} else {
-
-		if ( INTERSECTED ) INTERSECTED.material.program = programStroke;
-
-		INTERSECTED = null;
+		lon += 0.1;
 
 	}
+
+	lat = Math.max( - 85, Math.min( 85, lat ) );
+	phi = THREE.Math.degToRad( 90 - lat );
+	theta = THREE.Math.degToRad( lon );
+
+	target.x = 500 * Math.sin( phi ) * Math.cos( theta );
+	target.y = 500 * Math.cos( phi );
+	target.z = 500 * Math.sin( phi ) * Math.sin( theta );
+
+	camera.lookAt( target );
 
 	renderer.render( scene, camera );
 
 }
-
-init();
-animate();
-}).call(this,require("oMfpAn"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_831c0e83.js","/")
-},{"buffer":1,"oMfpAn":4,"three":5}]},{},[6])
+}).call(this,require("oMfpAn"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_7aaaa3ec.js","/")
+},{"./test":7,"buffer":1,"oMfpAn":4,"three":5}],7:[function(require,module,exports){
+(function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
+console.log('ping');
+}).call(this,require("oMfpAn"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/test.js","/")
+},{"buffer":1,"oMfpAn":4}]},{},[6])
