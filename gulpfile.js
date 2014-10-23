@@ -2,6 +2,7 @@ var gulp = require('gulp');
 
 var jshint = require('gulp-jshint');
 var browserify = require('gulp-browserify');
+var uglify = require('gulp-uglify');
 // var sass = require('gulp-sass');
 
 gulp.task('lint', function () {
@@ -13,8 +14,15 @@ gulp.task('lint', function () {
 gulp.task('browserify', function () {
 	return gulp.src('public/js/app.js')
 		.pipe(browserify({
-			insertGlobals: true
+			insertGlobals: true,
 		}))
+		.pipe(gulp.dest('./build/js'));
+});
+
+
+gulp.task('compress', function () {
+	return gulp.src('./build/js/*.js')
+		.pipe(uglify())
 		.pipe(gulp.dest('./build/js'));
 });
 
@@ -29,3 +37,5 @@ gulp.task('default', ['lint', 'browserify'], function () {
 		gulp.run('browserify');
 	});
 });
+
+gulp.task('build', ['lint', 'browserify', 'compress']);

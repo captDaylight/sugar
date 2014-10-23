@@ -6,7 +6,8 @@ var THREE = require('three');
 var camera = require('./camera');
 var renderer = require('./renderer');
 var animate = require('./animate');
-
+var terrain = require('./terrain');
+console.log(terrain);
 var scene;
 
 var texture_placeholder,
@@ -28,24 +29,11 @@ var context = texture_placeholder.getContext( '2d' );
 context.fillStyle = 'rgb( 200, 200, 200 )';
 context.fillRect( 0, 0, texture_placeholder.width, texture_placeholder.height );
 
-var hemiLight1 = new THREE.HemisphereLight( 0xffffff, 0xffffff, 1 );
-
-hemiLight1.color.setHSL( 0.6, 1, 0.6 );
-hemiLight1.groundColor.setHSL( .01, 0, 0.2 );
-hemiLight1.position.set( 0, 500, 0 );
-scene.add( hemiLight1 );
-
 
 scene.add(require('./skybox'));
 
 
 container.appendChild( renderer.domElement );
-
-//
-
-
-window.addEventListener( 'resize', onWindowResize, false );
-
 
 
 function onWindowResize() {
@@ -57,5 +45,6 @@ function onWindowResize() {
 
 }
 
+window.addEventListener( 'resize', onWindowResize, false );
 
 animate(camera, renderer, scene);
