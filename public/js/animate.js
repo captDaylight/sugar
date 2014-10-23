@@ -13,14 +13,13 @@ var target = new THREE.Vector3(),
 
 function animate(cam, rend, sc) {
 
-	if (arguments.length === 3) {
+	if (arguments.length === 3) { // setting these variables on the initial animate call
 		camera = cam;
 		renderer = rend;
 		scene = sc
 	}
 
 	requestAnimationFrame( animate );
-
 	update();
 
 }

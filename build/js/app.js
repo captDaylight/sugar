@@ -39282,14 +39282,13 @@ var target = new THREE.Vector3(),
 
 function animate(cam, rend, sc) {
 
-	if (arguments.length === 3) {
+	if (arguments.length === 3) { // setting these variables on the initial animate call
 		camera = cam;
 		renderer = rend;
 		scene = sc
 	}
 
 	requestAnimationFrame( animate );
-
 	update();
 
 }
@@ -39341,8 +39340,6 @@ var scene;
 var texture_placeholder,
 	isUserInteracting = false;
 
-init();
-
 function getSkyboxImageArray(location){
 	var path = 'images/skyboxes/' + location + '/';
     var format = '.jpg';
@@ -39354,60 +39351,60 @@ function getSkyboxImageArray(location){
 	return urls;
 }
 
-function init() {
-
-	var container, mesh;
-
-	container = document.getElementById( 'container' );
-
-	camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 1100 );
-
-	scene = new THREE.Scene();
-
-	texture_placeholder = document.createElement( 'canvas' );
-	texture_placeholder.width = 128;
-	texture_placeholder.height = 128;
-
-	var context = texture_placeholder.getContext( '2d' );
-	context.fillStyle = 'rgb( 200, 200, 200 )';
-	context.fillRect( 0, 0, texture_placeholder.width, texture_placeholder.height );
-
-    var hemiLight1 = new THREE.HemisphereLight( 0xffffff, 0xffffff, 1 );
-
-    hemiLight1.color.setHSL( 0.6, 1, 0.6 );
-    hemiLight1.groundColor.setHSL( .01, 0, 0.2 );
-    hemiLight1.position.set( 0, 500, 0 );
-    scene.add( hemiLight1 );
-
-	var textureCube = THREE.ImageUtils.loadTextureCube( getSkyboxImageArray('Cube'), new THREE.CubeRefractionMapping());
-
-    var shader = THREE.ShaderLib.cube;
-    shader.uniforms.tCube.value = textureCube;
-    var material = new THREE.ShaderMaterial( {
-
-        fragmentShader: shader.fragmentShader,
-        vertexShader: shader.vertexShader,
-        uniforms: shader.uniforms,
-        depthWrite: false,
-        side: THREE.BackSide
-
-    } );
-
-    mesh = new THREE.Mesh( new THREE.BoxGeometry( 100, 100, 100 ), material );
-
-    scene.add( mesh );
 
 
+var container, mesh;
 
-	
-	container.appendChild( renderer.domElement );
+container = document.getElementById( 'container' );
 
-	//
+camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 1100 );
+
+scene = new THREE.Scene();
+
+texture_placeholder = document.createElement( 'canvas' );
+texture_placeholder.width = 128;
+texture_placeholder.height = 128;
+
+var context = texture_placeholder.getContext( '2d' );
+context.fillStyle = 'rgb( 200, 200, 200 )';
+context.fillRect( 0, 0, texture_placeholder.width, texture_placeholder.height );
+
+var hemiLight1 = new THREE.HemisphereLight( 0xffffff, 0xffffff, 1 );
+
+hemiLight1.color.setHSL( 0.6, 1, 0.6 );
+hemiLight1.groundColor.setHSL( .01, 0, 0.2 );
+hemiLight1.position.set( 0, 500, 0 );
+scene.add( hemiLight1 );
+
+var textureCube = THREE.ImageUtils.loadTextureCube( getSkyboxImageArray('Cube'), new THREE.CubeRefractionMapping());
+
+var shader = THREE.ShaderLib.cube;
+shader.uniforms.tCube.value = textureCube;
+var material = new THREE.ShaderMaterial( {
+
+    fragmentShader: shader.fragmentShader,
+    vertexShader: shader.vertexShader,
+    uniforms: shader.uniforms,
+    depthWrite: false,
+    side: THREE.BackSide
+
+} );
+
+mesh = new THREE.Mesh( new THREE.BoxGeometry( 100, 100, 100 ), material );
+
+scene.add( mesh );
 
 
-	window.addEventListener( 'resize', onWindowResize, false );
 
-}
+
+container.appendChild( renderer.domElement );
+
+//
+
+
+window.addEventListener( 'resize', onWindowResize, false );
+
+
 
 function onWindowResize() {
 
@@ -39421,7 +39418,7 @@ function onWindowResize() {
 
 animate(camera, renderer, scene);
 
-}).call(this,require("oMfpAn"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_6fddaf11.js","/")
+}).call(this,require("oMfpAn"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_51584c8f.js","/")
 },{"./animate":6,"./camera":7,"./renderer":9,"buffer":1,"oMfpAn":4,"three":5}],9:[function(require,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
 "use strict";
