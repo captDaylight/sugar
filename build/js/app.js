@@ -39340,19 +39340,6 @@ var scene;
 var texture_placeholder,
 	isUserInteracting = false;
 
-function getSkyboxImageArray(location){
-	var path = 'images/skyboxes/' + location + '/';
-    var format = '.jpg';
-    var urls = [
-    	path + 'px' + format, path + 'nx' + format,
-    	path + 'py' + format, path + 'ny' + format,
-    	path + 'pz' + format, path + 'nz' + format
-	];
-	return urls;
-}
-
-
-
 var container, mesh;
 
 container = document.getElementById( 'container' );
@@ -39376,25 +39363,8 @@ hemiLight1.groundColor.setHSL( .01, 0, 0.2 );
 hemiLight1.position.set( 0, 500, 0 );
 scene.add( hemiLight1 );
 
-var textureCube = THREE.ImageUtils.loadTextureCube( getSkyboxImageArray('Cube'), new THREE.CubeRefractionMapping());
 
-var shader = THREE.ShaderLib.cube;
-shader.uniforms.tCube.value = textureCube;
-var material = new THREE.ShaderMaterial( {
-
-    fragmentShader: shader.fragmentShader,
-    vertexShader: shader.vertexShader,
-    uniforms: shader.uniforms,
-    depthWrite: false,
-    side: THREE.BackSide
-
-} );
-
-mesh = new THREE.Mesh( new THREE.BoxGeometry( 100, 100, 100 ), material );
-
-scene.add( mesh );
-
-
+scene.add(require('./skybox'));
 
 
 container.appendChild( renderer.domElement );
@@ -39418,8 +39388,8 @@ function onWindowResize() {
 
 animate(camera, renderer, scene);
 
-}).call(this,require("oMfpAn"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_51584c8f.js","/")
-},{"./animate":6,"./camera":7,"./renderer":9,"buffer":1,"oMfpAn":4,"three":5}],9:[function(require,module,exports){
+}).call(this,require("oMfpAn"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_5b13caec.js","/")
+},{"./animate":6,"./camera":7,"./renderer":9,"./skybox":10,"buffer":1,"oMfpAn":4,"three":5}],9:[function(require,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
 "use strict";
 
@@ -39433,4 +39403,44 @@ renderer.autoClear = false;
 
 module.exports = renderer;
 }).call(this,require("oMfpAn"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/renderer.js","/")
+},{"buffer":1,"oMfpAn":4,"three":5}],10:[function(require,module,exports){
+(function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
+"use strict";
+
+var THREE = require('three');
+
+var scene, mesh, shader, material, textureCube;
+
+function getSkyboxImageArray(location){
+	var path = 'images/skyboxes/' + location + '/';
+    var format = '.jpg';
+    var urls = [
+    	path + 'px' + format, path + 'nx' + format,
+    	path + 'py' + format, path + 'ny' + format,
+    	path + 'pz' + format, path + 'nz' + format
+	];
+	return urls;
+}
+
+textureCube = THREE.ImageUtils.loadTextureCube( getSkyboxImageArray('Cube'), new THREE.CubeRefractionMapping());
+
+shader = THREE.ShaderLib.cube;
+shader.uniforms.tCube.value = textureCube;
+
+material = new THREE.ShaderMaterial( {
+
+    fragmentShader: shader.fragmentShader,
+    vertexShader: shader.vertexShader,
+    uniforms: shader.uniforms,
+    depthWrite: false,
+    side: THREE.BackSide
+
+} );
+
+mesh = new THREE.Mesh( new THREE.BoxGeometry( 100, 100, 100 ), material );
+
+
+
+module.exports = mesh;
+}).call(this,require("oMfpAn"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/skybox.js","/")
 },{"buffer":1,"oMfpAn":4,"three":5}]},{},[8])

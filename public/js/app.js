@@ -12,19 +12,6 @@ var scene;
 var texture_placeholder,
 	isUserInteracting = false;
 
-function getSkyboxImageArray(location){
-	var path = 'images/skyboxes/' + location + '/';
-    var format = '.jpg';
-    var urls = [
-    	path + 'px' + format, path + 'nx' + format,
-    	path + 'py' + format, path + 'ny' + format,
-    	path + 'pz' + format, path + 'nz' + format
-	];
-	return urls;
-}
-
-
-
 var container, mesh;
 
 container = document.getElementById( 'container' );
@@ -48,25 +35,8 @@ hemiLight1.groundColor.setHSL( .01, 0, 0.2 );
 hemiLight1.position.set( 0, 500, 0 );
 scene.add( hemiLight1 );
 
-var textureCube = THREE.ImageUtils.loadTextureCube( getSkyboxImageArray('Cube'), new THREE.CubeRefractionMapping());
 
-var shader = THREE.ShaderLib.cube;
-shader.uniforms.tCube.value = textureCube;
-var material = new THREE.ShaderMaterial( {
-
-    fragmentShader: shader.fragmentShader,
-    vertexShader: shader.vertexShader,
-    uniforms: shader.uniforms,
-    depthWrite: false,
-    side: THREE.BackSide
-
-} );
-
-mesh = new THREE.Mesh( new THREE.BoxGeometry( 100, 100, 100 ), material );
-
-scene.add( mesh );
-
-
+scene.add(require('./skybox'));
 
 
 container.appendChild( renderer.domElement );
