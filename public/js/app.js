@@ -3,20 +3,16 @@
 'use strict';
 
 var THREE = require('three');
-var test = require('./test');
+var camera = require('./camera');
+var renderer = require('./renderer');
+var animate = require('./animate');
 
-var camera, scene, renderer;
+var scene;
 
 var texture_placeholder,
-isUserInteracting = false,
-lon = 90, onMouseDownLon = 0,
-lat = 0, onMouseDownLat = 0,
-phi = 0, theta = 0,
-target = new THREE.Vector3();
+	isUserInteracting = false;
 
 init();
-animate();
-
 
 function getSkyboxImageArray(location){
 	var path = 'images/skyboxes/' + location + '/';
@@ -69,17 +65,16 @@ function init() {
     } );
 
     mesh = new THREE.Mesh( new THREE.BoxGeometry( 100, 100, 100 ), material );
-console.log(mesh);
+
     scene.add( mesh );
 
 
-    renderer = new THREE.WebGLRenderer({ antialiasing: true });
-	renderer.setSize( window.innerWidth, window.innerHeight );
-    renderer.autoClear = false;
+
 	
 	container.appendChild( renderer.domElement );
 
 	//
+
 
 	window.addEventListener( 'resize', onWindowResize, false );
 
@@ -94,49 +89,5 @@ function onWindowResize() {
 
 }
 
-function loadTexture( path ) {
 
-	var texture = new THREE.Texture( texture_placeholder );
-	var material = new THREE.MeshBasicMaterial( { map: texture, overdraw: 0.5 } );
-
-	var image = new Image();
-	image.onload = function () {
-
-		texture.image = this;
-		texture.needsUpdate = true;
-
-	};
-	image.src = path;
-
-	return material;
-
-}
-
-function animate() {
-
-	requestAnimationFrame( animate );
-	update();
-
-}
-
-function update() {
-
-	if ( isUserInteracting === false ) {
-
-		lon += 0.1;
-
-	}
-
-	lat = Math.max( - 85, Math.min( 85, lat ) );
-	phi = THREE.Math.degToRad( 90 - lat );
-	theta = THREE.Math.degToRad( lon );
-
-	target.x = 500 * Math.sin( phi ) * Math.cos( theta );
-	target.y = 500 * Math.cos( phi );
-	target.z = 500 * Math.sin( phi ) * Math.sin( theta );
-
-	camera.lookAt( target );
-
-	renderer.render( scene, camera );
-
-}
+animate(camera, renderer, scene);

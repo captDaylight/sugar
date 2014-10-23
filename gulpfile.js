@@ -24,4 +24,8 @@ gulp.task('sass', function () {
 		.pipe(gulp.dest('./build/css'))	
 })
 
-gulp.task('default', ['lint', 'browserify', 'sass']);
+gulp.task('default', ['lint', 'browserify', 'sass'], function () {
+	gulp.watch('public/js/*.js', function () {
+		gulp.run('browserify');
+	});
+});

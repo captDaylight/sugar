@@ -39267,25 +39267,81 @@ if (typeof exports !== 'undefined') {
 }).call(this,require("oMfpAn"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/../../node_modules/three/three.js","/../../node_modules/three")
 },{"buffer":1,"oMfpAn":4}],6:[function(require,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
+"use strict";
+
+var THREE = require('three');
+
+var target = new THREE.Vector3(),
+	lon = 90,
+	lat = 0,
+	phi = 0, 
+	theta = 0,
+	camera,
+	renderer,
+	scene;
+
+function animate(cam, rend, sc) {
+
+	if (arguments.length === 3) {
+		camera = cam;
+		renderer = rend;
+		scene = sc
+	}
+
+	requestAnimationFrame( animate );
+
+	update();
+
+}
+
+function update() {
+	lon += 0.1;
+
+
+	lat = Math.max( - 85, Math.min( 85, lat ) );
+	phi = THREE.Math.degToRad( 90 - lat );
+	theta = THREE.Math.degToRad( lon );
+
+	target.x = 500 * Math.sin( phi ) * Math.cos( theta );
+	target.y = 500 * Math.cos( phi );
+	target.z = 500 * Math.sin( phi ) * Math.sin( theta );
+
+	camera.lookAt( target );
+
+	renderer.render( scene, camera );
+}
+
+module.exports = animate;
+}).call(this,require("oMfpAn"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/animate.js","/")
+},{"buffer":1,"oMfpAn":4,"three":5}],7:[function(require,module,exports){
+(function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
+"use strict";
+
+var THREE = require('three');
+
+var camera;
+
+camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 1100 );
+
+module.exports = camera;
+}).call(this,require("oMfpAn"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/camera.js","/")
+},{"buffer":1,"oMfpAn":4,"three":5}],8:[function(require,module,exports){
+(function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
 /*jslint browser: true*/
 
 'use strict';
 
 var THREE = require('three');
-var test = require('./test');
+var camera = require('./camera');
+var renderer = require('./renderer');
+var animate = require('./animate');
 
-var camera, scene, renderer;
+var scene;
 
 var texture_placeholder,
-isUserInteracting = false,
-lon = 90, onMouseDownLon = 0,
-lat = 0, onMouseDownLat = 0,
-phi = 0, theta = 0,
-target = new THREE.Vector3();
+	isUserInteracting = false;
 
 init();
-animate();
-
 
 function getSkyboxImageArray(location){
 	var path = 'images/skyboxes/' + location + '/';
@@ -39338,17 +39394,16 @@ function init() {
     } );
 
     mesh = new THREE.Mesh( new THREE.BoxGeometry( 100, 100, 100 ), material );
-console.log(mesh);
+
     scene.add( mesh );
 
 
-    renderer = new THREE.WebGLRenderer({ antialiasing: true });
-	renderer.setSize( window.innerWidth, window.innerHeight );
-    renderer.autoClear = false;
+
 	
 	container.appendChild( renderer.domElement );
 
 	//
+
 
 	window.addEventListener( 'resize', onWindowResize, false );
 
@@ -39363,55 +39418,22 @@ function onWindowResize() {
 
 }
 
-function loadTexture( path ) {
 
-	var texture = new THREE.Texture( texture_placeholder );
-	var material = new THREE.MeshBasicMaterial( { map: texture, overdraw: 0.5 } );
+animate(camera, renderer, scene);
 
-	var image = new Image();
-	image.onload = function () {
-
-		texture.image = this;
-		texture.needsUpdate = true;
-
-	};
-	image.src = path;
-
-	return material;
-
-}
-
-function animate() {
-
-	requestAnimationFrame( animate );
-	update();
-
-}
-
-function update() {
-
-	if ( isUserInteracting === false ) {
-
-		lon += 0.1;
-
-	}
-
-	lat = Math.max( - 85, Math.min( 85, lat ) );
-	phi = THREE.Math.degToRad( 90 - lat );
-	theta = THREE.Math.degToRad( lon );
-
-	target.x = 500 * Math.sin( phi ) * Math.cos( theta );
-	target.y = 500 * Math.cos( phi );
-	target.z = 500 * Math.sin( phi ) * Math.sin( theta );
-
-	camera.lookAt( target );
-
-	renderer.render( scene, camera );
-
-}
-}).call(this,require("oMfpAn"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_7aaaa3ec.js","/")
-},{"./test":7,"buffer":1,"oMfpAn":4,"three":5}],7:[function(require,module,exports){
+}).call(this,require("oMfpAn"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_6fddaf11.js","/")
+},{"./animate":6,"./camera":7,"./renderer":9,"buffer":1,"oMfpAn":4,"three":5}],9:[function(require,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
-console.log('ping');
-}).call(this,require("oMfpAn"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/test.js","/")
-},{"buffer":1,"oMfpAn":4}]},{},[6])
+"use strict";
+
+var THREE = require('three');
+
+var renderer;
+
+renderer = new THREE.WebGLRenderer({ antialiasing: true });
+renderer.setSize( window.innerWidth, window.innerHeight );
+renderer.autoClear = false;
+
+module.exports = renderer;
+}).call(this,require("oMfpAn"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/renderer.js","/")
+},{"buffer":1,"oMfpAn":4,"three":5}]},{},[8])
