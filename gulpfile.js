@@ -1,8 +1,10 @@
 var gulp = require('gulp');
 
 var jshint = require('gulp-jshint');
-var browserify = require('gulp-browserify');
+var browserify = require('browserify');
 var uglify = require('gulp-uglify');
+var source = require('vinyl-source-stream');
+var workerify = require('workerify');
 // var sass = require('gulp-sass');
 
 gulp.task('lint', function () {
@@ -12,10 +14,10 @@ gulp.task('lint', function () {
 });
 
 gulp.task('browserify', function () {
-	return gulp.src('public/js/app.js')
-		.pipe(browserify({
-			insertGlobals: true,
-		}))
+	return browserify('./public/js/app.js')
+		.transform(workerify)
+		.bundle()
+		.pipe(source('app.js'))
 		.pipe(gulp.dest('./build/js'));
 });
 
