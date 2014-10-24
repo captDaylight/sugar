@@ -39320,11 +39320,27 @@ var THREE = require('three');
 
 var camera;
 
-camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 1100 );
-
+camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 11000 );
+camera.position.z = -10;
+camera.position.y = -10;
+camera.position.x = -10;
 module.exports = camera;
 }).call(this,require("oMfpAn"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/camera.js","/")
 },{"buffer":1,"oMfpAn":4,"three":5}],8:[function(require,module,exports){
+(function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
+module.exports = function (camera, renderer) {
+
+	return function onWindowResize() {
+		console.log('window resizing');
+		camera.aspect = window.innerWidth / window.innerHeight;
+		camera.updateProjectionMatrix();
+
+		renderer.setSize( window.innerWidth, window.innerHeight );
+
+	};
+}
+}).call(this,require("oMfpAn"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/events/onWindowResize.js","/events")
+},{"buffer":1,"oMfpAn":4}],9:[function(require,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
 /*jslint browser: true*/
 
@@ -39334,51 +39350,52 @@ var THREE = require('three');
 var camera = require('./camera');
 var renderer = require('./renderer');
 var animate = require('./animate');
-var terrain = require('./terrain');
-console.log(terrain);
-var scene;
+var onWindowResize = require('./events/onWindowResize');
 
-var texture_placeholder,
-	isUserInteracting = false;
-
-var container, mesh;
+var scene, 
+	container, 
+	mesh;
 
 container = document.getElementById( 'container' );
 
-camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 1100 );
-
 scene = new THREE.Scene();
-
-texture_placeholder = document.createElement( 'canvas' );
-texture_placeholder.width = 128;
-texture_placeholder.height = 128;
-
-var context = texture_placeholder.getContext( '2d' );
-context.fillStyle = 'rgb( 200, 200, 200 )';
-context.fillRect( 0, 0, texture_placeholder.width, texture_placeholder.height );
-
 
 scene.add(require('./skybox'));
 
-
 container.appendChild( renderer.domElement );
 
+var hemiLight1 = new THREE.HemisphereLight( 0xffffff, 0xffffff, 1 );
 
-function onWindowResize() {
+hemiLight1.color.setHSL( 0.6, 1, 0.6 );
+hemiLight1.groundColor.setHSL( .01, 0, 0.2 );
+hemiLight1.position.set( 0, 500, 0 );
+scene.add( hemiLight1 );
 
-	camera.aspect = window.innerWidth / window.innerHeight;
-	camera.updateProjectionMatrix();
+var loader = new THREE.JSONLoader(); // init the loader util
+var newObject;
 
-	renderer.setSize( window.innerWidth, window.innerHeight );
+// init loading
+loader.load('models/moto.json', function (geometry) {
+    var material = new THREE.MeshPhongMaterial( { ambient: 0x030303, color: 0xdddddd, specular: 0xff0000, shininess: 50, shading: THREE.FlatShading } )
+    var mesh = new THREE.Mesh(
+        geometry,
+        material
+    );
+    newObject = mesh;
+    newObject.scale.x = newObject.scale.y = newObject.scale.z = .001;
+    newObject.position.y = -10;
+    newObject.position.x = -10;
+    newObject.position.z = -7;
+    newObject.rotation.x = 2;
+    newObject.rotation.y = 2;
+    scene.add(newObject);
+});
 
-}
-
-window.addEventListener( 'resize', onWindowResize, false );
+window.addEventListener( 'resize', onWindowResize(camera, renderer), false );
 
 animate(camera, renderer, scene);
-
-}).call(this,require("oMfpAn"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_b6b5aee7.js","/")
-},{"./animate":6,"./camera":7,"./renderer":9,"./skybox":10,"./terrain":11,"buffer":1,"oMfpAn":4,"three":5}],9:[function(require,module,exports){
+}).call(this,require("oMfpAn"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_ff2492e8.js","/")
+},{"./animate":6,"./camera":7,"./events/onWindowResize":8,"./renderer":10,"./skybox":11,"buffer":1,"oMfpAn":4,"three":5}],10:[function(require,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
 "use strict";
 
@@ -39392,7 +39409,7 @@ renderer.autoClear = false;
 
 module.exports = renderer;
 }).call(this,require("oMfpAn"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/renderer.js","/")
-},{"buffer":1,"oMfpAn":4,"three":5}],10:[function(require,module,exports){
+},{"buffer":1,"oMfpAn":4,"three":5}],11:[function(require,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
 "use strict";
 
@@ -39426,384 +39443,10 @@ material = new THREE.ShaderMaterial( {
 
 } );
 
-mesh = new THREE.Mesh( new THREE.BoxGeometry( 100, 100, 100 ), material );
+mesh = new THREE.Mesh( new THREE.BoxGeometry( 200, 200, 200 ), material );
 
 
 
 module.exports = mesh;
 }).call(this,require("oMfpAn"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/skybox.js","/")
-},{"buffer":1,"oMfpAn":4,"three":5}],11:[function(require,module,exports){
-(function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
-var THREE = require('three');
-var THREEx	= THREEx	|| {}
-
-THREEx.Terrain	= {}
-
-/**
- * allocate the heightmap
- * 
- * @param  {Number} width the width of the heightmap
- * @param  {Number} depth the depth of the heightmap
- * @return {Array} the allocated heightmap
- */
-THREEx.Terrain.allocateHeightMap	= function(width, depth){
-	var ArrayClass	= THREEx.Terrain.allocateHeightMap.ArrayClass
-	var heightMap	= new Array(width)
-	for(var x = 0; x < width; x++){
-		heightMap[x]	= new ArrayClass(depth)		
-	}
-	return heightMap
-}
-THREEx.Terrain.allocateHeightMap.ArrayClass	= window.Float64Array	|| window.Array
-
-/**
- * generate a heightmap using a simplex noise
- * @todo make it it tunable... how ?
- * 
- * @param  {Array} heightMap the heightmap to store the data
- */
-THREEx.Terrain.simplexHeightMap	= function(heightMap){
-	// get heightMap dimensions
-	var width	= heightMap.length
-	var depth	= heightMap[0].length
-
-	var simplex	= new SimplexNoise()
-	for(var x = 0; x < width; x++){
-		for(var z = 0; z < depth; z++){
-			// compute the height
-			var height	= 0
-			var level	= 8
-			height	+= (simplex.noise(x/level, z/level)/2 + 0.5) * 0.125
-			level	*= 3
-			height	+= (simplex.noise(x/level, z/level)/2 + 0.5) * 0.25
-			level	*= 2
-			height	+= (simplex.noise(x/level, z/level)/2 + 0.5) * 0.5
-			level	*= 2
-			height	+= (simplex.noise(x/level, z/level)/2 + 0.5) * 1
-			height	/= 1+0.5+0.25+0.125
-			// put the height in the heightMap
-			heightMap[x][z]	= height
-		}
-	}
-}
-
-/**
- * build a canvas 2d from a heightmap
- * @param  {Array} heightMap heightmap
- * @param  {HTMLCanvasElement|undefined} canvas  the destination canvas. 
- * @return {HTMLCanvasElement}           the canvas
- */
-THREEx.Terrain.heightMapToCanvas	= function(heightMap, canvas){
-	// get heightMap dimensions
-	var width	= heightMap.length
-	var depth	= heightMap[0].length
-	// create canvas
-	canvas		= canvas	|| document.createElement('canvas')
-	canvas.width	= width
-	canvas.height	= depth
-	var context	= canvas.getContext("2d");
-	// loop on each pixel of the canvas
-	for(var x = 0; x < canvas.width; x++){
-		for(var y = 0; y < canvas.height; y++){
-			var height	= heightMap[x][y]
-			var color	= THREEx.Terrain.heightToColor(height)
-			context.fillStyle	= color.getStyle()
-			context.fillRect(x, y, 1, 1)
-		}
-	}
-	// return the just built canvas
-	return canvas
-}
-
-/**
- * Build a THREE.PlaneGeometry based on a heightMap
- * 
- * @param  {Array} heightMap the heightmap
- * @return {THREE.Geometry}  the just built geometry
- */
-THREEx.Terrain.heightMapToPlaneGeometry	= function(heightMap){
-	// get heightMap dimensions
-	var width	= heightMap.length
-	var depth	= heightMap[0].length
-	// build geometry
-	var geometry	= new THREEx.Terrain.PlaneGeometry( 1, 1, width-1, depth-1)
-	// loop on each vertex of the geometry
-	for(var x = 0; x < width; x++){
-		for(var z = 0; z < depth; z++){
-			// get the height from heightMap
-			var height	= heightMap[x][z]
-			// set the vertex.z to a normalized height
-			var vertex	= geometry.vertices[x + z * width]			
-			vertex.z	= (height-0.5)*2
-		}
-	}
-	// notify the geometry need to update vertices
-	geometry.verticesNeedUpdate	= true
-	// notify the geometry need to update normals
-	geometry.computeFaceNormals()
-	geometry.computeVertexNormals()
-	geometry.normalsNeedUpdate	= true
-	// return the just built geometry
-	return geometry
-}
-
-THREEx.Terrain.heightMapToHeight	= function(heightMap, x, z){
-	// get heightMap dimensions
-	var width	= heightMap.length
-	var depth	= heightMap[0].length
-	// sanity check - boundaries
-	console.assert( x >= 0 && x < width )
-	console.assert( z >= 0 && z < depth )
-
-	// get the delta within a single segment
-	var deltaX	= x - Math.floor(x)
-	var deltaZ	= z - Math.floor(z)
-
-	// get the height of each corner of the segment
-	var heightNW	= heightMap[Math.floor(x)][Math.floor(z)]
-	var heightNE	= heightMap[Math.ceil (x)][Math.floor(z)]
-	var heightSW	= heightMap[Math.floor(x)][Math.ceil (z)]
-	var heightSE	= heightMap[Math.ceil (x)][Math.ceil (z)]
-
-	// test in which triangle the point is. north-east or south-west
-	var inTriangleNE= deltaX > deltaZ ? true : false
-	if( inTriangleNE ){
-		var height	= heightNE 
-			+ (heightNW - heightNE) * (1 - deltaX)
-			+ (heightSE - heightNE) * deltaZ
-	}else{
-		var height	= heightSW
-			+ (heightSE - heightSW) * deltaX
-			+ (heightNW - heightSW) * (1-deltaZ)
-	}
-	// return the height
-	return height
-}
-
-THREEx.Terrain.planeToHeightMapCoords	= function(heightMap, planeMesh, x, z){
-
-	// TODO assert no rotation in planeMesh
-	// - how can i check that ? with euler ?
-
-	var position	= new THREE.Vector3(x, 0, z)
-
-	// set position relative to planeMesh position
-	position.sub(planeMesh.position)
-
-	// heightMap origin is at its top-left, while planeMesh origin is at its center
-	position.x	+= planeMesh.geometry.width /2 * planeMesh.scale.x
-	position.z	+= planeMesh.geometry.height/2 * planeMesh.scale.y
-
-	// normalize it from [0,1] for the heightmap
-	position.x	/= planeMesh.geometry.width * planeMesh.scale.x
-	position.z	/= planeMesh.geometry.height* planeMesh.scale.y
-
-	// get heightMap dimensions
-	var width	= heightMap.length
-	var depth	= heightMap[0].length
-	
-	// convert it in heightMap coordinate
-	position.x	*= (width-1)
-	position.z	*= (depth-1)
-
-	position.y	= THREEx.Terrain.heightMapToHeight(heightMap, position.x, position.z)
-	position.y	= (position.y-0.5)*2
-	position.y	*= planeMesh.scale.z
-
-	return position.y
-}
-
-
-
-
-THREEx.Terrain.planeToHeightMapCoords0	= function(position, heightMap, planeMesh){
-
-	// TODO assert no rotation in planeMesh
-	// - how can i check that ? with euler ?
-
-	// set position relative to planeMesh position
-	position.sub(planeMesh.position)
-
-	// heightMap origin is at its top-left, while planeMesh origin is at its center
-	position.x	+= planeMesh.geometry.width/2
-	position.z	+= planeMesh.geometry.height/2
-
-	// normalize it from [0,1] for the heightmap
-	position.x	/= planeMesh.geometry.width
-	position.z	/= planeMesh.geometry.height
-
-	// get heightMap dimensions
-	var width	= heightMap.length
-	var depth	= heightMap[0].length
-	
-	// convert it in heightMap coordinate
-	position.x	*= (width-1)
-	position.z	*= (depth-1)
-
-	var height	= THREEx.Terrain.heightMapToHeight(heightMap, position.x, position.z)
-	position.y	= (height-0.5)*2
-
-	return position;
-}
-
-/**
- * Set the vertex color for a THREE.Geometry based on a heightMap
- * 
- * @param  {Array} heightMap the heightmap
- * @param  {THREE.Geometry} geometry  the geometry to set
- */
-THREEx.Terrain.heightMapToVertexColor	= function(heightMap, geometry){
-	// get heightMap dimensions
-	var width	= heightMap.length
-	var depth	= heightMap[0].length
-	// loop on each vertex of the geometry
-	var color	= new THREE.Color()
-	for(var i = 0; i < geometry.faces.length; i++){
-		var face	= geometry.faces[i]
-		if( face instanceof THREE.Face4 ){
-			console.assert(face instanceof THREE.Face4)
-			face.vertexColors.push( vertexIdxToColor(face.a).clone() )
-			face.vertexColors.push( vertexIdxToColor(face.b).clone() )
-			face.vertexColors.push( vertexIdxToColor(face.c).clone() )
-			face.vertexColors.push( vertexIdxToColor(face.d).clone() )
-		}else if( face instanceof THREE.Face3 ){
-			console.assert(face instanceof THREE.Face3)
-			face.vertexColors.push( vertexIdxToColor(face.a).clone() )
-			face.vertexColors.push( vertexIdxToColor(face.b).clone() )
-			face.vertexColors.push( vertexIdxToColor(face.c).clone() )
-		}else	console.assert(false)
-	}
-	geometry.colorsNeedUpdate	= true
-	return
-	
-	function vertexIdxToColor(vertexIdx){
-		var x		= Math.floor(vertexIdx % width)
-		var z		= Math.floor(vertexIdx / width)
-		var height	= heightMap[x][z]
-		return THREEx.Terrain.heightToColor(height)
-	}
-}
-
-/**
- * give a color based on a given height
- * 
- * @param {Number} height the height
- * @return {THREE.Color} the color for this height
- */
-THREEx.Terrain.heightToColor	= (function(){
-	var color	= new THREE.Color()
-	return function(height){
-		// compute color based on height
-		if( height < 0.5 ){
-			height		= (height*2)*0.5 + 0.2
-			color.setRGB(0,0, height)
-		}else if( height < 0.7 ){
-			height		= (height-0.5)/0.2
-			height		= height*0.5 + 0.2
-			color.setRGB(0,height, 0)
-		}else{
-			height		= (height-0.7)/0.3
-			height		= height*0.5 + 0.5
-			color.setRGB(height,height, height)
-		}
-		// color.setRGB(1,1,1)
-		return color;		
-	}
-})()
-
-
-//////////////////////////////////////////////////////////////////////////////////
-//		comment								//
-//////////////////////////////////////////////////////////////////////////////////
-
-/**
- * plane geometry with THREE.Face3 from three.js r66
- * 
- * @param {[type]} width          [description]
- * @param {[type]} height         [description]
- * @param {[type]} widthSegments  [description]
- * @param {[type]} heightSegments [description]
- */
-THREEx.Terrain.PlaneGeometry = function ( width, height, widthSegments, heightSegments ) {
-
-	THREE.Geometry.call( this );
-
-	this.width = width;
-	this.height = height;
-
-	this.widthSegments = widthSegments || 1;
-	this.heightSegments = heightSegments || 1;
-
-	var ix, iz;
-	var width_half = width / 2;
-	var height_half = height / 2;
-
-	var gridX = this.widthSegments;
-	var gridZ = this.heightSegments;
-
-	var gridX1 = gridX + 1;
-	var gridZ1 = gridZ + 1;
-
-	var segment_width = this.width / gridX;
-	var segment_height = this.height / gridZ;
-
-	var normal = new THREE.Vector3( 0, 0, 1 );
-
-	for ( iz = 0; iz < gridZ1; iz ++ ) {
-
-		for ( ix = 0; ix < gridX1; ix ++ ) {
-
-			var x = ix * segment_width - width_half;
-			var y = iz * segment_height - height_half;
-
-			this.vertices.push( new THREE.Vector3( x, - y, 0 ) );
-
-		}
-
-	}
-
-	for ( iz = 0; iz < gridZ; iz ++ ) {
-
-		for ( ix = 0; ix < gridX; ix ++ ) {
-
-			var a = ix + gridX1 * iz;
-			var b = ix + gridX1 * ( iz + 1 );
-			var c = ( ix + 1 ) + gridX1 * ( iz + 1 );
-			var d = ( ix + 1 ) + gridX1 * iz;
-
-			var uva = new THREE.Vector2( ix / gridX, 1 - iz / gridZ );
-			var uvb = new THREE.Vector2( ix / gridX, 1 - ( iz + 1 ) / gridZ );
-			var uvc = new THREE.Vector2( ( ix + 1 ) / gridX, 1 - ( iz + 1 ) / gridZ );
-			var uvd = new THREE.Vector2( ( ix + 1 ) / gridX, 1 - iz / gridZ );
-
-			var face = new THREE.Face3( a, b, d );
-			face.normal.copy( normal );
-			face.vertexNormals.push( normal.clone(), normal.clone(), normal.clone() );
-
-			this.faces.push( face );
-			this.faceVertexUvs[ 0 ].push( [ uva, uvb, uvd ] );
-
-			face = new THREE.Face3( b, c, d );
-			face.normal.copy( normal );
-			face.vertexNormals.push( normal.clone(), normal.clone(), normal.clone() );
-
-			this.faces.push( face );
-			this.faceVertexUvs[ 0 ].push( [ uvb.clone(), uvc, uvd.clone() ] );
-
-		}
-
-	}
-
-	this.computeCentroids();
-
-};
-
-THREEx.Terrain.PlaneGeometry.prototype = Object.create( THREE.Geometry.prototype );
-
-
-module.exports = THREEx;
-
-
-
-}).call(this,require("oMfpAn"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/terrain.js","/")
-},{"buffer":1,"oMfpAn":4,"three":5}]},{},[8])
+},{"buffer":1,"oMfpAn":4,"three":5}]},{},[9])

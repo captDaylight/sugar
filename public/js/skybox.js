@@ -30,7 +30,7 @@ material = new THREE.ShaderMaterial( {
 
 } );
 
-mesh = new THREE.Mesh( new THREE.BoxGeometry( 100, 100, 100 ), material );
+mesh = new THREE.Mesh( new THREE.BoxGeometry( 200, 200, 200 ), material );
 
 
 

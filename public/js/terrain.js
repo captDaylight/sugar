@@ -1,7 +1,9 @@
 var THREE = require('three');
-var THREEx	= THREEx	|| {}
+var SimplexNoise = require('./simplexNoise');
 
-THREEx.Terrain	= {}
+var THREEx	= THREEx	|| {};
+
+THREEx.Terrain	= {};
 
 /**
  * allocate the heightmap
@@ -11,12 +13,12 @@ THREEx.Terrain	= {}
  * @return {Array} the allocated heightmap
  */
 THREEx.Terrain.allocateHeightMap	= function(width, depth){
-	var ArrayClass	= THREEx.Terrain.allocateHeightMap.ArrayClass
-	var heightMap	= new Array(width)
+	var ArrayClass	= THREEx.Terrain.allocateHeightMap.ArrayClass;
+	var heightMap	= new Array(width);
 	for(var x = 0; x < width; x++){
-		heightMap[x]	= new ArrayClass(depth)		
+		heightMap[x]	= new ArrayClass(depth)	;	
 	}
-	return heightMap
+	return heightMap;
 }
 THREEx.Terrain.allocateHeightMap.ArrayClass	= window.Float64Array	|| window.Array
 
@@ -28,10 +30,11 @@ THREEx.Terrain.allocateHeightMap.ArrayClass	= window.Float64Array	|| window.Arra
  */
 THREEx.Terrain.simplexHeightMap	= function(heightMap){
 	// get heightMap dimensions
-	var width	= heightMap.length
-	var depth	= heightMap[0].length
+	var width	= heightMap.length;
+	var depth	= heightMap[0].length;
 
-	var simplex	= new SimplexNoise()
+	var simplex	= new SimplexNoise();
+	console.log(simplex);
 	for(var x = 0; x < width; x++){
 		for(var z = 0; z < depth; z++){
 			// compute the height
