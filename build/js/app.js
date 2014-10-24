@@ -39280,22 +39280,8 @@ var target = new THREE.Vector3(),
 	renderer,
 	scene;
 
-function animate(cam, rend, sc) {
-
-	if (arguments.length === 3) { // setting these variables on the initial animate call
-		camera = cam;
-		renderer = rend;
-		scene = sc
-	}
-
-	requestAnimationFrame( animate );
-	update();
-
-}
-
 function update() {
 	lon += 0.1;
-
 
 	lat = Math.max( - 85, Math.min( 85, lat ) );
 	phi = THREE.Math.degToRad( 90 - lat );
@@ -39310,7 +39296,19 @@ function update() {
 	renderer.render( scene, camera );
 }
 
-module.exports = animate;
+module.exports = function(cam, rend, sc){
+	
+	camera = cam;
+	renderer = rend;
+	scene = sc
+
+	return function animate() {
+
+		requestAnimationFrame( animate );
+		update();
+
+	};
+};
 }).call(this,require("oMfpAn"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/animate.js","/")
 },{"buffer":1,"oMfpAn":4,"three":5}],7:[function(require,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
@@ -39374,27 +39372,55 @@ scene.add( hemiLight1 );
 var loader = new THREE.JSONLoader(); // init the loader util
 var newObject;
 
-// init loading
-loader.load('models/moto.json', function (geometry) {
-    var material = new THREE.MeshPhongMaterial( { ambient: 0x030303, color: 0xdddddd, specular: 0xff0000, shininess: 50, shading: THREE.FlatShading } )
-    var mesh = new THREE.Mesh(
-        geometry,
-        material
-    );
-    newObject = mesh;
+// // init loading
+// loader.load('models/moto.json', function (geometry, material) {
+//     var mesh = new THREE.Mesh(
+//         geometry,
+//         material
+//     );
+//     newObject = mesh;
+//     newObject.scale.x = newObject.scale.y = newObject.scale.z = .001;
+//     newObject.position.y = -10;
+//     newObject.position.x = -10;
+//     newObject.position.z = -7;
+//     newObject.rotation.x = 2;
+//     newObject.rotation.y = 2;
+//     scene.add(newObject);
+// });
+
+var modelCallback = function ( geometry, materials ) { 
+	createScene( geometry, materials, 0, 0, 0, 105 );
+};
+
+loader.load( 'models/moto.json', modelCallback );
+
+function createScene( geometry, materials, x, y, z, b ) {
+
+	materials.forEach(function (mat) {
+		mat.color.r = mat.color.b = mat.color.g = 3;
+	});
+
+	newObject = new THREE.Mesh( geometry, new THREE.MeshFaceMaterial( materials ) );
+	
     newObject.scale.x = newObject.scale.y = newObject.scale.z = .001;
     newObject.position.y = -10;
     newObject.position.x = -10;
     newObject.position.z = -7;
     newObject.rotation.x = 2;
     newObject.rotation.y = 2;
-    scene.add(newObject);
-});
+	
+	scene.add( newObject );
+
+}
+
+
+
 
 window.addEventListener( 'resize', onWindowResize(camera, renderer), false );
 
-animate(camera, renderer, scene);
-}).call(this,require("oMfpAn"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_ff2492e8.js","/")
+animate(camera, renderer, scene)();
+
+}).call(this,require("oMfpAn"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_e899a33e.js","/")
 },{"./animate":6,"./camera":7,"./events/onWindowResize":8,"./renderer":10,"./skybox":11,"buffer":1,"oMfpAn":4,"three":5}],10:[function(require,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
 "use strict";

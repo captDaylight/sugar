@@ -11,22 +11,8 @@ var target = new THREE.Vector3(),
 	renderer,
 	scene;
 
-function animate(cam, rend, sc) {
-
-	if (arguments.length === 3) { // setting these variables on the initial animate call
-		camera = cam;
-		renderer = rend;
-		scene = sc
-	}
-
-	requestAnimationFrame( animate );
-	update();
-
-}
-
 function update() {
 	lon += 0.1;
-
 
 	lat = Math.max( - 85, Math.min( 85, lat ) );
 	phi = THREE.Math.degToRad( 90 - lat );
@@ -41,4 +27,16 @@ function update() {
 	renderer.render( scene, camera );
 }
 
-module.exports = animate;
+module.exports = function(cam, rend, sc){
+	
+	camera = cam;
+	renderer = rend;
+	scene = sc
+
+	return function animate() {
+
+		requestAnimationFrame( animate );
+		update();
+
+	};
+};
