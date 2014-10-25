@@ -11,7 +11,8 @@ var worker = new Worker('./worker/test.js');
 
 var scene, 
 	container, 
-	mesh;
+	mesh,
+	light;
 
 container = document.getElementById( 'container' );
 
@@ -21,16 +22,7 @@ scene.add(require('./skybox'));
 
 container.appendChild( renderer.domElement );
 
-
-// OLD LOADER
-
-
-var hemiLight1 = new THREE.HemisphereLight( 0xffffff, 0xffffff, 1 );
-
-hemiLight1.color.setHSL( 0.6, 1, 0.6 );
-hemiLight1.groundColor.setHSL( .01, 0, 0.2 );
-hemiLight1.position.set( 0, 500, 0 );
-scene.add( hemiLight1 );
+scene.add( require('./lights') );
 
 var loader = new THREE.JSONLoader(); // init the loader util
 var newObject;
