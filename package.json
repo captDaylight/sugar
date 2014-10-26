@@ -12,7 +12,8 @@
     "jade": "^1.7.0",
     "serve-favicon": "^2.1.6",
     "simplex-noise": "^2.1.1",
-    "three": "^0.66.4"
+    "three": "^0.66.4",
+    "workerstream": "^1.2.1"
   },
   "engines": {
     "node": "0.10.x"

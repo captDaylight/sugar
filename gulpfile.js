@@ -23,7 +23,7 @@ gulp.task('browserify', function () {
 
 
 gulp.task('compress', function () {
-	return gulp.src('./build/js/*.js')
+	return gulp.src('./build/js/app.js')
 		.pipe(uglify())
 		.pipe(gulp.dest('./build/js'));
 });
