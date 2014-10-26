@@ -316,7 +316,7 @@ scene.add(require('./skybox'));
 	render = function() {
 		requestAnimationFrame( render );
 		if ( vehicle ) {
-			camera.position.copy( vehicle.mesh.position ).add( new THREE.Vector3( 40, 25, 40 ) );
+			camera.position.copy( vehicle.mesh.position ).add( new THREE.Vector3( 25, 10, 25 ) );
 			camera.lookAt( vehicle.mesh.position );
 
 			light.target.position.copy( vehicle.mesh.position );
