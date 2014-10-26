@@ -229,7 +229,7 @@ var echo = new Worker(window.URL.createObjectURL(new Blob(['(function e(t,n,r){f
 					car,
 					new THREE.MeshFaceMaterial( car_materials )
 				);
-				mesh.position.y = 2;
+				mesh.position.y = 20;
 				mesh.castShadow = mesh.receiveShadow = true;
 
 				vehicle = new Physijs.Vehicle(mesh, new Physijs.VehicleTuning(
@@ -307,7 +307,7 @@ var echo = new Worker(window.URL.createObjectURL(new Blob(['(function e(t,n,r){f
 			});
 		});
 
-scene.add(require('./skybox'));
+		scene.add(require('./skybox'));
 
 		requestAnimationFrame( render );
 		scene.simulate();
