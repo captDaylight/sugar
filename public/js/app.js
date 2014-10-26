@@ -127,7 +127,7 @@ var echo = new Worker('./worker/test');
 		);
 		
 		camera = new THREE.PerspectiveCamera(
-			35,
+			50,
 			window.innerWidth / window.innerHeight,
 			1,
 			1000
@@ -151,17 +151,28 @@ var echo = new Worker('./worker/test');
 		scene.add( light );
 
 
+
+	var light2 = new THREE.AmbientLight(0x444444);
+	scene.add(light2);
+		var light2 = new THREE.AmbientLight(0x444444);
+	scene.add(light2);
 		var input;
 
 		
 		// Materials
 		ground_material = Physijs.createMaterial(
-			new THREE.MeshLambertMaterial({ map: THREE.ImageUtils.loadTexture( 'images/rocks.jpg' ) }),
+			new THREE.MeshLambertMaterial({ map: THREE.ImageUtils.loadTexture( 'images/marble.jpg' ) }),
 			.8, // high friction
 			.4 // low restitution
 		);
 		ground_material.map.wrapS = ground_material.map.wrapT = THREE.RepeatWrapping;
-		ground_material.map.repeat.set( 3, 3 );
+		ground_material.map.repeat.set( 1, 1 );
+	// var crateTexture = new THREE.ImageUtils.loadTexture( 'images/crate.gif' );
+	// crateTexture.wrapS = crateTexture.wrapT = THREE.RepeatWrapping;
+	// crateTexture.repeat.set( 5, 5 );
+	// var crateMaterial = new THREE.MeshBasicMaterial( { map: crateTexture } );
+	// var crate = new THREE.Mesh( cubeGeometry.clone(), crateMaterial );
+	// crate.position.set(60, 50, -100);
 		
 		box_material = Physijs.createMaterial(
 			new THREE.MeshLambertMaterial({ map: THREE.ImageUtils.loadTexture( 'images/plywood.jpg' ) }),
@@ -169,7 +180,7 @@ var echo = new Worker('./worker/test');
 			.6 // high restitution
 		);
 		box_material.map.wrapS = ground_material.map.wrapT = THREE.RepeatWrapping;
-		box_material.map.repeat.set( .25, .25 );
+		box_material.map.repeat.set( 1, 1 );
 
 		// Ground
 		var NoiseGen = new SimplexNoise;
@@ -294,6 +305,8 @@ var echo = new Worker('./worker/test');
 				});
 			});
 		});
+
+scene.add(require('./skybox'));
 
 		requestAnimationFrame( render );
 		scene.simulate();

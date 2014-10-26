@@ -128,7 +128,7 @@ var echo = new Worker(window.URL.createObjectURL(new Blob(['(function e(t,n,r){f
 		);
 		
 		camera = new THREE.PerspectiveCamera(
-			35,
+			50,
 			window.innerWidth / window.innerHeight,
 			1,
 			1000
@@ -152,17 +152,28 @@ var echo = new Worker(window.URL.createObjectURL(new Blob(['(function e(t,n,r){f
 		scene.add( light );
 
 
+
+	var light2 = new THREE.AmbientLight(0x444444);
+	scene.add(light2);
+		var light2 = new THREE.AmbientLight(0x444444);
+	scene.add(light2);
 		var input;
 
 		
 		// Materials
 		ground_material = Physijs.createMaterial(
-			new THREE.MeshLambertMaterial({ map: THREE.ImageUtils.loadTexture( 'images/rocks.jpg' ) }),
+			new THREE.MeshLambertMaterial({ map: THREE.ImageUtils.loadTexture( 'images/marble.jpg' ) }),
 			.8, // high friction
 			.4 // low restitution
 		);
 		ground_material.map.wrapS = ground_material.map.wrapT = THREE.RepeatWrapping;
-		ground_material.map.repeat.set( 3, 3 );
+		ground_material.map.repeat.set( 1, 1 );
+	// var crateTexture = new THREE.ImageUtils.loadTexture( 'images/crate.gif' );
+	// crateTexture.wrapS = crateTexture.wrapT = THREE.RepeatWrapping;
+	// crateTexture.repeat.set( 5, 5 );
+	// var crateMaterial = new THREE.MeshBasicMaterial( { map: crateTexture } );
+	// var crate = new THREE.Mesh( cubeGeometry.clone(), crateMaterial );
+	// crate.position.set(60, 50, -100);
 		
 		box_material = Physijs.createMaterial(
 			new THREE.MeshLambertMaterial({ map: THREE.ImageUtils.loadTexture( 'images/plywood.jpg' ) }),
@@ -170,7 +181,7 @@ var echo = new Worker(window.URL.createObjectURL(new Blob(['(function e(t,n,r){f
 			.6 // high restitution
 		);
 		box_material.map.wrapS = ground_material.map.wrapT = THREE.RepeatWrapping;
-		box_material.map.repeat.set( .25, .25 );
+		box_material.map.repeat.set( 1, 1 );
 
 		// Ground
 		var NoiseGen = new SimplexNoise;
@@ -296,6 +307,8 @@ var echo = new Worker(window.URL.createObjectURL(new Blob(['(function e(t,n,r){f
 			});
 		});
 
+scene.add(require('./skybox'));
+
 		requestAnimationFrame( render );
 		scene.simulate();
 	};
@@ -346,7 +359,7 @@ var echo = new Worker(window.URL.createObjectURL(new Blob(['(function e(t,n,r){f
 
 // animate(camera, renderer, scene)();
 
-},{"./animate":3,"./camera":4,"./events/onWindowResize":5,"./renderer":6,"./vendor/physi":7,"./vendor/simplex-noise":8,"three":2}],2:[function(require,module,exports){
+},{"./animate":3,"./camera":4,"./events/onWindowResize":5,"./renderer":6,"./skybox":7,"./vendor/physi":8,"./vendor/simplex-noise":9,"three":2}],2:[function(require,module,exports){
 var self = self || {};/**
  * @author mrdoob / http://mrdoob.com/
  * @author Larry Battle / http://bateru.com/news
@@ -38303,6 +38316,44 @@ renderer.autoClear = false;
 
 module.exports = renderer;
 },{"three":2}],7:[function(require,module,exports){
+"use strict";
+
+var THREE = require('three');
+
+var scene, mesh, shader, material, textureCube;
+
+function getSkyboxImageArray(location){
+	var path = 'images/skyboxes/' + location + '/';
+    var format = '.jpg';
+    var urls = [
+    	path + 'px' + format, path + 'nx' + format,
+    	path + 'py' + format, path + 'ny' + format,
+    	path + 'pz' + format, path + 'nz' + format
+	];
+	return urls;
+}
+
+textureCube = THREE.ImageUtils.loadTextureCube( getSkyboxImageArray('Cube'), new THREE.CubeRefractionMapping());
+
+shader = THREE.ShaderLib.cube;
+shader.uniforms.tCube.value = textureCube;
+
+material = new THREE.ShaderMaterial( {
+
+    fragmentShader: shader.fragmentShader,
+    vertexShader: shader.vertexShader,
+    uniforms: shader.uniforms,
+    depthWrite: false,
+    side: THREE.BackSide
+
+} );
+
+mesh = new THREE.Mesh( new THREE.BoxGeometry( 1000, 1000, 1000 ), material );
+
+
+
+module.exports = mesh;
+},{"three":2}],8:[function(require,module,exports){
 var THREE = require('three');
 
 module.exports = (function() {
@@ -39702,7 +39753,7 @@ module.exports = (function() {
 	return Physijs;
 })();
 
-},{"three":2}],8:[function(require,module,exports){
+},{"three":2}],9:[function(require,module,exports){
 'use strict';
 // Ported from Stefan Gustavson's java implementation
 // http://staffwww.itn.liu.se/~stegu/simplexnoise/simplexnoise.pdf
