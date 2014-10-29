@@ -11,6 +11,21 @@ var target = new THREE.Vector3(),
 	renderer,
 	scene;
 
+
+
+function update() {
+	
+	if ( vehicle ) {
+		camera.position.copy( vehicle.mesh.position ).add( new THREE.Vector3( 25, 10, 25 ) );
+		camera.lookAt( vehicle.mesh.position );
+
+		light.target.position.copy( vehicle.mesh.position );
+		light.position.addVectors( light.target.position, new THREE.Vector3( 20, 20, -15 ) );
+	}
+	renderer.render( scene, camera );
+	
+};
+
 function update() {
 	lon += 0.1;
 

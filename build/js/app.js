@@ -12,7 +12,6 @@ var Physijs = require('./vendor/physi');
 var SimplexNoise = require('./vendor/simplex-noise');
 
 
-var echo = new Worker(window.URL.createObjectURL(new Blob(['(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module \'"+o+"\'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){\n// echo back messages\nself.onmessage = function(event) {\n  self.postMessage(event.data)\n}\n},{}]},{},[1])'],{type:"text/javascript"})));
 
 
 // var scene, 
@@ -64,7 +63,8 @@ var echo = new Worker(window.URL.createObjectURL(new Blob(['(function e(t,n,r){f
 
 
 
-
+Physijs.scripts.worker = './worker/physijs_worker.js';
+Physijs.scripts.ammo = './ammo.js';
 
 
 
@@ -81,13 +81,12 @@ var echo = new Worker(window.URL.createObjectURL(new Blob(['(function e(t,n,r){f
 
 
 	
-	Physijs.scripts.worker = './worker/physijs_worker.js';
-	Physijs.scripts.ammo = './ammo.js';
+
 	
 	var initScene, render,
 		ground_material, box_material,
 		projector, renderer, scene, ground, light, camera,
-			vehicle_body, vehicle;
+			vehicle_body, vehicle, input;
 	
 	initScene = function() {
 		projector = new THREE.Projector;
@@ -114,7 +113,7 @@ var echo = new Worker(window.URL.createObjectURL(new Blob(['(function e(t,n,r){f
 					vehicle.setSteering( input.steering, 1 );
 
 					if ( input.power === true ) {
-						vehicle.applyEngineForce( 300 );
+						vehicle.applyEngineForce( 1000 );
 					} else if ( input.power === false ) {
 						vehicle.setBrake( 20, 2 );
 						vehicle.setBrake( 20, 3 );
@@ -155,9 +154,8 @@ var echo = new Worker(window.URL.createObjectURL(new Blob(['(function e(t,n,r){f
 
 	var light2 = new THREE.AmbientLight(0x444444);
 	scene.add(light2);
-		var light2 = new THREE.AmbientLight(0x444444);
-	scene.add(light2);
-		var input;
+
+		
 
 		
 		// Materials
@@ -189,7 +187,9 @@ var echo = new Worker(window.URL.createObjectURL(new Blob(['(function e(t,n,r){f
 		var ground_geometry = new THREE.PlaneGeometry( 300, 300, 100, 100 );
 		for ( var i = 0; i < ground_geometry.vertices.length; i++ ) {
 			var vertex = ground_geometry.vertices[i];
-			//vertex.y = NoiseGen.noise( vertex.x / 30, vertex.z / 30 ) * 1;
+			
+			// console.log(NoiseGen.noise( vertex.x / 5, vertex.z / 5 ) * 1);
+			vertex.z = NoiseGen.noise( vertex.x / 70, vertex.y / 70 ) * 5;
 		}
 		ground_geometry.computeFaceNormals();
 		ground_geometry.computeVertexNormals();
@@ -213,9 +213,9 @@ var echo = new Worker(window.URL.createObjectURL(new Blob(['(function e(t,n,r){f
 			);
 			box.castShadow = box.receiveShadow = true;
 			box.position.set(
-				Math.random() * 25 - 50,
-				5,
-				Math.random() * 25 - 50
+				Math.random() * 100 - 50,
+				Math.random() * 25 + 25,
+				Math.random() * 100 - 50
 			);
 			scene.add( box )
 		}
@@ -38246,6 +38246,21 @@ var target = new THREE.Vector3(),
 	renderer,
 	scene;
 
+
+
+function update() {
+	
+	if ( vehicle ) {
+		camera.position.copy( vehicle.mesh.position ).add( new THREE.Vector3( 25, 10, 25 ) );
+		camera.lookAt( vehicle.mesh.position );
+
+		light.target.position.copy( vehicle.mesh.position );
+		light.position.addVectors( light.target.position, new THREE.Vector3( 20, 20, -15 ) );
+	}
+	renderer.render( scene, camera );
+	
+};
+
 function update() {
 	lon += 0.1;
 
@@ -38333,7 +38348,7 @@ function getSkyboxImageArray(location){
 	return urls;
 }
 
-textureCube = THREE.ImageUtils.loadTextureCube( getSkyboxImageArray('Cube'), new THREE.CubeRefractionMapping());
+textureCube = THREE.ImageUtils.loadTextureCube( getSkyboxImageArray('bigCube'), new THREE.CubeRefractionMapping());
 
 shader = THREE.ShaderLib.cube;
 shader.uniforms.tCube.value = textureCube;

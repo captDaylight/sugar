@@ -11,7 +11,6 @@ var Physijs = require('./vendor/physi');
 var SimplexNoise = require('./vendor/simplex-noise');
 
 
-var echo = new Worker('./worker/test');
 
 
 // var scene, 
@@ -63,7 +62,8 @@ var echo = new Worker('./worker/test');
 
 
 
-
+Physijs.scripts.worker = './worker/physijs_worker.js';
+Physijs.scripts.ammo = './ammo.js';
 
 
 
@@ -80,13 +80,12 @@ var echo = new Worker('./worker/test');
 
 
 	
-	Physijs.scripts.worker = './worker/physijs_worker.js';
-	Physijs.scripts.ammo = './ammo.js';
+
 	
 	var initScene, render,
 		ground_material, box_material,
 		projector, renderer, scene, ground, light, camera,
-			vehicle_body, vehicle;
+			vehicle_body, vehicle, input;
 	
 	initScene = function() {
 		projector = new THREE.Projector;
@@ -113,7 +112,7 @@ var echo = new Worker('./worker/test');
 					vehicle.setSteering( input.steering, 1 );
 
 					if ( input.power === true ) {
-						vehicle.applyEngineForce( 300 );
+						vehicle.applyEngineForce( 1000 );
 					} else if ( input.power === false ) {
 						vehicle.setBrake( 20, 2 );
 						vehicle.setBrake( 20, 3 );
@@ -154,9 +153,8 @@ var echo = new Worker('./worker/test');
 
 	var light2 = new THREE.AmbientLight(0x444444);
 	scene.add(light2);
-		var light2 = new THREE.AmbientLight(0x444444);
-	scene.add(light2);
-		var input;
+
+		
 
 		
 		// Materials
@@ -188,7 +186,9 @@ var echo = new Worker('./worker/test');
 		var ground_geometry = new THREE.PlaneGeometry( 300, 300, 100, 100 );
 		for ( var i = 0; i < ground_geometry.vertices.length; i++ ) {
 			var vertex = ground_geometry.vertices[i];
-			//vertex.y = NoiseGen.noise( vertex.x / 30, vertex.z / 30 ) * 1;
+			
+			// console.log(NoiseGen.noise( vertex.x / 5, vertex.z / 5 ) * 1);
+			vertex.z = NoiseGen.noise( vertex.x / 70, vertex.y / 70 ) * 5;
 		}
 		ground_geometry.computeFaceNormals();
 		ground_geometry.computeVertexNormals();
@@ -212,9 +212,9 @@ var echo = new Worker('./worker/test');
 			);
 			box.castShadow = box.receiveShadow = true;
 			box.position.set(
-				Math.random() * 25 - 50,
-				5,
-				Math.random() * 25 - 50
+				Math.random() * 100 - 50,
+				Math.random() * 25 + 25,
+				Math.random() * 100 - 50
 			);
 			scene.add( box )
 		}

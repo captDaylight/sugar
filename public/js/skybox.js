@@ -15,7 +15,7 @@ function getSkyboxImageArray(location){
 	return urls;
 }
 
-textureCube = THREE.ImageUtils.loadTextureCube( getSkyboxImageArray('Cube'), new THREE.CubeRefractionMapping());
+textureCube = THREE.ImageUtils.loadTextureCube( getSkyboxImageArray('bigCube'), new THREE.CubeRefractionMapping());
 
 shader = THREE.ShaderLib.cube;
 shader.uniforms.tCube.value = textureCube;
