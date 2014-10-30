@@ -228,16 +228,16 @@ Physijs.scripts.ammo = './ammo.js';
 					car,
 					new THREE.MeshFaceMaterial( car_materials )
 				);
-				mesh.position.y = 20;
+				mesh.position.y = 5;
 				mesh.castShadow = mesh.receiveShadow = true;
 
 				vehicle = new Physijs.Vehicle(mesh, new Physijs.VehicleTuning(
-					10.88,
-					1.83,
-					0.28,
-					500,
-					10.5,
-					6000
+					10.88, // suspension_stiffness
+					1.83, // suspension_compression
+					0.28, // suspension_damping
+					500, // max_suspension_travel
+					10.5, // friction_slip
+					6000 // max_suspension_force
 				));
 				scene.add( vehicle );
 
