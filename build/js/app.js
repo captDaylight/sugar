@@ -154,8 +154,26 @@ Physijs.scripts.ammo = './ammo.js';
 
 	var light2 = new THREE.AmbientLight(0x444444);
 	scene.add(light2);
+	var light3 = new THREE.AmbientLight(0x444444);
+	scene.add(light3);
 
 		
+
+
+
+
+
+// new Physijs.ConvexMesh(
+// 						torus_geometry,
+// 						material
+// 					);
+
+
+
+
+
+
+var loader = new THREE.JSONLoader();
 
 		
 		// Materials
@@ -181,6 +199,13 @@ Physijs.scripts.ammo = './ammo.js';
 		box_material.map.wrapS = ground_material.map.wrapT = THREE.RepeatWrapping;
 		box_material.map.repeat.set( 1, 1 );
 
+
+
+
+
+
+
+
 		// Ground
 		var NoiseGen = new SimplexNoise;
 
@@ -199,11 +224,30 @@ Physijs.scripts.ammo = './ammo.js';
 		ground = new Physijs.HeightfieldMesh(
 				ground_geometry,
 				ground_material,
-				0 // mass
+				2 // mass
 		);
 		ground.rotation.x = -Math.PI / 2;
 		ground.receiveShadow = true;
-		scene.add( ground );
+
+		loader.load( "models/islands/islands.json", function( islands, islands_material ) {
+
+			console.log(islands);
+			
+			var mesh = new Physijs.ConvexMesh(
+				islands,
+				ground_material,
+				0
+			);
+			mesh.receiveShadow = true;
+			scene.add(mesh)
+		});
+
+		// scene.add( ground );
+
+
+
+
+
 
 		for ( i = 0; i < 50; i++ ) {
 			var size = Math.random() * 2 + .5;
@@ -221,7 +265,7 @@ Physijs.scripts.ammo = './ammo.js';
 		}
 
 
-		var loader = new THREE.JSONLoader();
+		
 
 		loader.load( "models/mustang/mustang.js", function( car, car_materials ) {
 			loader.load( "models/mustang/mustang_wheel.js", function( wheel, wheel_materials ) {
