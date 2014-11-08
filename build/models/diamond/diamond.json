@@ -1,0 +1,27 @@
+{
+    "metadata" :
+    {
+        "formatVersion" : 3.1,
+        "sourceFile"    : "diamond.obj",
+        "generatedBy"   : "OBJConverter",
+        "vertices"      : 4,
+        "faces"         : 0,
+        "normals"       : 0,
+        "colors"        : 0,
+        "uvs"           : 0,
+        "materials"     : 0
+    },
+    "scale" : 1.000000,
+    "materials": [	{
+	"DbgColor" : 15658734,
+	"DbgIndex" : 0,
+	"DbgName" : "default"
+	}],
+    "vertices": [-62.813431,36.579079,-31.165877,-59.997303,36.579079,-61.941365,-32.037943,36.579079,-28.349750,-29.221815,36.579079,-59.125237],
+    "morphTargets": [],
+    "morphColors": [],
+    "normals": [],
+    "colors": [],
+    "uvs": [[]],
+    "faces": []
+}

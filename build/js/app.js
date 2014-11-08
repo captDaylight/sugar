@@ -191,15 +191,16 @@ var loader = new THREE.JSONLoader();
 	// var crate = new THREE.Mesh( cubeGeometry.clone(), crateMaterial );
 	// crate.position.set(60, 50, -100);
 		
-		box_material = Physijs.createMaterial(
-			new THREE.MeshLambertMaterial({ map: THREE.ImageUtils.loadTexture( 'images/plywood.jpg' ) }),
-			.4, // low friction
-			.6 // high restitution
-		);
-		box_material.map.wrapS = ground_material.map.wrapT = THREE.RepeatWrapping;
-		box_material.map.repeat.set( 1, 1 );
 
 
+			box_material = Physijs.createMaterial(
+				new THREE.MeshLambertMaterial({ map: THREE.ImageUtils.loadTexture( 'images/plywood.jpg' ) }),
+				.4, // low friction
+				.6 // high restitution
+			);	
+			
+			box_material.map.wrapS = ground_material.map.wrapT = THREE.RepeatWrapping;
+			box_material.map.repeat.set( 1, 1 );
 
 
 
@@ -230,8 +231,6 @@ var loader = new THREE.JSONLoader();
 		ground.receiveShadow = true;
 
 		loader.load( "models/islands/islands.json", function( islands, islands_material ) {
-
-			console.log(islands);
 			
 			var mesh = new Physijs.ConvexMesh(
 				islands,
@@ -239,30 +238,72 @@ var loader = new THREE.JSONLoader();
 				0
 			);
 			mesh.receiveShadow = true;
+			console.log(mesh);
 			scene.add(mesh)
+
+
+
 		});
 
-		// scene.add( ground );
+
+		// loader.load( "models/test/test.json", function( islands, islands_material ) {
+			
+		// 	var mesh = new Physijs.ConvexMesh(
+		// 		islands,
+		// 		ground_material,
+		// 		1
+		// 	);
+		// 	mesh.position.y = 10;
+		// 	mesh.receiveShadow = true;
+		// 	console.log(mesh);
+		// 	scene.add(mesh);
+
+		// });
 
 
 
+		loader.load( "models/test/test.json", function( islands, islands_material ) {
+			
+
+			for ( i = 0; i < 50; i++ ) {
+				var size = Math.random() * 2 + .5;
+				var mesh = new Physijs.ConvexMesh(
+					islands,
+					box_material,
+					1
+				);
+
+				console.log('here');
+				mesh.castShadow = mesh.receiveShadow = true;
+				mesh.position.set(
+					Math.random() * 50 - 50,
+					Math.random() * 50 + 15,
+					Math.random() * 50 - 50
+				);
+				console.log(mesh);
+				mesh.rotation.set(size, size, size);
+				scene.add( mesh )
+			}
+
+			// scene.add(mesh);
+
+		});
 
 
-
-		for ( i = 0; i < 50; i++ ) {
-			var size = Math.random() * 2 + .5;
-			var box = new Physijs.BoxMesh(
-				new THREE.BoxGeometry( size, size, size ),
-				box_material
-			);
-			box.castShadow = box.receiveShadow = true;
-			box.position.set(
-				Math.random() * 100 - 50,
-				Math.random() * 25 + 25,
-				Math.random() * 100 - 50
-			);
-			scene.add( box )
-		}
+		// for ( i = 0; i < 50; i++ ) {
+		// 	var size = Math.random() * 2 + .5;
+		// 	var box = new Physijs.BoxMesh(
+		// 		new THREE.BoxGeometry( size, size, size ),
+		// 		box_material
+		// 	);
+		// 	box.castShadow = box.receiveShadow = true;
+		// 	box.position.set(
+		// 		Math.random() * 100 - 50,
+		// 		Math.random() * 25 + 25,
+		// 		Math.random() * 100 - 50
+		// 	);
+		// 	scene.add( box )
+		// }
 
 
 		
@@ -275,7 +316,8 @@ var loader = new THREE.JSONLoader();
 				);
 				mesh.position.y = 5;
 				mesh.castShadow = mesh.receiveShadow = true;
-
+				console.log('---');
+				console.log(mesh.position);
 				vehicle = new Physijs.Vehicle(mesh, new Physijs.VehicleTuning(
 					10.88, // suspension_stiffness
 					1.83, // suspension_compression
