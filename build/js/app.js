@@ -4,415 +4,208 @@
 'use strict';
 
 var THREE = require('three');
-var camera = require('./camera');
-var renderer = require('./renderer');
-var animate = require('./animate');
 var onWindowResize = require('./events/onWindowResize');
 var Physijs = require('./vendor/physi');
-var SimplexNoise = require('./vendor/simplex-noise');
-
-
-
-
-// var scene, 
-// 	container, 
-// 	mesh,
-// 	light;
-
-// container = document.getElementById( 'container' );
-
-// scene = new THREE.Scene();
-
-// scene.add(require('./skybox'));
-
-// container.appendChild( renderer.domElement );
-
-// // scene.add( require('./lights') );
-
-// var loader = new THREE.JSONLoader(); // init the loader util
-// var newObject;
-
-
-// var modelCallback = function ( geometry, materials ) { 
-// 	createScene( geometry, materials, 0, 0, 0, 105 );
-// };
-
-// loader.load( 'models/mustang/mustang.js', modelCallback );
-
-// function createScene( geometry, materials, x, y, z, b ) {
-
-// 	materials.forEach(function (mat) {
-// 		mat.color.r = mat.color.b = mat.color.g = 3;
-// 	});
-
-// 	newObject = new THREE.Mesh( geometry, new THREE.MeshFaceMaterial( materials ) );
-	
-//     newObject.scale.x = newObject.scale.y = newObject.scale.z = .1;
-//     newObject.position.y = -10;
-//     newObject.position.x = -10;
-//     newObject.position.z = -7;
-//     newObject.rotation.x = 2;
-//     // newObject.rotation.y = 2;
-	
-// 	scene.add( newObject );
-
-// }
-
-
-
-
-
-
+// var SimplexNoise = require('./vendor/simplex-noise');
 Physijs.scripts.worker = './worker/physijs_worker.js';
 Physijs.scripts.ammo = './ammo.js';
 
+// project specific import
+var addLights = require('./lights');
+var addCamera = require('./camera');
+var addLandscape = require('./landscape');
+var addSkybox = require('./skybox');
+
+var loader = new THREE.JSONLoader(),
+	initScene, render,
+	ground_material, box_material,
+	projector, renderer, scene, ground, light, camera,
+		vehicle_body, vehicle, input;
 
 
+projector = new THREE.Projector;
 
+renderer = new THREE.WebGLRenderer({ antialias: true });
+renderer.setSize( window.innerWidth, window.innerHeight );
+renderer.shadowMapEnabled = true;
+renderer.shadowMapSoft = true;
+document.getElementById( 'container' ).appendChild( renderer.domElement );
 
+scene = new Physijs.Scene;
+scene.setGravity(new THREE.Vector3( 0, -30, 0 ));
+scene.addEventListener(
+	'update',
+	function() {
 
-
-
-
-
-
-
-
-
-
-	
-
-	
-	var initScene, render,
-		ground_material, box_material,
-		projector, renderer, scene, ground, light, camera,
-			vehicle_body, vehicle, input;
-	
-	initScene = function() {
-		projector = new THREE.Projector;
-		
-		renderer = new THREE.WebGLRenderer({ antialias: true });
-		renderer.setSize( window.innerWidth, window.innerHeight );
-		renderer.shadowMapEnabled = true;
-		renderer.shadowMapSoft = true;
-		document.getElementById( 'container' ).appendChild( renderer.domElement );
-		
-		scene = new Physijs.Scene;
-		scene.setGravity(new THREE.Vector3( 0, -30, 0 ));
-		scene.addEventListener(
-			'update',
-			function() {
-
-				if ( input && vehicle ) {
-					if ( input.direction !== null ) {
-						input.steering += input.direction / 50;
-						if ( input.steering < -.6 ) input.steering = -.6;
-						if ( input.steering > .6 ) input.steering = .6;
-					}
-					vehicle.setSteering( input.steering, 0 );
-					vehicle.setSteering( input.steering, 1 );
-
-					if ( input.power === true ) {
-						vehicle.applyEngineForce( 1000 );
-					} else if ( input.power === false ) {
-						vehicle.setBrake( 20, 2 );
-						vehicle.setBrake( 20, 3 );
-					} else {
-						vehicle.applyEngineForce( 0 );
-					}
-				}
-
-				scene.simulate( undefined, 2 );
+		if ( input && vehicle ) {
+			if ( input.direction !== null ) {
+				input.steering += input.direction / 50;
+				if ( input.steering < -.6 ) input.steering = -.6;
+				if ( input.steering > .6 ) input.steering = .6;
 			}
-		);
-		
-		camera = new THREE.PerspectiveCamera(
-			50,
-			window.innerWidth / window.innerHeight,
-			1,
-			1000
-		);
-		scene.add( camera );
-		
-		// Light
-		light = new THREE.DirectionalLight( 0xFFFFFF );
-		light.position.set( 20, 20, -15 );
-		light.target.position.copy( scene.position );
-		light.castShadow = true;
-		light.shadowCameraLeft = -150;
-		light.shadowCameraTop = -150;
-		light.shadowCameraRight = 150;
-		light.shadowCameraBottom = 150;
-		light.shadowCameraNear = 20;
-		light.shadowCameraFar = 400;
-		light.shadowBias = -.0001
-		light.shadowMapWidth = light.shadowMapHeight = 2048;
-		light.shadowDarkness = .7;
-		scene.add( light );
+			vehicle.setSteering( input.steering, 0 );
+			vehicle.setSteering( input.steering, 1 );
 
-
-
-	var light2 = new THREE.AmbientLight(0x444444);
-	scene.add(light2);
-	var light3 = new THREE.AmbientLight(0x444444);
-	scene.add(light3);
-
-		
-
-
-
-
-
-// new Physijs.ConvexMesh(
-// 						torus_geometry,
-// 						material
-// 					);
-
-
-
-
-
-
-var loader = new THREE.JSONLoader();
-
-		
-		// Materials
-		ground_material = Physijs.createMaterial(
-			new THREE.MeshLambertMaterial({ map: THREE.ImageUtils.loadTexture( 'images/marble.jpg' ) }),
-			.8, // high friction
-			.4 // low restitution
-		);
-		ground_material.map.wrapS = ground_material.map.wrapT = THREE.RepeatWrapping;
-		ground_material.map.repeat.set( 1, 1 );
-	// var crateTexture = new THREE.ImageUtils.loadTexture( 'images/crate.gif' );
-	// crateTexture.wrapS = crateTexture.wrapT = THREE.RepeatWrapping;
-	// crateTexture.repeat.set( 5, 5 );
-	// var crateMaterial = new THREE.MeshBasicMaterial( { map: crateTexture } );
-	// var crate = new THREE.Mesh( cubeGeometry.clone(), crateMaterial );
-	// crate.position.set(60, 50, -100);
-		
-
-
-			box_material = Physijs.createMaterial(
-				new THREE.MeshLambertMaterial({ map: THREE.ImageUtils.loadTexture( 'images/plywood.jpg' ) }),
-				.4, // low friction
-				.6 // high restitution
-			);	
-			
-			box_material.map.wrapS = ground_material.map.wrapT = THREE.RepeatWrapping;
-			box_material.map.repeat.set( 1, 1 );
-
-
-
-
-
-
-		// Ground
-		var NoiseGen = new SimplexNoise;
-
-		var ground_geometry = new THREE.PlaneGeometry( 300, 300, 100, 100 );
-		for ( var i = 0; i < ground_geometry.vertices.length; i++ ) {
-			var vertex = ground_geometry.vertices[i];
-			
-			// console.log(NoiseGen.noise( vertex.x / 5, vertex.z / 5 ) * 1);
-			vertex.z = NoiseGen.noise( vertex.x / 70, vertex.y / 70 ) * 5;
+			if ( input.power === true ) {
+				vehicle.applyEngineForce( 1000 );
+			} else if ( input.power === false ) {
+				vehicle.setBrake( 20, 2 );
+				vehicle.setBrake( 20, 3 );
+			} else {
+				vehicle.applyEngineForce( 0 );
+			}
 		}
-		ground_geometry.computeFaceNormals();
-		ground_geometry.computeVertexNormals();
 
-		// If your plane is not square as far as face count then the HeightfieldMesh
-		// takes two more arguments at the end: # of x faces and # of z faces that were passed to THREE.PlaneMaterial
-		ground = new Physijs.HeightfieldMesh(
-				ground_geometry,
-				ground_material,
-				2 // mass
+		scene.simulate( undefined, 2 );
+	}
+);
+
+// add elements to the scene
+camera = addCamera(scene);
+
+light = addLights(scene);
+
+addLandscape(scene, Physijs, loader);
+
+addSkybox(scene);
+	
+
+loader.load( "models/test/test.json", function( islands, islands_material ) {
+	
+	var box_material = Physijs.createMaterial(
+		new THREE.MeshPhongMaterial( { color: 0x000000, specular: 0x666666, emissive: 0xbbbbbb, ambient: 0x000000, shininess: 10, shading: THREE.SmoothShading, opacity: 0.8, transparent: true } ),
+		.4, // low friction
+		.6 // high restitution
+	);	
+
+	for ( var i = 0; i < 10; i++ ) {
+		var size = Math.random() * 2 + .5;
+		var mesh = new Physijs.ConvexMesh(
+			islands,
+			box_material,
+			1
 		);
-		ground.rotation.x = -Math.PI / 2;
-		ground.receiveShadow = true;
 
-		loader.load( "models/islands/islands.json", function( islands, islands_material ) {
-			
-			var mesh = new Physijs.ConvexMesh(
-				islands,
-				ground_material,
-				0
+		mesh.castShadow = true;
+		mesh.position.set(
+			Math.random() * 50 - 50,
+			Math.random() * 50 + 15,
+			Math.random() * 50 - 50
+		);
+		mesh.rotation.set(size, size, size);
+		scene.add( mesh )
+	}
+
+});		
+
+loader.load( "models/mustang/mustang.js", function( car, car_materials ) {
+	loader.load( "models/mustang/mustang_wheel.js", function( wheel, wheel_materials ) {
+		var mesh = new Physijs.BoxMesh(
+			car,
+			new THREE.MeshFaceMaterial( car_materials )
+		);
+		mesh.position.y = 5;
+		mesh.castShadow = mesh.receiveShadow = true;
+		console.log('---');
+		console.log(mesh.position);
+		vehicle = new Physijs.Vehicle(mesh, new Physijs.VehicleTuning(
+			10.88, // suspension_stiffness
+			1.83, // suspension_compression
+			0.28, // suspension_damping
+			500, // max_suspension_travel
+			10.5, // friction_slip
+			6000 // max_suspension_force
+		));
+		scene.add( vehicle );
+
+		var wheel_material = new THREE.MeshFaceMaterial( wheel_materials );
+
+		for ( var i = 0; i < 4; i++ ) {
+			vehicle.addWheel(
+				wheel,
+				wheel_material,
+				new THREE.Vector3(
+						i % 2 === 0 ? -1.6 : 1.6,
+						-1,
+						i < 2 ? 3.3 : -3.2
+				),
+				new THREE.Vector3( 0, -1, 0 ),
+				new THREE.Vector3( -1, 0, 0 ),
+				0.5,
+				0.7,
+				i < 2 ? false : true
 			);
-			mesh.receiveShadow = true;
-			console.log(mesh);
-			scene.add(mesh)
-
-
-
-		});
-
-
-		// loader.load( "models/test/test.json", function( islands, islands_material ) {
-			
-		// 	var mesh = new Physijs.ConvexMesh(
-		// 		islands,
-		// 		ground_material,
-		// 		1
-		// 	);
-		// 	mesh.position.y = 10;
-		// 	mesh.receiveShadow = true;
-		// 	console.log(mesh);
-		// 	scene.add(mesh);
-
-		// });
-
-
-
-		loader.load( "models/test/test.json", function( islands, islands_material ) {
-			
-
-			for ( i = 0; i < 50; i++ ) {
-				var size = Math.random() * 2 + .5;
-				var mesh = new Physijs.ConvexMesh(
-					islands,
-					box_material,
-					1
-				);
-
-				console.log('here');
-				mesh.castShadow = mesh.receiveShadow = true;
-				mesh.position.set(
-					Math.random() * 50 - 50,
-					Math.random() * 50 + 15,
-					Math.random() * 50 - 50
-				);
-				console.log(mesh);
-				mesh.rotation.set(size, size, size);
-				scene.add( mesh )
-			}
-
-			// scene.add(mesh);
-
-		});
-
-
-		// for ( i = 0; i < 50; i++ ) {
-		// 	var size = Math.random() * 2 + .5;
-		// 	var box = new Physijs.BoxMesh(
-		// 		new THREE.BoxGeometry( size, size, size ),
-		// 		box_material
-		// 	);
-		// 	box.castShadow = box.receiveShadow = true;
-		// 	box.position.set(
-		// 		Math.random() * 100 - 50,
-		// 		Math.random() * 25 + 25,
-		// 		Math.random() * 100 - 50
-		// 	);
-		// 	scene.add( box )
-		// }
-
-
-		
-
-		loader.load( "models/mustang/mustang.js", function( car, car_materials ) {
-			loader.load( "models/mustang/mustang_wheel.js", function( wheel, wheel_materials ) {
-				var mesh = new Physijs.BoxMesh(
-					car,
-					new THREE.MeshFaceMaterial( car_materials )
-				);
-				mesh.position.y = 5;
-				mesh.castShadow = mesh.receiveShadow = true;
-				console.log('---');
-				console.log(mesh.position);
-				vehicle = new Physijs.Vehicle(mesh, new Physijs.VehicleTuning(
-					10.88, // suspension_stiffness
-					1.83, // suspension_compression
-					0.28, // suspension_damping
-					500, // max_suspension_travel
-					10.5, // friction_slip
-					6000 // max_suspension_force
-				));
-				scene.add( vehicle );
-
-				var wheel_material = new THREE.MeshFaceMaterial( wheel_materials );
-
-				for ( var i = 0; i < 4; i++ ) {
-					vehicle.addWheel(
-						wheel,
-						wheel_material,
-						new THREE.Vector3(
-								i % 2 === 0 ? -1.6 : 1.6,
-								-1,
-								i < 2 ? 3.3 : -3.2
-						),
-						new THREE.Vector3( 0, -1, 0 ),
-						new THREE.Vector3( -1, 0, 0 ),
-						0.5,
-						0.7,
-						i < 2 ? false : true
-					);
-				}
-
-				input = {
-					power: null,
-					direction: null,
-					steering: 0
-				};
-				document.addEventListener('keydown', function( ev ) {
-					switch ( ev.keyCode ) {
-						case 37: // left
-							input.direction = 1;
-							break;
-
-						case 38: // forward
-							input.power = true;
-							break;
-
-						case 39: // right
-							input.direction = -1;
-							break;
-
-						case 40: // back
-							input.power = false;
-							break;
-					}
-				});
-				document.addEventListener('keyup', function( ev ) {
-					switch ( ev.keyCode ) {
-						case 37: // left
-							input.direction = null;
-							break;
-
-						case 38: // forward
-							input.power = null;
-							break;
-
-						case 39: // right
-							input.direction = null;
-							break;
-
-						case 40: // back
-							input.power = null;
-							break;
-					}
-				});
-			});
-		});
-
-		scene.add(require('./skybox'));
-
-		requestAnimationFrame( render );
-		scene.simulate();
-	};
-	
-	render = function() {
-		requestAnimationFrame( render );
-		if ( vehicle ) {
-			camera.position.copy( vehicle.mesh.position ).add( new THREE.Vector3( 25, 10, 25 ) );
-			camera.lookAt( vehicle.mesh.position );
-
-			light.target.position.copy( vehicle.mesh.position );
-			light.position.addVectors( light.target.position, new THREE.Vector3( 20, 20, -15 ) );
 		}
-		renderer.render( scene, camera );
-		
-	};
 
-	window.onload = initScene;
+		input = {
+			power: null,
+			direction: null,
+			steering: 0
+		};
+		document.addEventListener('keydown', function( ev ) {
+			switch ( ev.keyCode ) {
+				case 37: // left
+					input.direction = 1;
+					break;
+
+				case 38: // forward
+					input.power = true;
+					break;
+
+				case 39: // right
+					input.direction = -1;
+					break;
+
+				case 40: // back
+					input.power = false;
+					break;
+			}
+		});
+		document.addEventListener('keyup', function( ev ) {
+			switch ( ev.keyCode ) {
+				case 37: // left
+					input.direction = null;
+					break;
+
+				case 38: // forward
+					input.power = null;
+					break;
+
+				case 39: // right
+					input.direction = null;
+					break;
+
+				case 40: // back
+					input.power = null;
+					break;
+			}
+		});
+	});
+});
+
+scene.add(require('./skybox'));
+
+render = function() {
+	requestAnimationFrame( render );
+
+	if ( vehicle ) {
+		camera.position.copy( vehicle.mesh.position ).add( new THREE.Vector3( 25, 10, 25 ) );
+		camera.lookAt( vehicle.mesh.position );
+
+		light.target.position.copy( vehicle.mesh.position );
+		light.position.addVectors( light.target.position, new THREE.Vector3( 20, 20, -15 ) );
+	}
+	renderer.render( scene, camera );
+
+};
+
+
+requestAnimationFrame( render );
+scene.simulate();
+
+// window.onload = initScene;
+
+window.addEventListener( 'resize', onWindowResize(camera, renderer), false );
 
 
 
@@ -428,24 +221,7 @@ var loader = new THREE.JSONLoader();
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-// window.addEventListener( 'resize', onWindowResize(camera, renderer), false );
-
-// animate(camera, renderer, scene)();
-
-},{"./animate":3,"./camera":4,"./events/onWindowResize":5,"./renderer":6,"./skybox":7,"./vendor/physi":8,"./vendor/simplex-noise":9,"three":2}],2:[function(require,module,exports){
+},{"./camera":3,"./events/onWindowResize":4,"./landscape":5,"./lights":6,"./skybox":7,"./vendor/physi":8,"three":2}],2:[function(require,module,exports){
 var self = self || {};/**
  * @author mrdoob / http://mrdoob.com/
  * @author Larry Battle / http://bateru.com/news
@@ -38323,99 +38099,88 @@ if (typeof exports !== 'undefined') {
 
 var THREE = require('three');
 
-var target = new THREE.Vector3(),
-	lon = 90,
-	lat = 0,
-	phi = 0, 
-	theta = 0,
-	camera,
-	renderer,
-	scene;
 
 
+module.exports = function (scene) {		
+	var camera = new THREE.PerspectiveCamera(
+		50,
+		window.innerWidth / window.innerHeight,
+		1,
+		1000
+	);
+	scene.add( camera );
 
-function update() {
-	
-	if ( vehicle ) {
-		camera.position.copy( vehicle.mesh.position ).add( new THREE.Vector3( 25, 10, 25 ) );
-		camera.lookAt( vehicle.mesh.position );
-
-		light.target.position.copy( vehicle.mesh.position );
-		light.position.addVectors( light.target.position, new THREE.Vector3( 20, 20, -15 ) );
-	}
-	renderer.render( scene, camera );
-	
-};
-
-function update() {
-	lon += 0.1;
-
-	lat = Math.max( - 85, Math.min( 85, lat ) );
-	phi = THREE.Math.degToRad( 90 - lat );
-	theta = THREE.Math.degToRad( lon );
-
-	target.x = 500 * Math.sin( phi ) * Math.cos( theta );
-	target.y = 500 * Math.cos( phi );
-	target.z = 500 * Math.sin( phi ) * Math.sin( theta );
-
-	camera.lookAt( target );
-
-	renderer.render( scene, camera );
-}
-
-module.exports = function(cam, rend, sc){
-	
-	camera = cam;
-	renderer = rend;
-	scene = sc
-
-	return function animate() {
-
-		requestAnimationFrame( animate );
-		update();
-
-	};
+	return camera;
 };
 },{"three":2}],4:[function(require,module,exports){
-"use strict";
-
-var THREE = require('three');
-
-var camera;
-
-camera = new THREE.PerspectiveCamera(
-	35,
-	window.innerWidth / window.innerHeight,
-	1,
-	1000
-);
-camera.position.set( 60, 50, 60 );
-
-module.exports = camera;
-},{"three":2}],5:[function(require,module,exports){
 module.exports = function (camera, renderer) {
-
 	return function onWindowResize() {
-		console.log('window resizing');
 		camera.aspect = window.innerWidth / window.innerHeight;
 		camera.updateProjectionMatrix();
-
 		renderer.setSize( window.innerWidth, window.innerHeight );
-
 	};
 }
-},{}],6:[function(require,module,exports){
-"use strict";
-
+},{}],5:[function(require,module,exports){
 var THREE = require('three');
 
-var renderer;
+module.exports = function (scene, Physijs, loader) {
+	// Materials
+	ground_material = Physijs.createMaterial(
+		new THREE.MeshLambertMaterial({ map: THREE.ImageUtils.loadTexture( 'images/marble.jpg' ) }),
+		.8, // high friction
+		.4 // low restitution
+	);
+	ground_material.map.wrapS = ground_material.map.wrapT = THREE.RepeatWrapping;
+	ground_material.map.repeat.set( 1, 1 );
 
-renderer = new THREE.WebGLRenderer({ antialiasing: true });
-renderer.setSize( window.innerWidth, window.innerHeight );
-renderer.autoClear = false;
 
-module.exports = renderer;
+	loader.load( "models/islands/islands.json", function( islands, islands_material ) {
+		
+		var mesh = new Physijs.ConvexMesh(
+			islands,
+			ground_material,
+			0
+		);
+		mesh.receiveShadow = true;
+		scene.add(mesh);
+	});
+
+}
+},{"three":2}],6:[function(require,module,exports){
+var THREE = require('three');
+
+module.exports = function (scene) {
+	console.log(scene);
+	console.log();
+	// Light
+	var light = new THREE.DirectionalLight( 0xFFFFFF );
+	light.position.set( 20, 20, -15 );
+	light.target.position.copy( scene.position );
+	light.castShadow = true;
+	light.shadowCameraLeft = -150;
+	light.shadowCameraTop = -150;
+	light.shadowCameraRight = 150;
+	light.shadowCameraBottom = 150;
+	light.shadowCameraNear = 20;
+	light.shadowCameraFar = 400;
+	light.shadowBias = -.0001
+	light.shadowMapWidth = light.shadowMapHeight = 2048;
+	light.shadowDarkness = .7;
+	scene.add( light );
+
+
+	var light2 = new THREE.AmbientLight(0x444444);
+	scene.add(light2);
+	var light3 = new THREE.AmbientLight(0x444444);
+	scene.add(light3);	
+
+	return light;
+
+}
+
+
+
+
 },{"three":2}],7:[function(require,module,exports){
 "use strict";
 
@@ -38434,26 +38199,28 @@ function getSkyboxImageArray(location){
 	return urls;
 }
 
-textureCube = THREE.ImageUtils.loadTextureCube( getSkyboxImageArray('bigCube'), new THREE.CubeRefractionMapping());
+module.exports = function (scene) {
+    textureCube = THREE.ImageUtils.loadTextureCube( getSkyboxImageArray('bigCube'), new THREE.CubeRefractionMapping());
 
-shader = THREE.ShaderLib.cube;
-shader.uniforms.tCube.value = textureCube;
+    shader = THREE.ShaderLib.cube;
+    shader.uniforms.tCube.value = textureCube;
 
-material = new THREE.ShaderMaterial( {
+    material = new THREE.ShaderMaterial( {
 
-    fragmentShader: shader.fragmentShader,
-    vertexShader: shader.vertexShader,
-    uniforms: shader.uniforms,
-    depthWrite: false,
-    side: THREE.BackSide
+        fragmentShader: shader.fragmentShader,
+        vertexShader: shader.vertexShader,
+        uniforms: shader.uniforms,
+        depthWrite: false,
+        side: THREE.BackSide
 
-} );
+    } );
 
-mesh = new THREE.Mesh( new THREE.BoxGeometry( 1000, 1000, 1000 ), material );
+    mesh = new THREE.Mesh( new THREE.BoxGeometry( 1000, 1000, 1000 ), material );
+    
+    scene.add(mesh);
 
-
-
-module.exports = mesh;
+    return mesh;
+};
 },{"three":2}],8:[function(require,module,exports){
 var THREE = require('three');
 
@@ -39854,189 +39621,4 @@ module.exports = (function() {
 	return Physijs;
 })();
 
-},{"three":2}],9:[function(require,module,exports){
-'use strict';
-// Ported from Stefan Gustavson's java implementation
-// http://staffwww.itn.liu.se/~stegu/simplexnoise/simplexnoise.pdf
-// Read Stefan's excellent paper for details on how this code works.
-//
-// Sean McCullough banksean@gmail.com
-
-/**
- * You can pass in a random number generator object if you like.
- * It is assumed to have a random() method.
- */
-module.exports = (function() {
-	var SimplexNoise = function(r) {
-		if (r == undefined) r = Math;
-	  this.grad3 = [[1,1,0],[-1,1,0],[1,-1,0],[-1,-1,0], 
-	                                 [1,0,1],[-1,0,1],[1,0,-1],[-1,0,-1], 
-	                                 [0,1,1],[0,-1,1],[0,1,-1],[0,-1,-1]]; 
-	  this.p = [];
-	  for (var i=0; i<256; i++) {
-		  this.p[i] = Math.floor(r.random()*256);
-	  }
-	  // To remove the need for index wrapping, double the permutation table length 
-	  this.perm = []; 
-	  for(var i=0; i<512; i++) {
-			this.perm[i]=this.p[i & 255];
-		} 
-	
-	  // A lookup table to traverse the simplex around a given point in 4D. 
-	  // Details can be found where this table is used, in the 4D noise method. 
-	  this.simplex = [ 
-	    [0,1,2,3],[0,1,3,2],[0,0,0,0],[0,2,3,1],[0,0,0,0],[0,0,0,0],[0,0,0,0],[1,2,3,0], 
-	    [0,2,1,3],[0,0,0,0],[0,3,1,2],[0,3,2,1],[0,0,0,0],[0,0,0,0],[0,0,0,0],[1,3,2,0], 
-	    [0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0], 
-	    [1,2,0,3],[0,0,0,0],[1,3,0,2],[0,0,0,0],[0,0,0,0],[0,0,0,0],[2,3,0,1],[2,3,1,0], 
-	    [1,0,2,3],[1,0,3,2],[0,0,0,0],[0,0,0,0],[0,0,0,0],[2,0,3,1],[0,0,0,0],[2,1,3,0], 
-	    [0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0], 
-	    [2,0,1,3],[0,0,0,0],[0,0,0,0],[0,0,0,0],[3,0,1,2],[3,0,2,1],[0,0,0,0],[3,1,2,0], 
-	    [2,1,0,3],[0,0,0,0],[0,0,0,0],[0,0,0,0],[3,1,0,2],[0,0,0,0],[3,2,0,1],[3,2,1,0]]; 
-	};
-	
-	SimplexNoise.prototype.dot = function(g, x, y) { 
-		return g[0]*x + g[1]*y;
-	};
-	
-	SimplexNoise.prototype.noise = function(xin, yin) { 
-	  var n0, n1, n2; // Noise contributions from the three corners 
-	  // Skew the input space to determine which simplex cell we're in 
-	  var F2 = 0.5*(Math.sqrt(3.0)-1.0); 
-	  var s = (xin+yin)*F2; // Hairy factor for 2D 
-	  var i = Math.floor(xin+s); 
-	  var j = Math.floor(yin+s); 
-	  var G2 = (3.0-Math.sqrt(3.0))/6.0; 
-	  var t = (i+j)*G2; 
-	  var X0 = i-t; // Unskew the cell origin back to (x,y) space 
-	  var Y0 = j-t; 
-	  var x0 = xin-X0; // The x,y distances from the cell origin 
-	  var y0 = yin-Y0; 
-	  // For the 2D case, the simplex shape is an equilateral triangle. 
-	  // Determine which simplex we are in. 
-	  var i1, j1; // Offsets for second (middle) corner of simplex in (i,j) coords 
-	  if(x0>y0) {i1=1; j1=0;} // lower triangle, XY order: (0,0)->(1,0)->(1,1) 
-	  else {i1=0; j1=1;}      // upper triangle, YX order: (0,0)->(0,1)->(1,1) 
-	  // A step of (1,0) in (i,j) means a step of (1-c,-c) in (x,y), and 
-	  // a step of (0,1) in (i,j) means a step of (-c,1-c) in (x,y), where 
-	  // c = (3-sqrt(3))/6 
-	  var x1 = x0 - i1 + G2; // Offsets for middle corner in (x,y) unskewed coords 
-	  var y1 = y0 - j1 + G2; 
-	  var x2 = x0 - 1.0 + 2.0 * G2; // Offsets for last corner in (x,y) unskewed coords 
-	  var y2 = y0 - 1.0 + 2.0 * G2; 
-	  // Work out the hashed gradient indices of the three simplex corners 
-	  var ii = i & 255; 
-	  var jj = j & 255; 
-	  var gi0 = this.perm[ii+this.perm[jj]] % 12; 
-	  var gi1 = this.perm[ii+i1+this.perm[jj+j1]] % 12; 
-	  var gi2 = this.perm[ii+1+this.perm[jj+1]] % 12; 
-	  // Calculate the contribution from the three corners 
-	  var t0 = 0.5 - x0*x0-y0*y0; 
-	  if(t0<0) n0 = 0.0; 
-	  else { 
-	    t0 *= t0; 
-	    n0 = t0 * t0 * this.dot(this.grad3[gi0], x0, y0);  // (x,y) of grad3 used for 2D gradient 
-	  } 
-	  var t1 = 0.5 - x1*x1-y1*y1; 
-	  if(t1<0) n1 = 0.0; 
-	  else { 
-	    t1 *= t1; 
-	    n1 = t1 * t1 * this.dot(this.grad3[gi1], x1, y1); 
-	  }
-	  var t2 = 0.5 - x2*x2-y2*y2; 
-	  if(t2<0) n2 = 0.0; 
-	  else { 
-	    t2 *= t2; 
-	    n2 = t2 * t2 * this.dot(this.grad3[gi2], x2, y2); 
-	  } 
-	  // Add contributions from each corner to get the final noise value. 
-	  // The result is scaled to return values in the interval [-1,1]. 
-	  return 70.0 * (n0 + n1 + n2); 
-	};
-	
-	// 3D simplex noise 
-	SimplexNoise.prototype.noise3d = function(xin, yin, zin) { 
-	  var n0, n1, n2, n3; // Noise contributions from the four corners 
-	  // Skew the input space to determine which simplex cell we're in 
-	  var F3 = 1.0/3.0; 
-	  var s = (xin+yin+zin)*F3; // Very nice and simple skew factor for 3D 
-	  var i = Math.floor(xin+s); 
-	  var j = Math.floor(yin+s); 
-	  var k = Math.floor(zin+s); 
-	  var G3 = 1.0/6.0; // Very nice and simple unskew factor, too 
-	  var t = (i+j+k)*G3; 
-	  var X0 = i-t; // Unskew the cell origin back to (x,y,z) space 
-	  var Y0 = j-t; 
-	  var Z0 = k-t; 
-	  var x0 = xin-X0; // The x,y,z distances from the cell origin 
-	  var y0 = yin-Y0; 
-	  var z0 = zin-Z0; 
-	  // For the 3D case, the simplex shape is a slightly irregular tetrahedron. 
-	  // Determine which simplex we are in. 
-	  var i1, j1, k1; // Offsets for second corner of simplex in (i,j,k) coords 
-	  var i2, j2, k2; // Offsets for third corner of simplex in (i,j,k) coords 
-	  if(x0>=y0) { 
-	    if(y0>=z0) 
-	      { i1=1; j1=0; k1=0; i2=1; j2=1; k2=0; } // X Y Z order 
-	      else if(x0>=z0) { i1=1; j1=0; k1=0; i2=1; j2=0; k2=1; } // X Z Y order 
-	      else { i1=0; j1=0; k1=1; i2=1; j2=0; k2=1; } // Z X Y order 
-	    } 
-	  else { // x0<y0 
-	    if(y0<z0) { i1=0; j1=0; k1=1; i2=0; j2=1; k2=1; } // Z Y X order 
-	    else if(x0<z0) { i1=0; j1=1; k1=0; i2=0; j2=1; k2=1; } // Y Z X order 
-	    else { i1=0; j1=1; k1=0; i2=1; j2=1; k2=0; } // Y X Z order 
-	  } 
-	  // A step of (1,0,0) in (i,j,k) means a step of (1-c,-c,-c) in (x,y,z), 
-	  // a step of (0,1,0) in (i,j,k) means a step of (-c,1-c,-c) in (x,y,z), and 
-	  // a step of (0,0,1) in (i,j,k) means a step of (-c,-c,1-c) in (x,y,z), where 
-	  // c = 1/6.
-	  var x1 = x0 - i1 + G3; // Offsets for second corner in (x,y,z) coords 
-	  var y1 = y0 - j1 + G3; 
-	  var z1 = z0 - k1 + G3; 
-	  var x2 = x0 - i2 + 2.0*G3; // Offsets for third corner in (x,y,z) coords 
-	  var y2 = y0 - j2 + 2.0*G3; 
-	  var z2 = z0 - k2 + 2.0*G3; 
-	  var x3 = x0 - 1.0 + 3.0*G3; // Offsets for last corner in (x,y,z) coords 
-	  var y3 = y0 - 1.0 + 3.0*G3; 
-	  var z3 = z0 - 1.0 + 3.0*G3; 
-	  // Work out the hashed gradient indices of the four simplex corners 
-	  var ii = i & 255; 
-	  var jj = j & 255; 
-	  var kk = k & 255; 
-	  var gi0 = this.perm[ii+this.perm[jj+this.perm[kk]]] % 12; 
-	  var gi1 = this.perm[ii+i1+this.perm[jj+j1+this.perm[kk+k1]]] % 12; 
-	  var gi2 = this.perm[ii+i2+this.perm[jj+j2+this.perm[kk+k2]]] % 12; 
-	  var gi3 = this.perm[ii+1+this.perm[jj+1+this.perm[kk+1]]] % 12; 
-	  // Calculate the contribution from the four corners 
-	  var t0 = 0.6 - x0*x0 - y0*y0 - z0*z0; 
-	  if(t0<0) n0 = 0.0; 
-	  else { 
-	    t0 *= t0; 
-	    n0 = t0 * t0 * this.dot(this.grad3[gi0], x0, y0, z0); 
-	  }
-	  var t1 = 0.6 - x1*x1 - y1*y1 - z1*z1; 
-	  if(t1<0) n1 = 0.0; 
-	  else { 
-	    t1 *= t1; 
-	    n1 = t1 * t1 * this.dot(this.grad3[gi1], x1, y1, z1); 
-	  } 
-	  var t2 = 0.6 - x2*x2 - y2*y2 - z2*z2; 
-	  if(t2<0) n2 = 0.0; 
-	  else { 
-	    t2 *= t2; 
-	    n2 = t2 * t2 * this.dot(this.grad3[gi2], x2, y2, z2); 
-	  } 
-	  var t3 = 0.6 - x3*x3 - y3*y3 - z3*z3; 
-	  if(t3<0) n3 = 0.0; 
-	  else { 
-	    t3 *= t3; 
-	    n3 = t3 * t3 * this.dot(this.grad3[gi3], x3, y3, z3); 
-	  } 
-	  // Add contributions from each corner to get the final noise value. 
-	  // The result is scaled to stay just inside [-1,1] 
-	  return 32.0*(n0 + n1 + n2 + n3); 
-	};
-	
-	return SimplexNoise;
-})();
-},{}]},{},[1]);
+},{"three":2}]},{},[1]);

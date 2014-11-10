@@ -2,14 +2,16 @@
 
 var THREE = require('three');
 
-var camera;
 
-camera = new THREE.PerspectiveCamera(
-	35,
-	window.innerWidth / window.innerHeight,
-	1,
-	1000
-);
-camera.position.set( 60, 50, 60 );
 
-module.exports = camera;
+module.exports = function (scene) {		
+	var camera = new THREE.PerspectiveCamera(
+		50,
+		window.innerWidth / window.innerHeight,
+		1,
+		1000
+	);
+	scene.add( camera );
+
+	return camera;
+};

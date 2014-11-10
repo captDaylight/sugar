@@ -15,23 +15,25 @@ function getSkyboxImageArray(location){
 	return urls;
 }
 
-textureCube = THREE.ImageUtils.loadTextureCube( getSkyboxImageArray('bigCube'), new THREE.CubeRefractionMapping());
+module.exports = function (scene) {
+    textureCube = THREE.ImageUtils.loadTextureCube( getSkyboxImageArray('bigCube'), new THREE.CubeRefractionMapping());
 
-shader = THREE.ShaderLib.cube;
-shader.uniforms.tCube.value = textureCube;
+    shader = THREE.ShaderLib.cube;
+    shader.uniforms.tCube.value = textureCube;
 
-material = new THREE.ShaderMaterial( {
+    material = new THREE.ShaderMaterial( {
 
-    fragmentShader: shader.fragmentShader,
-    vertexShader: shader.vertexShader,
-    uniforms: shader.uniforms,
-    depthWrite: false,
-    side: THREE.BackSide
+        fragmentShader: shader.fragmentShader,
+        vertexShader: shader.vertexShader,
+        uniforms: shader.uniforms,
+        depthWrite: false,
+        side: THREE.BackSide
 
-} );
+    } );
 
-mesh = new THREE.Mesh( new THREE.BoxGeometry( 1000, 1000, 1000 ), material );
+    mesh = new THREE.Mesh( new THREE.BoxGeometry( 1000, 1000, 1000 ), material );
+    
+    scene.add(mesh);
 
-
-
-module.exports = mesh;
+    return mesh;
+};
