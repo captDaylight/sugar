@@ -15,6 +15,7 @@ var addLights = require('./lights');
 var addCamera = require('./camera');
 var addLandscape = require('./landscape');
 var addSkybox = require('./skybox');
+var addVehicle = require('./vehicle');
 
 var loader = new THREE.JSONLoader(),
 	initScene, render,
@@ -62,11 +63,8 @@ scene.addEventListener(
 
 // add elements to the scene
 camera = addCamera(scene);
-
 light = addLights(scene);
-
 addLandscape(scene, Physijs, loader);
-
 addSkybox(scene);
 	
 
@@ -98,6 +96,8 @@ loader.load( "models/test/test.json", function( islands, islands_material ) {
 
 });		
 
+// addVehicle(scene, Physijs, loader, input, vehicle);
+
 loader.load( "models/mustang/mustang.js", function( car, car_materials ) {
 	loader.load( "models/mustang/mustang_wheel.js", function( wheel, wheel_materials ) {
 		var mesh = new Physijs.BoxMesh(
@@ -106,8 +106,6 @@ loader.load( "models/mustang/mustang.js", function( car, car_materials ) {
 		);
 		mesh.position.y = 5;
 		mesh.castShadow = mesh.receiveShadow = true;
-		console.log('---');
-		console.log(mesh.position);
 		vehicle = new Physijs.Vehicle(mesh, new Physijs.VehicleTuning(
 			10.88, // suspension_stiffness
 			1.83, // suspension_compression
@@ -183,7 +181,6 @@ loader.load( "models/mustang/mustang.js", function( car, car_materials ) {
 	});
 });
 
-scene.add(require('./skybox'));
 
 render = function() {
 	requestAnimationFrame( render );
@@ -198,7 +195,6 @@ render = function() {
 	renderer.render( scene, camera );
 
 };
-
 
 requestAnimationFrame( render );
 scene.simulate();
@@ -221,7 +217,7 @@ window.addEventListener( 'resize', onWindowResize(camera, renderer), false );
 
 
 
-},{"./camera":3,"./events/onWindowResize":4,"./landscape":5,"./lights":6,"./skybox":7,"./vendor/physi":8,"three":2}],2:[function(require,module,exports){
+},{"./camera":3,"./events/onWindowResize":4,"./landscape":5,"./lights":6,"./skybox":7,"./vehicle":8,"./vendor/physi":9,"three":2}],2:[function(require,module,exports){
 var self = self || {};/**
  * @author mrdoob / http://mrdoob.com/
  * @author Larry Battle / http://bateru.com/news
@@ -38134,7 +38130,40 @@ module.exports = function (scene, Physijs, loader) {
 	ground_material.map.repeat.set( 1, 1 );
 
 
-	loader.load( "models/islands/islands.json", function( islands, islands_material ) {
+	loader.load( "models/islands/islands01.json", function( islands, islands_material ) {
+		
+		var mesh = new Physijs.ConvexMesh(
+			islands,
+			ground_material,
+			0
+		);
+		mesh.receiveShadow = true;
+		scene.add(mesh);
+	});
+
+	loader.load( "models/islands/islands02.json", function( islands, islands_material ) {
+		
+		var mesh = new Physijs.ConvexMesh(
+			islands,
+			ground_material,
+			0
+		);
+		mesh.receiveShadow = true;
+		scene.add(mesh);
+	});
+
+	loader.load( "models/islands/islands03.json", function( islands, islands_material ) {
+		
+		var mesh = new Physijs.ConvexMesh(
+			islands,
+			ground_material,
+			0
+		);
+		mesh.receiveShadow = true;
+		scene.add(mesh);
+	});
+
+	loader.load( "models/islands/islands04.json", function( islands, islands_material ) {
 		
 		var mesh = new Physijs.ConvexMesh(
 			islands,
@@ -38222,6 +38251,97 @@ module.exports = function (scene) {
     return mesh;
 };
 },{"three":2}],8:[function(require,module,exports){
+var THREE = require('three');
+
+
+module.exports = function (scene, Physijs, loader, input, vehicle) {
+	loader.load( "models/mustang/mustang.js", function( car, car_materials ) {
+		loader.load( "models/mustang/mustang_wheel.js", function( wheel, wheel_materials ) {
+			var mesh = new Physijs.BoxMesh(
+				car,
+				new THREE.MeshFaceMaterial( car_materials )
+			);
+			mesh.position.y = 5;
+			mesh.castShadow = mesh.receiveShadow = true;
+
+			var vehicle = new Physijs.Vehicle(mesh, new Physijs.VehicleTuning(
+				10.88, // suspension_stiffness
+				1.83, // suspension_compression
+				0.28, // suspension_damping
+				500, // max_suspension_travel
+				10.5, // friction_slip
+				6000 // max_suspension_force
+			));
+			scene.add( vehicle );
+
+			var wheel_material = new THREE.MeshFaceMaterial( wheel_materials );
+
+			for ( var i = 0; i < 4; i++ ) {
+				vehicle.addWheel(
+					wheel,
+					wheel_material,
+					new THREE.Vector3(
+							i % 2 === 0 ? -1.6 : 1.6,
+							-1,
+							i < 2 ? 3.3 : -3.2
+					),
+					new THREE.Vector3( 0, -1, 0 ),
+					new THREE.Vector3( -1, 0, 0 ),
+					0.5,
+					0.7,
+					i < 2 ? false : true
+				);
+			}
+
+			input = {
+				power: null,
+				direction: null,
+				steering: 0
+			};
+			document.addEventListener('keydown', function( ev ) {
+				switch ( ev.keyCode ) {
+					case 37: // left
+						input.direction = 1;
+						break;
+
+					case 38: // forward
+						input.power = true;
+						break;
+
+					case 39: // right
+						input.direction = -1;
+						break;
+
+					case 40: // back
+						input.power = false;
+						break;
+				}
+			});
+			document.addEventListener('keyup', function( ev ) {
+				switch ( ev.keyCode ) {
+					case 37: // left
+						input.direction = null;
+						break;
+
+					case 38: // forward
+						input.power = null;
+						break;
+
+					case 39: // right
+						input.direction = null;
+						break;
+
+					case 40: // back
+						input.power = null;
+						break;
+				}
+			});
+			
+			return vehicle;
+		});
+	});
+};
+},{"three":2}],9:[function(require,module,exports){
 var THREE = require('three');
 
 module.exports = (function() {

@@ -14,6 +14,7 @@ var addLights = require('./lights');
 var addCamera = require('./camera');
 var addLandscape = require('./landscape');
 var addSkybox = require('./skybox');
+var addVehicle = require('./vehicle');
 
 var loader = new THREE.JSONLoader(),
 	initScene, render,
@@ -61,11 +62,8 @@ scene.addEventListener(
 
 // add elements to the scene
 camera = addCamera(scene);
-
 light = addLights(scene);
-
 addLandscape(scene, Physijs, loader);
-
 addSkybox(scene);
 	
 
@@ -97,6 +95,8 @@ loader.load( "models/test/test.json", function( islands, islands_material ) {
 
 });		
 
+// addVehicle(scene, Physijs, loader, input, vehicle);
+
 loader.load( "models/mustang/mustang.js", function( car, car_materials ) {
 	loader.load( "models/mustang/mustang_wheel.js", function( wheel, wheel_materials ) {
 		var mesh = new Physijs.BoxMesh(
@@ -105,8 +105,6 @@ loader.load( "models/mustang/mustang.js", function( car, car_materials ) {
 		);
 		mesh.position.y = 5;
 		mesh.castShadow = mesh.receiveShadow = true;
-		console.log('---');
-		console.log(mesh.position);
 		vehicle = new Physijs.Vehicle(mesh, new Physijs.VehicleTuning(
 			10.88, // suspension_stiffness
 			1.83, // suspension_compression
@@ -182,7 +180,6 @@ loader.load( "models/mustang/mustang.js", function( car, car_materials ) {
 	});
 });
 
-scene.add(require('./skybox'));
 
 render = function() {
 	requestAnimationFrame( render );
@@ -197,7 +194,6 @@ render = function() {
 	renderer.render( scene, camera );
 
 };
-
 
 requestAnimationFrame( render );
 scene.simulate();

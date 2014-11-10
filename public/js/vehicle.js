@@ -1,6 +1,7 @@
 var THREE = require('three');
 
-module.exports = function (scene, Physijs, loader) {
+
+module.exports = function (scene, Physijs, loader, input, vehicle) {
 	loader.load( "models/mustang/mustang.js", function( car, car_materials ) {
 		loader.load( "models/mustang/mustang_wheel.js", function( wheel, wheel_materials ) {
 			var mesh = new Physijs.BoxMesh(
@@ -10,7 +11,7 @@ module.exports = function (scene, Physijs, loader) {
 			mesh.position.y = 5;
 			mesh.castShadow = mesh.receiveShadow = true;
 
-			vehicle = new Physijs.Vehicle(mesh, new Physijs.VehicleTuning(
+			var vehicle = new Physijs.Vehicle(mesh, new Physijs.VehicleTuning(
 				10.88, // suspension_stiffness
 				1.83, // suspension_compression
 				0.28, // suspension_damping
@@ -82,6 +83,8 @@ module.exports = function (scene, Physijs, loader) {
 						break;
 				}
 			});
+			
+			return vehicle;
 		});
 	});
 };

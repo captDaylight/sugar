@@ -11,7 +11,40 @@ module.exports = function (scene, Physijs, loader) {
 	ground_material.map.repeat.set( 1, 1 );
 
 
-	loader.load( "models/islands/islands.json", function( islands, islands_material ) {
+	loader.load( "models/islands/islands01.json", function( islands, islands_material ) {
+		
+		var mesh = new Physijs.ConvexMesh(
+			islands,
+			ground_material,
+			0
+		);
+		mesh.receiveShadow = true;
+		scene.add(mesh);
+	});
+
+	loader.load( "models/islands/islands02.json", function( islands, islands_material ) {
+		
+		var mesh = new Physijs.ConvexMesh(
+			islands,
+			ground_material,
+			0
+		);
+		mesh.receiveShadow = true;
+		scene.add(mesh);
+	});
+
+	loader.load( "models/islands/islands03.json", function( islands, islands_material ) {
+		
+		var mesh = new Physijs.ConvexMesh(
+			islands,
+			ground_material,
+			0
+		);
+		mesh.receiveShadow = true;
+		scene.add(mesh);
+	});
+
+	loader.load( "models/islands/islands04.json", function( islands, islands_material ) {
 		
 		var mesh = new Physijs.ConvexMesh(
 			islands,
