@@ -22,6 +22,17 @@ var loader = new THREE.JSONLoader(),
 	projector, renderer, scene, ground, light, camera,
 		vehicle_body, vehicle, input;
 
+function getCameraVector(objYRotation, distance) {
+
+	var coords = {x:0, z:0};
+
+	coords.x = Math.sin(objYRotation) * distance;
+
+	coords.z = Math.pow( (Math.pow(distance, 2) + Math.pow(coords.x, 2)), 0.5);
+
+	return coords;
+}
+
 
 projector = new THREE.Projector;
 
@@ -105,6 +116,12 @@ loader.load( "models/mustang/mustang.js", function( car, car_materials ) {
 		);
 		mesh.position.y = 5;
 		mesh.castShadow = mesh.receiveShadow = true;
+		camera.position.y = 3;
+		camera.position.z = -20;
+		camera.lookAt( mesh.position );
+		mesh.add(camera);
+
+		
 		vehicle = new Physijs.Vehicle(mesh, new Physijs.VehicleTuning(
 			10.88, // suspension_stiffness
 			1.83, // suspension_compression
@@ -113,6 +130,7 @@ loader.load( "models/mustang/mustang.js", function( car, car_materials ) {
 			10.5, // friction_slip
 			6000 // max_suspension_force
 		));
+
 		scene.add( vehicle );
 
 		var wheel_material = new THREE.MeshFaceMaterial( wheel_materials );
@@ -180,13 +198,23 @@ loader.load( "models/mustang/mustang.js", function( car, car_materials ) {
 	});
 });
 
-
+var cameraVector;
+var relativeCameraOffset, cameraOffset;
 render = function() {
 	requestAnimationFrame( render );
 
 	if ( vehicle ) {
-		camera.position.copy( vehicle.mesh.position ).add( new THREE.Vector3( 25, 10, 25 ) );
-		camera.lookAt( vehicle.mesh.position );
+		console.log(vehicle.mesh.rotation);
+		// relativeCameraOffset = new THREE.Vector3(0,5,20);
+
+		// cameraOffset = relativeCameraOffset.applyMatrix4( vehicle.mesh.matrixWorld );
+
+		// camera.position.x = cameraOffset.x;
+		// camera.position.y = cameraOffset.y;
+		// camera.position.z = cameraOffset.z;
+
+		// camera.position.copy( vehicle.mesh.position ).add( new THREE.Vector3( 10, 5, 10 ) );
+		// camera.lookAt( vehicle.mesh.position );
 
 		light.target.position.copy( vehicle.mesh.position );
 		light.position.addVectors( light.target.position, new THREE.Vector3( 20, 20, -15 ) );

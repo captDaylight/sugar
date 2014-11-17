@@ -11,7 +11,7 @@ module.exports = function (scene) {
 		1,
 		1000
 	);
-	scene.add( camera );
+	// scene.add( camera );
 
 	return camera;
 };
