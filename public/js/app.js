@@ -53,6 +53,8 @@ scene.addEventListener(
 				input.steering += input.direction / 50;
 				if ( input.steering < -.6 ) input.steering = -.6;
 				if ( input.steering > .6 ) input.steering = .6;
+			} else {
+				input.steering = 0;
 			}
 			vehicle.setSteering( input.steering, 0 );
 			vehicle.setSteering( input.steering, 1 );
@@ -123,12 +125,12 @@ loader.load( "models/mustang/mustang.js", function( car, car_materials ) {
 
 		
 		vehicle = new Physijs.Vehicle(mesh, new Physijs.VehicleTuning(
-			10.88, // suspension_stiffness
-			1.83, // suspension_compression
+			11.88, // suspension_stiffness
+			2.83, // suspension_compression
 			0.28, // suspension_damping
 			500, // max_suspension_travel
 			10.5, // friction_slip
-			6000 // max_suspension_force
+			4000 // max_suspension_force
 		));
 
 		scene.add( vehicle );
@@ -204,17 +206,6 @@ render = function() {
 	requestAnimationFrame( render );
 
 	if ( vehicle ) {
-		console.log(vehicle.mesh.rotation);
-		// relativeCameraOffset = new THREE.Vector3(0,5,20);
-
-		// cameraOffset = relativeCameraOffset.applyMatrix4( vehicle.mesh.matrixWorld );
-
-		// camera.position.x = cameraOffset.x;
-		// camera.position.y = cameraOffset.y;
-		// camera.position.z = cameraOffset.z;
-
-		// camera.position.copy( vehicle.mesh.position ).add( new THREE.Vector3( 10, 5, 10 ) );
-		// camera.lookAt( vehicle.mesh.position );
 
 		light.target.position.copy( vehicle.mesh.position );
 		light.position.addVectors( light.target.position, new THREE.Vector3( 20, 20, -15 ) );
