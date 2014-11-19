@@ -1,6 +1,6 @@
 var THREE = require('three');
 
-module.exports = function (scene, Physijs, loader) {
+module.exports = function (scene, Physijs, loader, listener) {
 	// Materials
 	ground_material = Physijs.createMaterial(
 		new THREE.MeshLambertMaterial({ map: THREE.ImageUtils.loadTexture( 'images/marble.jpg' ) }),
@@ -18,6 +18,12 @@ module.exports = function (scene, Physijs, loader) {
 			ground_material,
 			0
 		);
+		var sound1 = new THREE.Audio( listener );
+		sound1.load( 'sounds/2.ogg' );
+		sound1.setRefDistance( 50 );
+
+		mesh.add(sound1);
+
 		mesh.receiveShadow = true;
 		scene.add(mesh);
 	});

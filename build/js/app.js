@@ -21,7 +21,7 @@ var loader = new THREE.JSONLoader(),
 	initScene, render,
 	ground_material, box_material,
 	projector, renderer, scene, ground, light, camera,
-		vehicle_body, vehicle, input;
+		vehicle_body, vehicle, input, listener;
 
 function getCameraVector(objYRotation, distance) {
 
@@ -34,7 +34,7 @@ function getCameraVector(objYRotation, distance) {
 	return coords;
 }
 
-
+listener = new THREE.AudioListener();
 projector = new THREE.Projector;
 
 renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -75,9 +75,9 @@ scene.addEventListener(
 );
 
 // add elements to the scene
-camera = addCamera(scene);
+camera = addCamera(scene, listener);
 light = addLights(scene);
-addLandscape(scene, Physijs, loader);
+addLandscape(scene, Physijs, loader, listener);
 addSkybox(scene);
 	
 
@@ -143,7 +143,7 @@ loader.load( "models/mustang/mustang.js", function( car, car_materials ) {
 				wheel,
 				wheel_material,
 				new THREE.Vector3(
-						i % 2 === 0 ? -1.6 : 1.6,
+						i % 2 === 0 ? -2.0 : 2.0,
 						-1,
 						i < 2 ? 3.3 : -3.2
 				),
@@ -34988,13 +34988,15 @@ var THREE = require('three');
 
 
 
-module.exports = function (scene) {		
+module.exports = function (scene, listener) {		
 	var camera = new THREE.PerspectiveCamera(
 		50,
 		window.innerWidth / window.innerHeight,
 		1,
 		1000
 	);
+	
+	camera.add( listener );
 	// scene.add( camera );
 
 	return camera;
@@ -35010,7 +35012,7 @@ module.exports = function (camera, renderer) {
 },{}],5:[function(require,module,exports){
 var THREE = require('three');
 
-module.exports = function (scene, Physijs, loader) {
+module.exports = function (scene, Physijs, loader, listener) {
 	// Materials
 	ground_material = Physijs.createMaterial(
 		new THREE.MeshLambertMaterial({ map: THREE.ImageUtils.loadTexture( 'images/marble.jpg' ) }),
@@ -35028,6 +35030,12 @@ module.exports = function (scene, Physijs, loader) {
 			ground_material,
 			0
 		);
+		var sound1 = new THREE.Audio( listener );
+		sound1.load( 'sounds/2.ogg' );
+		sound1.setRefDistance( 50 );
+
+		mesh.add(sound1);
+
 		mesh.receiveShadow = true;
 		scene.add(mesh);
 	});
