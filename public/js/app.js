@@ -60,7 +60,7 @@ scene.addEventListener(
 			vehicle.setSteering( input.steering, 1 );
 
 			if ( input.power === true ) {
-				vehicle.applyEngineForce( 1000 );
+				vehicle.applyEngineForce( 600 );
 			} else if ( input.power === false ) {
 				vehicle.setBrake( 20, 2 );
 				vehicle.setBrake( 20, 3 );
