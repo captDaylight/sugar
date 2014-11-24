@@ -9,7 +9,7 @@ module.exports = function (scene, listener) {
 		50,
 		window.innerWidth / window.innerHeight,
 		1,
-		1000
+		2000
 	);
 	
 	camera.add( listener );

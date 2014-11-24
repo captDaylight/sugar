@@ -11,6 +11,7 @@ module.exports = function (scene, Physijs, loader, listener) {
 	ground_material.map.repeat.set( 1, 1 );
 
 
+	// ISLAND 1
 	loader.load( "models/islands/islands01.json", function( islands, islands_material ) {
 		
 		var mesh = new Physijs.ConvexMesh(
@@ -18,16 +19,18 @@ module.exports = function (scene, Physijs, loader, listener) {
 			ground_material,
 			0
 		);
-		var sound1 = new THREE.Audio( listener );
-		sound1.load( 'sounds/2.ogg' );
-		sound1.setRefDistance( 50 );
+		// var sound1 = new THREE.Audio( listener );
+		// sound1.load( 'sounds/2.ogg' );
+		// sound1.setRefDistance( 50 );
+		// sound1.setLoop(true);
 
-		mesh.add(sound1);
+		// mesh.add(sound1);
 
 		mesh.receiveShadow = true;
 		scene.add(mesh);
 	});
 
+	// ISLAND 2
 	loader.load( "models/islands/islands02.json", function( islands, islands_material ) {
 		
 		var mesh = new Physijs.ConvexMesh(
@@ -39,6 +42,7 @@ module.exports = function (scene, Physijs, loader, listener) {
 		scene.add(mesh);
 	});
 
+	// BRIDGE 1
 	loader.load( "models/islands/islands03.json", function( islands, islands_material ) {
 		
 		var mesh = new Physijs.ConvexMesh(
@@ -50,7 +54,32 @@ module.exports = function (scene, Physijs, loader, listener) {
 		scene.add(mesh);
 	});
 
+	// ISLAND 3
 	loader.load( "models/islands/islands04.json", function( islands, islands_material ) {
+		
+		var mesh = new Physijs.ConvexMesh(
+			islands,
+			ground_material,
+			0
+		);
+		mesh.receiveShadow = true;
+		scene.add(mesh);
+	});
+
+	// BRIDGE 2
+	loader.load( "models/islands/islands05.json", function( islands, islands_material ) {
+		
+		var mesh = new Physijs.ConvexMesh(
+			islands,
+			ground_material,
+			0
+		);
+		mesh.receiveShadow = true;
+		scene.add(mesh);
+	});
+
+	// CASTLE
+	loader.load( "models/islands/islands06.json", function( islands, islands_material ) {
 		
 		var mesh = new Physijs.ConvexMesh(
 			islands,

@@ -15,6 +15,8 @@ var addCamera = require('./camera');
 var addLandscape = require('./landscape');
 var addSkybox = require('./skybox');
 var addVehicle = require('./vehicle');
+// require('./soundEvents');
+
 
 var loader = new THREE.JSONLoader(),
 	initScene, render,
@@ -88,23 +90,23 @@ loader.load( "models/test/test.json", function( islands, islands_material ) {
 		.6 // high restitution
 	);	
 
-	for ( var i = 0; i < 10; i++ ) {
-		var size = Math.random() * 2 + .5;
-		var mesh = new Physijs.ConvexMesh(
-			islands,
-			box_material,
-			1
-		);
+	// for ( var i = 0; i < 10; i++ ) {
+	// 	var size = Math.random() * 2 + .5;
+	// 	var mesh = new Physijs.ConvexMesh(
+	// 		islands,
+	// 		box_material,
+	// 		1
+	// 	);
 
-		mesh.castShadow = true;
-		mesh.position.set(
-			Math.random() * 50 - 50,
-			Math.random() * 50 + 15,
-			Math.random() * 50 - 50
-		);
-		mesh.rotation.set(size, size, size);
-		scene.add( mesh )
-	}
+	// 	mesh.castShadow = true;
+	// 	mesh.position.set(
+	// 		Math.random() * 50 - 50,
+	// 		Math.random() * 50 + 15,
+	// 		Math.random() * 50 - 50
+	// 	);
+	// 	mesh.rotation.set(size, size, size);
+	// 	scene.add( mesh )
+	// }
 
 });		
 
@@ -119,11 +121,12 @@ loader.load( "models/mustang/mustang.js", function( car, car_materials ) {
 		mesh.position.y = 5;
 		mesh.castShadow = mesh.receiveShadow = true;
 		camera.position.y = 3;
-		camera.position.z = -20;
+		camera.position.z = -25;
 		camera.lookAt( mesh.position );
 		mesh.add(camera);
 
-		
+		mesh.position.z = -200;
+
 		vehicle = new Physijs.Vehicle(mesh, new Physijs.VehicleTuning(
 			11.88, // suspension_stiffness
 			2.83, // suspension_compression

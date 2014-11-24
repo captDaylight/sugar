@@ -16,6 +16,8 @@ var addCamera = require('./camera');
 var addLandscape = require('./landscape');
 var addSkybox = require('./skybox');
 var addVehicle = require('./vehicle');
+// require('./soundEvents');
+
 
 var loader = new THREE.JSONLoader(),
 	initScene, render,
@@ -89,23 +91,23 @@ loader.load( "models/test/test.json", function( islands, islands_material ) {
 		.6 // high restitution
 	);	
 
-	for ( var i = 0; i < 10; i++ ) {
-		var size = Math.random() * 2 + .5;
-		var mesh = new Physijs.ConvexMesh(
-			islands,
-			box_material,
-			1
-		);
+	// for ( var i = 0; i < 10; i++ ) {
+	// 	var size = Math.random() * 2 + .5;
+	// 	var mesh = new Physijs.ConvexMesh(
+	// 		islands,
+	// 		box_material,
+	// 		1
+	// 	);
 
-		mesh.castShadow = true;
-		mesh.position.set(
-			Math.random() * 50 - 50,
-			Math.random() * 50 + 15,
-			Math.random() * 50 - 50
-		);
-		mesh.rotation.set(size, size, size);
-		scene.add( mesh )
-	}
+	// 	mesh.castShadow = true;
+	// 	mesh.position.set(
+	// 		Math.random() * 50 - 50,
+	// 		Math.random() * 50 + 15,
+	// 		Math.random() * 50 - 50
+	// 	);
+	// 	mesh.rotation.set(size, size, size);
+	// 	scene.add( mesh )
+	// }
 
 });		
 
@@ -120,11 +122,12 @@ loader.load( "models/mustang/mustang.js", function( car, car_materials ) {
 		mesh.position.y = 5;
 		mesh.castShadow = mesh.receiveShadow = true;
 		camera.position.y = 3;
-		camera.position.z = -20;
+		camera.position.z = -25;
 		camera.lookAt( mesh.position );
 		mesh.add(camera);
 
-		
+		mesh.position.z = -200;
+
 		vehicle = new Physijs.Vehicle(mesh, new Physijs.VehicleTuning(
 			11.88, // suspension_stiffness
 			2.83, // suspension_compression
@@ -34993,7 +34996,7 @@ module.exports = function (scene, listener) {
 		50,
 		window.innerWidth / window.innerHeight,
 		1,
-		1000
+		2000
 	);
 	
 	camera.add( listener );
@@ -35023,6 +35026,7 @@ module.exports = function (scene, Physijs, loader, listener) {
 	ground_material.map.repeat.set( 1, 1 );
 
 
+	// ISLAND 1
 	loader.load( "models/islands/islands01.json", function( islands, islands_material ) {
 		
 		var mesh = new Physijs.ConvexMesh(
@@ -35030,16 +35034,18 @@ module.exports = function (scene, Physijs, loader, listener) {
 			ground_material,
 			0
 		);
-		var sound1 = new THREE.Audio( listener );
-		sound1.load( 'sounds/2.ogg' );
-		sound1.setRefDistance( 50 );
+		// var sound1 = new THREE.Audio( listener );
+		// sound1.load( 'sounds/2.ogg' );
+		// sound1.setRefDistance( 50 );
+		// sound1.setLoop(true);
 
-		mesh.add(sound1);
+		// mesh.add(sound1);
 
 		mesh.receiveShadow = true;
 		scene.add(mesh);
 	});
 
+	// ISLAND 2
 	loader.load( "models/islands/islands02.json", function( islands, islands_material ) {
 		
 		var mesh = new Physijs.ConvexMesh(
@@ -35051,6 +35057,7 @@ module.exports = function (scene, Physijs, loader, listener) {
 		scene.add(mesh);
 	});
 
+	// BRIDGE 1
 	loader.load( "models/islands/islands03.json", function( islands, islands_material ) {
 		
 		var mesh = new Physijs.ConvexMesh(
@@ -35062,7 +35069,32 @@ module.exports = function (scene, Physijs, loader, listener) {
 		scene.add(mesh);
 	});
 
+	// ISLAND 3
 	loader.load( "models/islands/islands04.json", function( islands, islands_material ) {
+		
+		var mesh = new Physijs.ConvexMesh(
+			islands,
+			ground_material,
+			0
+		);
+		mesh.receiveShadow = true;
+		scene.add(mesh);
+	});
+
+	// BRIDGE 2
+	loader.load( "models/islands/islands05.json", function( islands, islands_material ) {
+		
+		var mesh = new Physijs.ConvexMesh(
+			islands,
+			ground_material,
+			0
+		);
+		mesh.receiveShadow = true;
+		scene.add(mesh);
+	});
+
+	// CASTLE
+	loader.load( "models/islands/islands06.json", function( islands, islands_material ) {
 		
 		var mesh = new Physijs.ConvexMesh(
 			islands,
