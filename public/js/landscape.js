@@ -90,4 +90,64 @@ module.exports = function (scene, Physijs, loader, listener) {
 		scene.add(mesh);
 	});
 
+	// FOREGROUND CONES, ISLAND 1
+	loader.load( "models/islands/islands07.json", function( islands, islands_material ) {
+		
+		var mesh = new Physijs.ConvexMesh(
+			islands,
+			ground_material,
+			0
+		);
+		mesh.receiveShadow = true;
+		scene.add(mesh);
+	});
+
+	// ISLAND 1 CONES
+ 	loader.load( "models/islands/islands08.json", function( islands, islands_material ) {
+		
+		var mesh = new Physijs.ConvexMesh(
+			islands,
+			ground_material,
+			0
+		);
+		mesh.receiveShadow = true;
+		scene.add(mesh);
+	});
+
+	// ISLAND 2 CONES RIGHT
+ 	loader.load( "models/islands/islands09.json", function( islands, islands_material ) {
+		
+		var mesh = new Physijs.ConvexMesh(
+			islands,
+			ground_material,
+			0
+		);
+		mesh.receiveShadow = true;
+		scene.add(mesh);
+	});
+
+	// ISLAND 2 CONES RIGHT
+ 	loader.load( "models/islands/islands10.json", function( islands, islands_material ) {
+		
+		var mesh = new Physijs.ConvexMesh(
+			islands,
+			ground_material,
+			0
+		);
+		mesh.receiveShadow = true;
+		scene.add(mesh);
+	});
+
+ 		// ISLAND 2 CONES RIGHT
+ 	loader.load( "models/islands/islands11.json", function( islands, islands_material ) {
+		
+		var mesh = new Physijs.ConvexMesh(
+			islands,
+			ground_material,
+			0
+		);
+		mesh.receiveShadow = true;
+		scene.add(mesh);
+	});
+
 }
