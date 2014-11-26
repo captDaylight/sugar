@@ -35017,7 +35017,7 @@ var THREE = require('three');
 
 module.exports = function (scene, Physijs, loader, listener) {
 	// Materials
-	ground_material = Physijs.createMaterial(
+	var ground_material = Physijs.createMaterial(
 		new THREE.MeshLambertMaterial({ map: THREE.ImageUtils.loadTexture( 'images/marble.jpg' ) }),
 		.8, // high friction
 		.4 // low restitution
@@ -35025,13 +35025,37 @@ module.exports = function (scene, Physijs, loader, listener) {
 	ground_material.map.wrapS = ground_material.map.wrapT = THREE.RepeatWrapping;
 	ground_material.map.repeat.set( 1, 1 );
 
+	var wood_material = Physijs.createMaterial(
+		new THREE.MeshLambertMaterial({ map: THREE.ImageUtils.loadTexture( 'images/plywood.jpg' ) }),
+		.8, // high friction
+		.4 // low restitution
+	);
+	wood_material.map.wrapS = ground_material.map.wrapT = THREE.RepeatWrapping;
+	wood_material.map.repeat.set( 1, 1 );
+
+	var rocks_material = Physijs.createMaterial(
+		new THREE.MeshLambertMaterial({ map: THREE.ImageUtils.loadTexture( 'images/rocks.jpg' ) }),
+		.8, // high friction
+		.4 // low restitution
+	);
+	rocks_material.map.wrapS = ground_material.map.wrapT = THREE.RepeatWrapping;
+	rocks_material.map.repeat.set( 1, 1 );
+
+	var grass_material = Physijs.createMaterial(
+		new THREE.MeshLambertMaterial({ map: THREE.ImageUtils.loadTexture( 'images/grass.png' ) }),
+		.8, // high friction
+		.4 // low restitution
+	);
+	grass_material.map.wrapS = ground_material.map.wrapT = THREE.RepeatWrapping;
+	grass_material.map.repeat.set( 1, 1 );
+
 
 	// ISLAND 1
 	loader.load( "models/islands/islands01.json", function( islands, islands_material ) {
 		
 		var mesh = new Physijs.ConvexMesh(
 			islands,
-			ground_material,
+			rocks_material,
 			0
 		);
 		// var sound1 = new THREE.Audio( listener );
@@ -35050,7 +35074,7 @@ module.exports = function (scene, Physijs, loader, listener) {
 		
 		var mesh = new Physijs.ConvexMesh(
 			islands,
-			ground_material,
+			grass_material,
 			0
 		);
 		mesh.receiveShadow = true;
@@ -35062,7 +35086,7 @@ module.exports = function (scene, Physijs, loader, listener) {
 		
 		var mesh = new Physijs.ConvexMesh(
 			islands,
-			ground_material,
+			wood_material,
 			0
 		);
 		mesh.receiveShadow = true;
@@ -35134,7 +35158,7 @@ module.exports = function (scene, Physijs, loader, listener) {
 		
 		var mesh = new Physijs.ConvexMesh(
 			islands,
-			ground_material,
+			grass_material,
 			0
 		);
 		mesh.receiveShadow = true;
@@ -35146,7 +35170,7 @@ module.exports = function (scene, Physijs, loader, listener) {
 		
 		var mesh = new Physijs.ConvexMesh(
 			islands,
-			ground_material,
+			grass_material,
 			0
 		);
 		mesh.receiveShadow = true;
@@ -35158,7 +35182,7 @@ module.exports = function (scene, Physijs, loader, listener) {
 		
 		var mesh = new Physijs.ConvexMesh(
 			islands,
-			ground_material,
+			grass_material,
 			0
 		);
 		mesh.receiveShadow = true;
