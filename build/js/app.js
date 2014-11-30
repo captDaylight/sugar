@@ -35047,7 +35047,7 @@ module.exports = function (scene, Physijs, loader, listener) {
 		.4 // low restitution
 	);
 	grass_material.map.wrapS = ground_material.map.wrapT = THREE.RepeatWrapping;
-	grass_material.map.repeat.set( 1, 1 );
+	grass_material.map.repeat.set( 10, 10 );
 
 
 	// ISLAND 1
@@ -35055,7 +35055,7 @@ module.exports = function (scene, Physijs, loader, listener) {
 		
 		var mesh = new Physijs.ConvexMesh(
 			islands,
-			rocks_material,
+			ground_material,
 			0
 		);
 		// var sound1 = new THREE.Audio( listener );
@@ -35074,7 +35074,7 @@ module.exports = function (scene, Physijs, loader, listener) {
 		
 		var mesh = new Physijs.ConvexMesh(
 			islands,
-			grass_material,
+			ground_material,
 			0
 		);
 		mesh.receiveShadow = true;
@@ -35086,7 +35086,7 @@ module.exports = function (scene, Physijs, loader, listener) {
 		
 		var mesh = new Physijs.ConvexMesh(
 			islands,
-			wood_material,
+			ground_material,
 			0
 		);
 		mesh.receiveShadow = true;
@@ -35158,7 +35158,7 @@ module.exports = function (scene, Physijs, loader, listener) {
 		
 		var mesh = new Physijs.ConvexMesh(
 			islands,
-			grass_material,
+			ground_material,
 			0
 		);
 		mesh.receiveShadow = true;
@@ -35170,7 +35170,7 @@ module.exports = function (scene, Physijs, loader, listener) {
 		
 		var mesh = new Physijs.ConvexMesh(
 			islands,
-			grass_material,
+			ground_material,
 			0
 		);
 		mesh.receiveShadow = true;
@@ -35182,7 +35182,7 @@ module.exports = function (scene, Physijs, loader, listener) {
 		
 		var mesh = new Physijs.ConvexMesh(
 			islands,
-			grass_material,
+			ground_material,
 			0
 		);
 		mesh.receiveShadow = true;
