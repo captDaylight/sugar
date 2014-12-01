@@ -53,8 +53,9 @@ module.exports = function (scene, Physijs, loader, listener) {
 	var cube = new THREE.Mesh( geometry, material );
 
 	var sound1 = new THREE.Audio( listener );
-	sound1.load( 'sounds/8.ogg' );
-	sound1.setRefDistance( 10 );
+	sound1.load( 'sounds/6.ogg' );
+	sound1.setRefDistance( 2 );
+	sound1.setRolloffFactor(5);
 	sound1.setLoop(true);
 
 	cube.add(sound1);
@@ -68,8 +69,9 @@ module.exports = function (scene, Physijs, loader, listener) {
 	var cube2 = new THREE.Mesh( geometry2, material2 );
 
 	var sound2 = new THREE.Audio( listener );
-	sound2.load( 'sounds/6.ogg' );
-	sound2.setRefDistance( 10 );
+	sound2.load( 'sounds/1.ogg' );
+	sound2.setRefDistance( 2 );
+	sound2.setRolloffFactor(5);
 	sound2.setLoop(true);
 
 	cube2.add(sound2);
@@ -83,8 +85,9 @@ module.exports = function (scene, Physijs, loader, listener) {
 	var cube3 = new THREE.Mesh( geometry3, material3 );
 
 	var sound3 = new THREE.Audio( listener );
-	sound3.load( 'sounds/1.ogg' );
-	sound3.setRefDistance( 10 );
+	sound3.load( 'sounds/8.ogg' );
+	sound3.setRefDistance( 2 );
+	sound3.setRolloffFactor(5);
 	sound3.setLoop(true);
 
 	cube3.add(sound3);
