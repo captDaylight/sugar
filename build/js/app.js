@@ -35058,16 +35058,54 @@ module.exports = function (scene, Physijs, loader, listener) {
 			ground_material,
 			0
 		);
-		// var sound1 = new THREE.Audio( listener );
-		// sound1.load( 'sounds/2.ogg' );
-		// sound1.setRefDistance( 50 );
-		// sound1.setLoop(true);
-
-		// mesh.add(sound1);
 
 		mesh.receiveShadow = true;
 		scene.add(mesh);
 	});
+
+	var geometry = new THREE.BoxGeometry( 2, 2, 2 );
+	var material = new THREE.MeshBasicMaterial( {color: 0xff0000} );
+	var cube = new THREE.Mesh( geometry, material );
+
+	var sound1 = new THREE.Audio( listener );
+	sound1.load( 'sounds/8.ogg' );
+	sound1.setRefDistance( 10 );
+	sound1.setLoop(true);
+
+	cube.add(sound1);
+
+	cube.position.z = -200;
+	scene.add( cube );
+
+
+	var geometry2 = new THREE.BoxGeometry( 2, 2, 2 );
+	var material2 = new THREE.MeshBasicMaterial( {color: 0xff0000} );
+	var cube2 = new THREE.Mesh( geometry2, material2 );
+
+	var sound2 = new THREE.Audio( listener );
+	sound2.load( 'sounds/6.ogg' );
+	sound2.setRefDistance( 10 );
+	sound2.setLoop(true);
+
+	cube2.add(sound2);
+
+	cube2.position.set(-260, 85, 45);
+	scene.add( cube2 );
+
+
+	var geometry3 = new THREE.BoxGeometry( 2, 2, 2 );
+	var material3 = new THREE.MeshBasicMaterial( {color: 0xff0000} );
+	var cube3 = new THREE.Mesh( geometry3, material3 );
+
+	var sound3 = new THREE.Audio( listener );
+	sound3.load( 'sounds/1.ogg' );
+	sound3.setRefDistance( 10 );
+	sound3.setLoop(true);
+
+	cube3.add(sound3);
+
+	cube3.position.set(141, 158, 295);
+	scene.add( cube3 );
 
 	// ISLAND 2
 	loader.load( "models/islands/islands02.json", function( islands, islands_material ) {
@@ -35077,6 +35115,7 @@ module.exports = function (scene, Physijs, loader, listener) {
 			ground_material,
 			0
 		);
+
 		mesh.receiveShadow = true;
 		scene.add(mesh);
 	});
@@ -35101,6 +35140,7 @@ module.exports = function (scene, Physijs, loader, listener) {
 			ground_material,
 			0
 		);
+
 		mesh.receiveShadow = true;
 		scene.add(mesh);
 	});
