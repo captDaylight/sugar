@@ -5,3 +5,9 @@ body, html{
 audio{
 	display:none;
 }
+#cover{
+	height: 100%;
+	position: absolute;
+	width: 100%;
+	background-color: purple;
+}

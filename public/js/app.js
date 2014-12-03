@@ -212,6 +212,7 @@ render = function() {
 
 		light.target.position.copy( vehicle.mesh.position );
 		light.position.addVectors( light.target.position, new THREE.Vector3( 20, 20, -15 ) );
+
 	}
 	renderer.render( scene, camera );
 

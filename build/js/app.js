@@ -213,6 +213,7 @@ render = function() {
 
 		light.target.position.copy( vehicle.mesh.position );
 		light.position.addVectors( light.target.position, new THREE.Vector3( 20, 20, -15 ) );
+
 	}
 	renderer.render( scene, camera );
 
@@ -35016,7 +35017,22 @@ module.exports = function (camera, renderer) {
 var THREE = require('three');
 
 module.exports = function (scene, Physijs, loader, listener) {
-	// Materials
+	var loadCount = 11;
+	var count = 0;
+	function loadCounter() {
+		++count;
+		console.log(count);
+		if (count === loadCount) {
+			setTimeout(function(){ 
+				var d = document.getElementById("cover");
+				d.className = d.className + " remove";
+			}, 2000);
+
+		};
+	}
+
+
+	// MATERIALS
 	var ground_material = Physijs.createMaterial(
 		new THREE.MeshLambertMaterial({ map: THREE.ImageUtils.loadTexture( 'images/marble.jpg' ) }),
 		.8, // high friction
@@ -35049,28 +35065,15 @@ module.exports = function (scene, Physijs, loader, listener) {
 	grass_material.map.wrapS = ground_material.map.wrapT = THREE.RepeatWrapping;
 	grass_material.map.repeat.set( 10, 10 );
 
-
-	// ISLAND 1
-	loader.load( "models/islands/islands01.json", function( islands, islands_material ) {
-		
-		var mesh = new Physijs.ConvexMesh(
-			islands,
-			ground_material,
-			0
-		);
-
-		mesh.receiveShadow = true;
-		scene.add(mesh);
-	});
-
+	// SOUNDS
 	var geometry = new THREE.BoxGeometry( 2, 2, 2 );
 	var material = new THREE.MeshBasicMaterial( {color: 0xff0000} );
 	var cube = new THREE.Mesh( geometry, material );
 
 	var sound1 = new THREE.Audio( listener );
-	sound1.load( 'sounds/6.ogg' );
-	sound1.setRefDistance( 2 );
-	sound1.setRolloffFactor(5);
+	sound1.load( 'sounds/gone.mp3' );
+	sound1.setRefDistance( 5 );
+	sound1.setRolloffFactor(10);
 	sound1.setLoop(true);
 
 	cube.add(sound1);
@@ -35085,8 +35088,8 @@ module.exports = function (scene, Physijs, loader, listener) {
 
 	var sound2 = new THREE.Audio( listener );
 	sound2.load( 'sounds/6.ogg' );
-	sound2.setRefDistance( 2 );
-	sound2.setRolloffFactor(5);
+	sound2.setRefDistance( 5 );
+	sound2.setRolloffFactor(10);
 	sound2.setLoop(true);
 
 	cube2.add(sound2);
@@ -35101,14 +35104,29 @@ module.exports = function (scene, Physijs, loader, listener) {
 
 	var sound3 = new THREE.Audio( listener );
 	sound3.load( 'sounds/6.ogg' );
-	sound3.setRefDistance( 2 );
-	sound3.setRolloffFactor(5);
+	sound3.setRefDistance( 5 );
+	sound3.setRolloffFactor(10);
 	sound3.setLoop(true);
 
 	cube3.add(sound3);
 
 	cube3.position.set(141, 158, 295);
 	scene.add( cube3 );
+
+
+	// ISLAND 1
+	loader.load( "models/islands/islands01.json", function( islands, islands_material ) {
+		
+		var mesh = new Physijs.ConvexMesh(
+			islands,
+			ground_material,
+			0
+		);
+
+		mesh.receiveShadow = true;
+		scene.add(mesh);
+		loadCounter();
+	});
 
 	// ISLAND 2
 	loader.load( "models/islands/islands02.json", function( islands, islands_material ) {
@@ -35121,6 +35139,7 @@ module.exports = function (scene, Physijs, loader, listener) {
 
 		mesh.receiveShadow = true;
 		scene.add(mesh);
+		loadCounter();
 	});
 
 	// BRIDGE 1
@@ -35133,11 +35152,12 @@ module.exports = function (scene, Physijs, loader, listener) {
 		);
 		mesh.receiveShadow = true;
 		scene.add(mesh);
+		loadCounter();
 	});
 
 	// ISLAND 3
 	loader.load( "models/islands/islands04.json", function( islands, islands_material ) {
-		
+
 		var mesh = new Physijs.ConvexMesh(
 			islands,
 			ground_material,
@@ -35146,6 +35166,7 @@ module.exports = function (scene, Physijs, loader, listener) {
 
 		mesh.receiveShadow = true;
 		scene.add(mesh);
+		loadCounter();
 	});
 
 	// BRIDGE 2
@@ -35158,6 +35179,7 @@ module.exports = function (scene, Physijs, loader, listener) {
 		);
 		mesh.receiveShadow = true;
 		scene.add(mesh);
+		loadCounter();
 	});
 
 	// CASTLE
@@ -35170,6 +35192,7 @@ module.exports = function (scene, Physijs, loader, listener) {
 		);
 		mesh.receiveShadow = true;
 		scene.add(mesh);
+		loadCounter();
 	});
 
 	// FOREGROUND CONES, ISLAND 1
@@ -35182,6 +35205,7 @@ module.exports = function (scene, Physijs, loader, listener) {
 		);
 		mesh.receiveShadow = true;
 		scene.add(mesh);
+		loadCounter();
 	});
 
 	// ISLAND 1 CONES
@@ -35194,6 +35218,7 @@ module.exports = function (scene, Physijs, loader, listener) {
 		);
 		mesh.receiveShadow = true;
 		scene.add(mesh);
+		loadCounter();
 	});
 
 	// ISLAND 2 CONES RIGHT
@@ -35206,6 +35231,7 @@ module.exports = function (scene, Physijs, loader, listener) {
 		);
 		mesh.receiveShadow = true;
 		scene.add(mesh);
+		loadCounter();
 	});
 
 	// ISLAND 2 CONES RIGHT
@@ -35218,6 +35244,7 @@ module.exports = function (scene, Physijs, loader, listener) {
 		);
 		mesh.receiveShadow = true;
 		scene.add(mesh);
+		loadCounter();
 	});
 
  		// ISLAND 2 CONES RIGHT
@@ -35230,6 +35257,7 @@ module.exports = function (scene, Physijs, loader, listener) {
 		);
 		mesh.receiveShadow = true;
 		scene.add(mesh);
+		loadCounter();
 	});
 
 }

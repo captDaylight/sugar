@@ -4,3 +4,24 @@ body, html {
 audio{
 	display: none;
 }
+#cover{
+	height: 100%;
+	position: absolute;
+	width: 100%;
+	background-color: #E3E778;
+	-webkit-transition: all 1s ease-in-out;
+	-moz-transition: all 1s ease-in-out;
+	-ms-transition: all 1s ease-in-out;
+	-o-transition: all 1s ease-in-out;
+	transition: all 1s ease-in-out;
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+	background-position: center center;
+}
+#cover.remove{
+  -webkit-opacity: 0;
+  -moz-opacity: 0;
+  opacity: 0;
+}

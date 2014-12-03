@@ -28,11 +28,11 @@ gulp.task('compress', function () {
 		.pipe(gulp.dest('./build/js'));
 });
 
-// gulp.task('sass', function () {
-// 	return gulp.src('public/sass/style.scss')
-// 		.pipe(sass())
-// 		.pipe(gulp.dest('./build/css'))	
-// })
+gulp.task('sass', function () {
+	return gulp.src('public/sass/style.scss')
+		.pipe(sass())
+		.pipe(gulp.dest('./build/css'))	
+})
 
 gulp.task('default', ['lint', 'browserify'], function () {
 	gulp.watch('public/js/*.js', function () {
