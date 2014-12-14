@@ -25,6 +25,15 @@ module.exports = function (scene, Physijs, loader, listener) {
 	ground_material.map.wrapS = ground_material.map.wrapT = THREE.RepeatWrapping;
 	ground_material.map.repeat.set( 1, 1 );
 
+	// MATERIALS
+	var granite_material = Physijs.createMaterial(
+		new THREE.MeshLambertMaterial({ map: THREE.ImageUtils.loadTexture( 'images/granite.jpeg' ) }),
+		.8, // high friction
+		.4 // low restitution
+	);
+	ground_material.map.wrapS = ground_material.map.wrapT = THREE.RepeatWrapping;
+	ground_material.map.repeat.set( 1, 1 );
+
 	var wood_material = Physijs.createMaterial(
 		new THREE.MeshLambertMaterial({ map: THREE.ImageUtils.loadTexture( 'images/plywood.jpg' ) }),
 		.8, // high friction
