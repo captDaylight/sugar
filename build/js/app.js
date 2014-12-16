@@ -18,6 +18,8 @@ var addSkybox = require('./skybox');
 var addVehicle = require('./vehicle');
 // require('./soundEvents');
 
+var diamondsTriggered = false;
+var diamondMesh;
 
 var loader = new THREE.JSONLoader(),
 	initScene, render,
@@ -83,31 +85,10 @@ addLandscape(scene, Physijs, loader, listener);
 addSkybox(scene);
 	
 
-loader.load( "models/test/test.json", function( islands, islands_material ) {
+loader.load( "models/test/test.json", function( diamond, islands_material ) {
 	
-	var box_material = Physijs.createMaterial(
-		new THREE.MeshPhongMaterial( { color: 0x000000, specular: 0x666666, emissive: 0xbbbbbb, ambient: 0x000000, shininess: 10, shading: THREE.SmoothShading, opacity: 0.8, transparent: true } ),
-		.4, // low friction
-		.6 // high restitution
-	);	
-
-	// for ( var i = 0; i < 10; i++ ) {
-	// 	var size = Math.random() * 2 + .5;
-	// 	var mesh = new Physijs.ConvexMesh(
-	// 		islands,
-	// 		box_material,
-	// 		1
-	// 	);
-
-	// 	mesh.castShadow = true;
-	// 	mesh.position.set(
-	// 		Math.random() * 50 - 50,
-	// 		Math.random() * 50 + 15,
-	// 		Math.random() * 50 - 50
-	// 	);
-	// 	mesh.rotation.set(size, size, size);
-	// 	scene.add( mesh )
-	// }
+	diamondMesh = diamond;
+	
 
 });		
 
@@ -204,16 +185,49 @@ loader.load( "models/mustang/mustang.js", function( car, car_materials ) {
 	});
 });
 
+function randomDiamonds(diamond) {
+	console.log('randomDiamonds');
+	var box_material = Physijs.createMaterial(
+		new THREE.MeshPhongMaterial( { color: 0x000000, specular: 0x666666, emissive: 0xbbbbbb, ambient: 0x000000, shininess: 10, shading: THREE.SmoothShading, opacity: 0.8, transparent: true } ),
+		.4, // low friction
+		.6 // high restitution
+	);	
+	console.log('randomizing');
+	for ( var i = 0; i < 10; i++ ) {
+		var size = Math.random() * 2 + .5;
+		var mesh = new Physijs.ConvexMesh(
+			diamond,
+			box_material,
+			1
+		);
+
+		// mesh.castShadow = true;
+		mesh.position.set(
+			Math.random() * 30 - 95,
+			Math.random() * 50 + 20,
+			Math.random() * 30 - 230
+		);
+		console.log(mesh.position);
+		mesh.rotation.set(size, size, size);
+		scene.add( mesh )
+	}
+}
+
 var cameraVector;
 var relativeCameraOffset, cameraOffset;
 render = function() {
 	requestAnimationFrame( render );
 
 	if ( vehicle ) {
-
+		console.log(vehicle.mesh.position);
 		light.target.position.copy( vehicle.mesh.position );
 		light.position.addVectors( light.target.position, new THREE.Vector3( 20, 20, -15 ) );
-
+		
+		if ( !diamondsTriggered  && ( vehicle.mesh.position.x < -35 || vehicle.mesh.position.z < -220) ) {
+			console.log('trigger diamonds');
+			randomDiamonds(diamondMesh);
+			diamondsTriggered = true;
+		}
 	}
 	renderer.render( scene, camera );
 
