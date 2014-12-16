@@ -15,13 +15,14 @@ var addLights = require('./lights');
 var addCamera = require('./camera');
 var addLandscape = require('./landscape');
 var addSkybox = require('./skybox');
-var addVehicle = require('./vehicle');
+// var addVehicle = require('./vehicle');
 // require('./soundEvents');
 
 var diamondsTriggered = false;
 var diamondMesh;
 
 var loader = new THREE.JSONLoader(),
+	splash = true,
 	initScene, render,
 	ground_material, box_material,
 	projector, renderer, scene, ground, light, camera,
@@ -138,7 +139,7 @@ loader.load( "models/mustang/mustang.js", function( car, car_materials ) {
 				i < 2 ? false : true
 			);
 		}
-
+		console.log(vehicle);
 		input = {
 			power: null,
 			direction: null,
@@ -186,14 +187,14 @@ loader.load( "models/mustang/mustang.js", function( car, car_materials ) {
 });
 
 function randomDiamonds(diamond) {
-	console.log('randomDiamonds');
+	
 	var box_material = Physijs.createMaterial(
 		new THREE.MeshPhongMaterial( { color: 0x000000, specular: 0x666666, emissive: 0xbbbbbb, ambient: 0x000000, shininess: 10, shading: THREE.SmoothShading, opacity: 0.8, transparent: true } ),
 		.4, // low friction
 		.6 // high restitution
 	);	
-	console.log('randomizing');
-	for ( var i = 0; i < 10; i++ ) {
+	
+	for ( var i = 0; i < 15; i++ ) {
 		var size = Math.random() * 2 + .5;
 		var mesh = new Physijs.ConvexMesh(
 			diamond,
@@ -204,7 +205,7 @@ function randomDiamonds(diamond) {
 		// mesh.castShadow = true;
 		mesh.position.set(
 			Math.random() * 30 - 95,
-			Math.random() * 50 + 20,
+			Math.random() * 50 + 50,
 			Math.random() * 30 - 230
 		);
 		console.log(mesh.position);
@@ -219,7 +220,6 @@ render = function() {
 	requestAnimationFrame( render );
 
 	if ( vehicle ) {
-		console.log(vehicle.mesh.position);
 		light.target.position.copy( vehicle.mesh.position );
 		light.position.addVectors( light.target.position, new THREE.Vector3( 20, 20, -15 ) );
 		
@@ -228,6 +228,13 @@ render = function() {
 			randomDiamonds(diamondMesh);
 			diamondsTriggered = true;
 		}
+		
+		if ( splash && vehicle.wheels[0].position.z < -10 ) {
+			var d = document.getElementById('cover');
+			d.className = d.className + ' remove';
+			splash = false;
+		}
+
 	}
 	renderer.render( scene, camera );
 
@@ -254,7 +261,7 @@ window.addEventListener( 'resize', onWindowResize(camera, renderer), false );
 
 
 
-},{"./camera":3,"./events/onWindowResize":4,"./landscape":5,"./lights":6,"./skybox":7,"./vehicle":8,"./vendor/physi":9,"three":2}],2:[function(require,module,exports){
+},{"./camera":3,"./events/onWindowResize":4,"./landscape":5,"./lights":6,"./skybox":7,"./vendor/physi":8,"three":2}],2:[function(require,module,exports){
 var self = self || {};// File:src/Three.js
 
 /**
@@ -35038,8 +35045,8 @@ module.exports = function (scene, Physijs, loader, listener) {
 		console.log(count);
 		if (count === loadCount) {
 			setTimeout(function(){ 
-				var d = document.getElementById("cover");
-				d.className = d.className + " remove";
+				// var d = document.getElementById("cover");
+				// d.className = d.className + " remove";
 			}, 2000);
 
 		};
@@ -35360,97 +35367,6 @@ module.exports = function (scene) {
     return mesh;
 };
 },{"three":2}],8:[function(require,module,exports){
-var THREE = require('three');
-
-
-module.exports = function (scene, Physijs, loader, input, vehicle) {
-	loader.load( "models/mustang/mustang.js", function( car, car_materials ) {
-		loader.load( "models/mustang/mustang_wheel.js", function( wheel, wheel_materials ) {
-			var mesh = new Physijs.BoxMesh(
-				car,
-				new THREE.MeshFaceMaterial( car_materials )
-			);
-			mesh.position.y = 5;
-			mesh.castShadow = mesh.receiveShadow = true;
-
-			var vehicle = new Physijs.Vehicle(mesh, new Physijs.VehicleTuning(
-				10.88, // suspension_stiffness
-				1.83, // suspension_compression
-				0.28, // suspension_damping
-				500, // max_suspension_travel
-				10.5, // friction_slip
-				6000 // max_suspension_force
-			));
-			scene.add( vehicle );
-
-			var wheel_material = new THREE.MeshFaceMaterial( wheel_materials );
-
-			for ( var i = 0; i < 4; i++ ) {
-				vehicle.addWheel(
-					wheel,
-					wheel_material,
-					new THREE.Vector3(
-							i % 2 === 0 ? -1.6 : 1.6,
-							-1,
-							i < 2 ? 3.3 : -3.2
-					),
-					new THREE.Vector3( 0, -1, 0 ),
-					new THREE.Vector3( -1, 0, 0 ),
-					0.5,
-					0.7,
-					i < 2 ? false : true
-				);
-			}
-
-			input = {
-				power: null,
-				direction: null,
-				steering: 0
-			};
-			document.addEventListener('keydown', function( ev ) {
-				switch ( ev.keyCode ) {
-					case 37: // left
-						input.direction = 1;
-						break;
-
-					case 38: // forward
-						input.power = true;
-						break;
-
-					case 39: // right
-						input.direction = -1;
-						break;
-
-					case 40: // back
-						input.power = false;
-						break;
-				}
-			});
-			document.addEventListener('keyup', function( ev ) {
-				switch ( ev.keyCode ) {
-					case 37: // left
-						input.direction = null;
-						break;
-
-					case 38: // forward
-						input.power = null;
-						break;
-
-					case 39: // right
-						input.direction = null;
-						break;
-
-					case 40: // back
-						input.power = null;
-						break;
-				}
-			});
-			
-			return vehicle;
-		});
-	});
-};
-},{"three":2}],9:[function(require,module,exports){
 var THREE = require('three');
 
 module.exports = (function() {

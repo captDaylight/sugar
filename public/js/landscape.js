@@ -8,8 +8,8 @@ module.exports = function (scene, Physijs, loader, listener) {
 		console.log(count);
 		if (count === loadCount) {
 			setTimeout(function(){ 
-				var d = document.getElementById("cover");
-				d.className = d.className + " remove";
+				// var d = document.getElementById("cover");
+				// d.className = d.className + " remove";
 			}, 2000);
 
 		};

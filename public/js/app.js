@@ -14,13 +14,14 @@ var addLights = require('./lights');
 var addCamera = require('./camera');
 var addLandscape = require('./landscape');
 var addSkybox = require('./skybox');
-var addVehicle = require('./vehicle');
+// var addVehicle = require('./vehicle');
 // require('./soundEvents');
 
 var diamondsTriggered = false;
 var diamondMesh;
 
 var loader = new THREE.JSONLoader(),
+	splash = true,
 	initScene, render,
 	ground_material, box_material,
 	projector, renderer, scene, ground, light, camera,
@@ -137,7 +138,7 @@ loader.load( "models/mustang/mustang.js", function( car, car_materials ) {
 				i < 2 ? false : true
 			);
 		}
-
+		console.log(vehicle);
 		input = {
 			power: null,
 			direction: null,
@@ -185,14 +186,14 @@ loader.load( "models/mustang/mustang.js", function( car, car_materials ) {
 });
 
 function randomDiamonds(diamond) {
-	console.log('randomDiamonds');
+	
 	var box_material = Physijs.createMaterial(
 		new THREE.MeshPhongMaterial( { color: 0x000000, specular: 0x666666, emissive: 0xbbbbbb, ambient: 0x000000, shininess: 10, shading: THREE.SmoothShading, opacity: 0.8, transparent: true } ),
 		.4, // low friction
 		.6 // high restitution
 	);	
-	console.log('randomizing');
-	for ( var i = 0; i < 10; i++ ) {
+	
+	for ( var i = 0; i < 15; i++ ) {
 		var size = Math.random() * 2 + .5;
 		var mesh = new Physijs.ConvexMesh(
 			diamond,
@@ -203,7 +204,7 @@ function randomDiamonds(diamond) {
 		// mesh.castShadow = true;
 		mesh.position.set(
 			Math.random() * 30 - 95,
-			Math.random() * 50 + 20,
+			Math.random() * 50 + 50,
 			Math.random() * 30 - 230
 		);
 		console.log(mesh.position);
@@ -218,7 +219,6 @@ render = function() {
 	requestAnimationFrame( render );
 
 	if ( vehicle ) {
-		console.log(vehicle.mesh.position);
 		light.target.position.copy( vehicle.mesh.position );
 		light.position.addVectors( light.target.position, new THREE.Vector3( 20, 20, -15 ) );
 		
@@ -227,6 +227,13 @@ render = function() {
 			randomDiamonds(diamondMesh);
 			diamondsTriggered = true;
 		}
+		
+		if ( splash && vehicle.wheels[0].position.z < -10 ) {
+			var d = document.getElementById('cover');
+			d.className = d.className + ' remove';
+			splash = false;
+		}
+
 	}
 	renderer.render( scene, camera );
 
