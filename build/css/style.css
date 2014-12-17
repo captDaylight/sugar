@@ -19,8 +19,29 @@ audio{
 	-o-background-size: cover;
 	background-size: cover;
 	background-position: center center;
+	z-index: 2;
+	pointer-events: none;
 }
 #cover.remove{
+  -webkit-opacity: 0;
+  -moz-opacity: 0;
+  opacity: 0;
+}
+
+.reload{
+	position: absolute;
+	bottom: 20px;
+	left: 20px;
+	height: 50px;
+	-webkit-transition: all 1s ease-in-out;
+	-moz-transition: all 1s ease-in-out;
+	-ms-transition: all 1s ease-in-out;
+	-o-transition: all 1s ease-in-out;
+	transition: all 1s ease-in-out;
+	z-index: 1;
+	cursor: pointer;
+}
+.reload.remove{
   -webkit-opacity: 0;
   -moz-opacity: 0;
   opacity: 0;

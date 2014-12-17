@@ -25,7 +25,8 @@ var loader = new THREE.JSONLoader(),
 	initScene, render,
 	ground_material, box_material,
 	projector, renderer, scene, ground, light, camera,
-		vehicle_body, vehicle, input, listener;
+		vehicle_body, vehicle, input, listener,
+		c, c_materials, w, w_materials;
 
 function getCameraVector(objYRotation, distance) {
 
@@ -88,7 +89,6 @@ addSkybox(scene);
 loader.load( "models/test/test.json", function( diamond, islands_material ) {
 	
 	diamondMesh = diamond;
-	
 
 });		
 
@@ -96,94 +96,108 @@ loader.load( "models/test/test.json", function( diamond, islands_material ) {
 
 loader.load( "models/mustang/mustang.js", function( car, car_materials ) {
 	loader.load( "models/mustang/mustang_wheel.js", function( wheel, wheel_materials ) {
-		var mesh = new Physijs.BoxMesh(
-			car,
-			new THREE.MeshFaceMaterial( car_materials )
-		);
-		mesh.position.y = 5;
-		mesh.castShadow = mesh.receiveShadow = true;
-		camera.position.y = 3;
-		camera.position.z = -25;
-		camera.lookAt( mesh.position );
-		mesh.add(camera);
+		
+		c = car;
+		c_materials = car_materials;
+		w = wheel; 
+		w_materials = wheel_materials;
 
-		mesh.position.z = -200;
+		createCar(car, car_materials, wheel, wheel_materials);
 
-		vehicle = new Physijs.Vehicle(mesh, new Physijs.VehicleTuning(
-			11.88, // suspension_stiffness
-			2.83, // suspension_compression
-			0.28, // suspension_damping
-			500, // max_suspension_travel
-			10.5, // friction_slip
-			4000 // max_suspension_force
-		));
-
-		scene.add( vehicle );
-
-		var wheel_material = new THREE.MeshFaceMaterial( wheel_materials );
-
-		for ( var i = 0; i < 4; i++ ) {
-			vehicle.addWheel(
-				wheel,
-				wheel_material,
-				new THREE.Vector3(
-						i % 2 === 0 ? -2.0 : 2.0,
-						-1,
-						i < 2 ? 3.3 : -3.2
-				),
-				new THREE.Vector3( 0, -1, 0 ),
-				new THREE.Vector3( -1, 0, 0 ),
-				0.5,
-				0.7,
-				i < 2 ? false : true
-			);
-		}
-		console.log(vehicle);
-		input = {
-			power: null,
-			direction: null,
-			steering: 0
-		};
-		document.addEventListener('keydown', function( ev ) {
-			switch ( ev.keyCode ) {
-				case 37: // left
-					input.direction = 1;
-					break;
-
-				case 38: // forward
-					input.power = true;
-					break;
-
-				case 39: // right
-					input.direction = -1;
-					break;
-
-				case 40: // back
-					input.power = false;
-					break;
-			}
-		});
-		document.addEventListener('keyup', function( ev ) {
-			switch ( ev.keyCode ) {
-				case 37: // left
-					input.direction = null;
-					break;
-
-				case 38: // forward
-					input.power = null;
-					break;
-
-				case 39: // right
-					input.direction = null;
-					break;
-
-				case 40: // back
-					input.power = null;
-					break;
-			}
-		});
 	});
 });
+
+function createCar(car, car_materials, wheel, wheel_materials) {
+	var mesh = new Physijs.BoxMesh(
+		car,
+		new THREE.MeshFaceMaterial( car_materials )
+	);
+	mesh.position.y = 5;
+	mesh.castShadow = mesh.receiveShadow = true;
+	camera.position.y = 3;
+	camera.position.z = -25;
+	camera.lookAt( mesh.position );
+	mesh.add(camera);
+
+	mesh.position.z = -200;
+
+	vehicle = new Physijs.Vehicle(mesh, new Physijs.VehicleTuning(
+		11.88, // suspension_stiffness
+		2.83, // suspension_compression
+		0.28, // suspension_damping
+		500, // max_suspension_travel
+		10.5, // friction_slip
+		4000 // max_suspension_force
+	));
+
+	scene.add( vehicle );
+
+	var wheel_material = new THREE.MeshFaceMaterial( wheel_materials );
+
+	for ( var i = 0; i < 4; i++ ) {
+		vehicle.addWheel(
+			wheel,
+			wheel_material,
+			new THREE.Vector3(
+					i % 2 === 0 ? -2.0 : 2.0,
+					-1,
+					i < 2 ? 3.3 : -3.2
+			),
+			new THREE.Vector3( 0, -1, 0 ),
+			new THREE.Vector3( -1, 0, 0 ),
+			0.5,
+			0.7,
+			i < 2 ? false : true
+		);
+	}
+	
+	console.log(vehicle.mesh.position);
+	console.log(vehicle.mesh.rotation);
+
+	input = {
+		power: null,
+		direction: null,
+		steering: 0
+	};
+	document.addEventListener('keydown', function( ev ) {
+		switch ( ev.keyCode ) {
+			case 37: // left
+				input.direction = 1;
+				break;
+
+			case 38: // forward
+				input.power = true;
+				break;
+
+			case 39: // right
+				input.direction = -1;
+				break;
+
+			case 40: // back
+				input.power = false;
+				break;
+		}
+	});
+	document.addEventListener('keyup', function( ev ) {
+		switch ( ev.keyCode ) {
+			case 37: // left
+				input.direction = null;
+				break;
+
+			case 38: // forward
+				input.power = null;
+				break;
+
+			case 39: // right
+				input.direction = null;
+				break;
+
+			case 40: // back
+				input.power = null;
+				break;
+		}
+	});
+}
 
 function randomDiamonds(diamond) {
 	
@@ -203,11 +217,10 @@ function randomDiamonds(diamond) {
 
 		// mesh.castShadow = true;
 		mesh.position.set(
-			Math.random() * 30 - 95,
+			Math.random() * 30 - 120,
 			Math.random() * 50 + 50,
-			Math.random() * 30 - 230
+			Math.random() * 30 - 250
 		);
-		console.log(mesh.position);
 		mesh.rotation.set(size, size, size);
 		scene.add( mesh )
 	}
@@ -215,19 +228,29 @@ function randomDiamonds(diamond) {
 
 var cameraVector;
 var relativeCameraOffset, cameraOffset;
+
+var test = document.getElementById("reload");
+
+test.addEventListener("click", function (evt) {
+
+	scene.remove(vehicle);
+    createCar(c, c_materials, w, w_materials);
+
+}, false);
+
 render = function() {
 	requestAnimationFrame( render );
 
 	if ( vehicle ) {
+
 		light.target.position.copy( vehicle.mesh.position );
 		light.position.addVectors( light.target.position, new THREE.Vector3( 20, 20, -15 ) );
 		
 		if ( !diamondsTriggered  && ( vehicle.mesh.position.x < -35 || vehicle.mesh.position.z < -220) ) {
-			console.log('trigger diamonds');
 			randomDiamonds(diamondMesh);
 			diamondsTriggered = true;
 		}
-		
+
 		if ( splash && vehicle.wheels[0].position.z < -10 ) {
 			var d = document.getElementById('cover');
 			d.className = d.className + ' remove';
@@ -236,7 +259,6 @@ render = function() {
 
 	}
 	renderer.render( scene, camera );
-
 };
 
 requestAnimationFrame( render );

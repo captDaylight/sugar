@@ -1,20 +1,6 @@
 var THREE = require('three');
 
 module.exports = function (scene, Physijs, loader, listener) {
-	var loadCount = 11;
-	var count = 0;
-	function loadCounter() {
-		++count;
-		console.log(count);
-		if (count === loadCount) {
-			setTimeout(function(){ 
-				// var d = document.getElementById("cover");
-				// d.className = d.className + " remove";
-			}, 2000);
-
-		};
-	}
-
 
 	// MATERIALS
 	var ground_material = Physijs.createMaterial(
@@ -118,7 +104,7 @@ module.exports = function (scene, Physijs, loader, listener) {
 
 		mesh.receiveShadow = true;
 		scene.add(mesh);
-		loadCounter();
+
 	});
 
 	// ISLAND 2
@@ -132,7 +118,7 @@ module.exports = function (scene, Physijs, loader, listener) {
 
 		mesh.receiveShadow = true;
 		scene.add(mesh);
-		loadCounter();
+
 	});
 
 	// BRIDGE 1
@@ -145,7 +131,7 @@ module.exports = function (scene, Physijs, loader, listener) {
 		);
 		mesh.receiveShadow = true;
 		scene.add(mesh);
-		loadCounter();
+
 	});
 
 	// ISLAND 3
@@ -159,7 +145,7 @@ module.exports = function (scene, Physijs, loader, listener) {
 
 		mesh.receiveShadow = true;
 		scene.add(mesh);
-		loadCounter();
+
 	});
 
 	// BRIDGE 2
@@ -172,7 +158,7 @@ module.exports = function (scene, Physijs, loader, listener) {
 		);
 		mesh.receiveShadow = true;
 		scene.add(mesh);
-		loadCounter();
+
 	});
 
 	// CASTLE
@@ -185,7 +171,7 @@ module.exports = function (scene, Physijs, loader, listener) {
 		);
 		mesh.receiveShadow = true;
 		scene.add(mesh);
-		loadCounter();
+
 	});
 
 	// FOREGROUND CONES, ISLAND 1
@@ -198,7 +184,7 @@ module.exports = function (scene, Physijs, loader, listener) {
 		);
 		mesh.receiveShadow = true;
 		scene.add(mesh);
-		loadCounter();
+
 	});
 
 	// ISLAND 1 CONES
@@ -211,7 +197,7 @@ module.exports = function (scene, Physijs, loader, listener) {
 		);
 		mesh.receiveShadow = true;
 		scene.add(mesh);
-		loadCounter();
+
 	});
 
 	// ISLAND 2 CONES RIGHT
@@ -224,7 +210,7 @@ module.exports = function (scene, Physijs, loader, listener) {
 		);
 		mesh.receiveShadow = true;
 		scene.add(mesh);
-		loadCounter();
+
 	});
 
 	// ISLAND 2 CONES RIGHT
@@ -237,7 +223,7 @@ module.exports = function (scene, Physijs, loader, listener) {
 		);
 		mesh.receiveShadow = true;
 		scene.add(mesh);
-		loadCounter();
+
 	});
 
  		// ISLAND 2 CONES RIGHT
@@ -250,7 +236,7 @@ module.exports = function (scene, Physijs, loader, listener) {
 		);
 		mesh.receiveShadow = true;
 		scene.add(mesh);
-		loadCounter();
+
 	});
 
 }
