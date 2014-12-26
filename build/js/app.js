@@ -10,6 +10,9 @@ var Physijs = require('./vendor/physi');
 Physijs.scripts.worker = './worker/physijs_worker.js';
 Physijs.scripts.ammo = './ammo.js';
 
+var fireball = require('./fireball');
+var fireballTriggered = false;
+
 // project specific import
 var addLights = require('./lights');
 var addCamera = require('./camera');
@@ -20,9 +23,11 @@ var addSkybox = require('./skybox');
 
 var diamondsTriggered = false;
 var diamondMesh;
+var engine; // for particle engine
 
 var loader = new THREE.JSONLoader(),
 	splash = true,
+	clock = new THREE.Clock(),
 	initScene, render,
 	ground_material, box_material,
 	projector, renderer, scene, ground, light, camera,
@@ -48,6 +53,8 @@ renderer.setSize( window.innerWidth, window.innerHeight );
 renderer.shadowMapEnabled = true;
 renderer.shadowMapSoft = true;
 document.getElementById( 'container' ).appendChild( renderer.domElement );
+// add fireball scene above container
+// fireball();
 
 scene = new Physijs.Scene;
 scene.setGravity(new THREE.Vector3( 0, -30, 0 ));
@@ -239,11 +246,14 @@ test.addEventListener("click", function (evt) {
 
 }, false);
 
+
+
 render = function() {
 	requestAnimationFrame( render );
+	
+	var delta = clock.getDelta();
 
 	if ( vehicle ) {
-
 		light.target.position.copy( vehicle.mesh.position );
 		light.position.addVectors( light.target.position, new THREE.Vector3( 20, 20, -15 ) );
 		
@@ -255,11 +265,25 @@ render = function() {
 		if ( splash && vehicle.wheels[0].position.z < -10 ) {
 			var d = document.getElementById('cover');
 			d.className = d.className + ' remove';
+			// console.log(Fire.candle.positionBase);
+			// startEngine(Fire.candle);
+
+			
+
 			splash = false;
 		}
 
+		if(vehicle.mesh.position.y < -1500 && !fireballTriggered) {
+			fireball();
+			fireballTriggered = true;
+		}
+		renderer.render( scene, camera );
+  
+			      
+
 	}
-	renderer.render( scene, camera );
+
+
 };
 
 requestAnimationFrame( render );
@@ -283,7 +307,7 @@ window.addEventListener( 'resize', onWindowResize(camera, renderer), false );
 
 
 
-},{"./camera":3,"./events/onWindowResize":4,"./landscape":5,"./lights":6,"./skybox":7,"./vendor/physi":8,"three":2}],2:[function(require,module,exports){
+},{"./camera":3,"./events/onWindowResize":4,"./fireball":5,"./landscape":6,"./lights":7,"./skybox":8,"./vendor/physi":9,"three":2}],2:[function(require,module,exports){
 var self = self || {};// File:src/Three.js
 
 /**
@@ -35059,6 +35083,82 @@ module.exports = function (camera, renderer) {
 },{}],5:[function(require,module,exports){
 var THREE = require('three');
 
+var renderer = new THREE.WebGLRenderer({ antialias: true, alpha:true });
+var scene = new THREE.Scene();
+var clock = new THREE.Clock();
+var camera = new THREE.PerspectiveCamera(
+		50,
+		window.innerWidth / window.innerHeight,
+		1,
+		2000
+	);
+camera.position.z = 50;
+camera.position.y = 10;
+camera.position.x = 5;
+scene.add(camera);
+renderer.setClearColor( 0x000000, 0);
+var onWindowResize = require('./events/onWindowResize');
+// camera.lookAt(cube);
+
+var light2 = new THREE.AmbientLight(0x444444);
+scene.add(light2);
+var light3 = new THREE.AmbientLight(0x444444);
+scene.add(light3);	
+
+
+renderer.setSize( window.innerWidth, window.innerHeight );
+
+var smokeParticles = new THREE.Geometry;
+// for (var i = 0; i < 600; i++) {
+var particle = new THREE.Vector3(Math.random() * 12, Math.random() * 230, Math.random() * 12);
+smokeParticles.vertices.push(particle);
+// }
+
+var smokeTexture = THREE.ImageUtils.loadTexture('images/smoke.png');
+var smokeMaterial = new THREE.ParticleBasicMaterial({ map: smokeTexture, transparent: true, blending: THREE.AdditiveBlending, size: 5, color: 0x111111 });
+
+for (var i = 0; i < 300; i++) {
+	var particle = new THREE.Vector3(Math.random() * 12, Math.random() * 50, Math.random() * 12);
+	smokeParticles.vertices.push(particle);
+};
+
+var smoke = new THREE.ParticleSystem(smokeParticles, smokeMaterial);
+smoke.sortParticles = true;
+
+scene.add(smoke);
+
+module.exports = function () {
+
+
+	document.getElementById( 'container' ).appendChild( renderer.domElement );
+	render = function() {
+		requestAnimationFrame( render );
+		var delta = clock.getDelta();
+
+		var particleCount = smokeParticles.vertices.length;
+
+		while (particleCount--) {
+		    var particle = smokeParticles.vertices[particleCount];
+		    particle.z += delta * 50;
+		     
+		    if (particle.z >= 50) {
+		        particle.y = Math.random() * 12;
+		        particle.x = Math.random() * 12;
+		        particle.z = Math.random() * 12;
+		    }
+		}
+		smokeParticles.__dirtyVertices = true;	
+		renderer.render(scene, camera);
+	};
+
+	requestAnimationFrame( render );
+}
+window.addEventListener( 'resize', onWindowResize(camera, renderer), false );
+
+
+},{"./events/onWindowResize":4,"three":2}],6:[function(require,module,exports){
+var THREE = require('three');
+
 module.exports = function (scene, Physijs, loader, listener) {
 
 	// MATERIALS
@@ -35299,12 +35399,11 @@ module.exports = function (scene, Physijs, loader, listener) {
 	});
 
 }
-},{"three":2}],6:[function(require,module,exports){
+},{"three":2}],7:[function(require,module,exports){
 var THREE = require('three');
 
 module.exports = function (scene) {
-	console.log(scene);
-	console.log();
+
 	// Light
 	var light = new THREE.DirectionalLight( 0xFFFFFF );
 	light.position.set( 20, 20, -15 );
@@ -35334,7 +35433,7 @@ module.exports = function (scene) {
 
 
 
-},{"three":2}],7:[function(require,module,exports){
+},{"three":2}],8:[function(require,module,exports){
 "use strict";
 
 var THREE = require('three');
@@ -35353,7 +35452,7 @@ function getSkyboxImageArray(location){
 }
 
 module.exports = function (scene) {
-    textureCube = THREE.ImageUtils.loadTextureCube( getSkyboxImageArray('bigCube'), new THREE.CubeRefractionMapping());
+    textureCube = THREE.ImageUtils.loadTextureCube( ['images/skyboxes/bigCube/smaller.jpg','images/skyboxes/bigCube/smaller.jpg','images/skyboxes/bigCube/smaller.jpg','images/skyboxes/bigCube/smaller.jpg','images/skyboxes/bigCube/smaller.jpg','images/skyboxes/bigCube/smaller.jpg'], new THREE.CubeRefractionMapping());
 
     shader = THREE.ShaderLib.cube;
     shader.uniforms.tCube.value = textureCube;
@@ -35374,7 +35473,7 @@ module.exports = function (scene) {
 
     return mesh;
 };
-},{"three":2}],8:[function(require,module,exports){
+},{"three":2}],9:[function(require,module,exports){
 var THREE = require('three');
 
 module.exports = (function() {

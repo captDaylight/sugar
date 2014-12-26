@@ -1,8 +1,7 @@
 var THREE = require('three');
 
 module.exports = function (scene) {
-	console.log(scene);
-	console.log();
+
 	// Light
 	var light = new THREE.DirectionalLight( 0xFFFFFF );
 	light.position.set( 20, 20, -15 );

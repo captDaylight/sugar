@@ -27,7 +27,9 @@ audio{
   -moz-opacity: 0;
   opacity: 0;
 }
-
+canvas{
+	position: absolute;
+}
 #cover .grapes{
 	-webkit-transition: all 1s ease-in-out;
 	-moz-transition: all 1s ease-in-out;

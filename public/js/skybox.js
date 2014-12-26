@@ -16,7 +16,7 @@ function getSkyboxImageArray(location){
 }
 
 module.exports = function (scene) {
-    textureCube = THREE.ImageUtils.loadTextureCube( getSkyboxImageArray('bigCube'), new THREE.CubeRefractionMapping());
+    textureCube = THREE.ImageUtils.loadTextureCube( ['images/skyboxes/bigCube/smaller.jpg','images/skyboxes/bigCube/smaller.jpg','images/skyboxes/bigCube/smaller.jpg','images/skyboxes/bigCube/smaller.jpg','images/skyboxes/bigCube/smaller.jpg','images/skyboxes/bigCube/smaller.jpg'], new THREE.CubeRefractionMapping());
 
     shader = THREE.ShaderLib.cube;
     shader.uniforms.tCube.value = textureCube;

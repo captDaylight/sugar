@@ -9,6 +9,9 @@ var Physijs = require('./vendor/physi');
 Physijs.scripts.worker = './worker/physijs_worker.js';
 Physijs.scripts.ammo = './ammo.js';
 
+var fireball = require('./fireball');
+var fireballTriggered = false;
+
 // project specific import
 var addLights = require('./lights');
 var addCamera = require('./camera');
@@ -19,9 +22,11 @@ var addSkybox = require('./skybox');
 
 var diamondsTriggered = false;
 var diamondMesh;
+var engine; // for particle engine
 
 var loader = new THREE.JSONLoader(),
 	splash = true,
+	clock = new THREE.Clock(),
 	initScene, render,
 	ground_material, box_material,
 	projector, renderer, scene, ground, light, camera,
@@ -47,6 +52,8 @@ renderer.setSize( window.innerWidth, window.innerHeight );
 renderer.shadowMapEnabled = true;
 renderer.shadowMapSoft = true;
 document.getElementById( 'container' ).appendChild( renderer.domElement );
+// add fireball scene above container
+// fireball();
 
 scene = new Physijs.Scene;
 scene.setGravity(new THREE.Vector3( 0, -30, 0 ));
@@ -238,11 +245,14 @@ test.addEventListener("click", function (evt) {
 
 }, false);
 
+
+
 render = function() {
 	requestAnimationFrame( render );
+	
+	var delta = clock.getDelta();
 
 	if ( vehicle ) {
-
 		light.target.position.copy( vehicle.mesh.position );
 		light.position.addVectors( light.target.position, new THREE.Vector3( 20, 20, -15 ) );
 		
@@ -254,11 +264,25 @@ render = function() {
 		if ( splash && vehicle.wheels[0].position.z < -10 ) {
 			var d = document.getElementById('cover');
 			d.className = d.className + ' remove';
+			// console.log(Fire.candle.positionBase);
+			// startEngine(Fire.candle);
+
+			
+
 			splash = false;
 		}
 
+		if(vehicle.mesh.position.y < -1500 && !fireballTriggered) {
+			fireball();
+			fireballTriggered = true;
+		}
+		renderer.render( scene, camera );
+  
+			      
+
 	}
-	renderer.render( scene, camera );
+
+
 };
 
 requestAnimationFrame( render );
