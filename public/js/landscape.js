@@ -125,8 +125,6 @@ module.exports = function (scene, Physijs, loader, listener) {
 		mesh.receiveShadow = true;
 		scene.add(mesh);
 
-
-
 	});
 
 	// FOREGROUND CONES, ISLAND 1
