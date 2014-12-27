@@ -11,6 +11,17 @@ Physijs.scripts.ammo = './ammo.js';
 
 var fireball = require('./fireball');
 var fireballTriggered = false;
+var boySwitch = false; // when to switch the camera;
+var boy;
+var boyCam = new THREE.PerspectiveCamera(
+		50,
+		window.innerWidth / window.innerHeight,
+		1,
+		2000
+	);
+boyCam.position.z = -50;
+boyCam.position.y = 1000;
+
 
 // project specific import
 var addLights = require('./lights');
@@ -54,6 +65,7 @@ renderer.shadowMapSoft = true;
 document.getElementById( 'container' ).appendChild( renderer.domElement );
 // add fireball scene above container
 // fireball();
+// boy();
 
 scene = new Physijs.Scene;
 scene.setGravity(new THREE.Vector3( 0, -30, 0 ));
@@ -114,6 +126,17 @@ loader.load( "models/mustang/mustang.js", function( car, car_materials ) {
 	});
 });
 
+
+loader.load( "models/boy/newboy.js", function( obj, materials ) {
+	var mesh = new THREE.Mesh( obj, new THREE.MeshFaceMaterial( materials ) );
+	scene.add( mesh );
+
+	mesh.position.y = 1000;
+	boy = mesh;
+	console.log(boy);
+	boyCam.lookAt( mesh.position );
+});
+
 function createCar(car, car_materials, wheel, wheel_materials) {
 	var mesh = new Physijs.BoxMesh(
 		car,
@@ -157,9 +180,6 @@ function createCar(car, car_materials, wheel, wheel_materials) {
 			i < 2 ? false : true
 		);
 	}
-	
-	console.log(vehicle.mesh.position);
-	console.log(vehicle.mesh.rotation);
 
 	input = {
 		power: null,
@@ -167,6 +187,7 @@ function createCar(car, car_materials, wheel, wheel_materials) {
 		steering: 0
 	};
 	document.addEventListener('keydown', function( ev ) {
+
 		switch ( ev.keyCode ) {
 			case 37: // left
 				input.direction = 1;
@@ -182,6 +203,9 @@ function createCar(car, car_materials, wheel, wheel_materials) {
 
 			case 40: // back
 				input.power = false;
+				break;
+			case 65:
+				boySwitch = true;
 				break;
 		}
 	});
@@ -245,41 +269,45 @@ test.addEventListener("click", function (evt) {
 
 }, false);
 
-
-
 render = function() {
 	requestAnimationFrame( render );
 	
+
 	var delta = clock.getDelta();
-
-	if ( vehicle ) {
-		light.target.position.copy( vehicle.mesh.position );
-		light.position.addVectors( light.target.position, new THREE.Vector3( 20, 20, -15 ) );
-		
-		if ( !diamondsTriggered  && ( vehicle.mesh.position.x < -35 || vehicle.mesh.position.z < -220) ) {
-			randomDiamonds(diamondMesh);
-			diamondsTriggered = true;
-		}
-
-		if ( splash && vehicle.wheels[0].position.z < -10 ) {
-			var d = document.getElementById('cover');
-			d.className = d.className + ' remove';
-			// console.log(Fire.candle.positionBase);
-			// startEngine(Fire.candle);
-
+	if ( !boySwitch ) {
+		if ( vehicle ) {
+			light.target.position.copy( vehicle.mesh.position );
+			light.position.addVectors( light.target.position, new THREE.Vector3( 20, 20, -15 ) );
 			
+			if ( !diamondsTriggered  && ( vehicle.mesh.position.x < -35 || vehicle.mesh.position.z < -220) ) {
+				randomDiamonds(diamondMesh);
+				diamondsTriggered = true;
+			}
 
-			splash = false;
-		}
+			if ( splash && vehicle.wheels[0].position.z < -10 ) {
+				var d = document.getElementById('cover');
+				d.className = d.className + ' remove';
 
-		if(vehicle.mesh.position.y < -1500 && !fireballTriggered) {
-			fireball();
-			fireballTriggered = true;
-		}
-		renderer.render( scene, camera );
-  
-			      
+				splash = false;
+			}
 
+			if(vehicle.mesh.position.y < -1500 && !fireballTriggered) {
+				fireball.renderer();
+				fireballTriggered = true;
+				setTimeout(function () {
+					boySwitch = true;
+					setTimeout(function () {
+						fireball.setFire(false);
+					}, 1000);
+				}, 5000);
+			}
+			renderer.render( scene, camera );
+		}		
+	} else {
+		boy.rotation.x = boy.rotation.x + 0.01;
+		boy.rotation.y = boy.rotation.y + 0.03;
+		boy.rotation.z = boy.rotation.z + 0.01;
+		renderer.render( scene, boyCam );
 	}
 
 
