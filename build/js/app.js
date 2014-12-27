@@ -322,19 +322,25 @@ function randomDiamonds(diamond) {
 var cameraVector;
 var relativeCameraOffset, cameraOffset;
 
-var test = document.getElementById("reload");
+var reload = document.getElementById("reload");
 
-test.addEventListener("click", function (evt) {
+reload.addEventListener("click", function (evt) {
+	var audio = document.getElementById('death');
+
+	// resetting the vehicle
 	vehicle.mesh.position.set( 0, 5, -200 );
 	vehicle.mesh.rotation.set( 0, 0, 0 );
-	console.log(THREE.Vector3( 0, 0, 0 ));
 	vehicle.mesh.setAngularVelocity(new THREE.Vector3( 0, 0, 0 ));
 	vehicle.mesh.setLinearVelocity(new THREE.Vector3( 0, 0, 0 ));
 	vehicle.mesh.__dirtyPosition = true;
 	vehicle.mesh.__dirtyRotation = true;
-	// scene.remove(vehicle);
- //    createCar(c, c_materials, w, w_materials);
 
+	// resetting after the fall, if it happens
+	fireballTriggered = false;
+	boySwitch = false;
+	audio.pause();
+	audio.currentTime = 0;
+	fireball.setFire(false);
 }, false);
 
 var renderCounter = 0;
@@ -364,16 +370,20 @@ render = function() {
 				splash = false;
 			}
 
-			if(vehicle.mesh.position.y < -1500 && !fireballTriggered) {
+			if ( vehicle.mesh.position.y < -1500 && !fireballTriggered ) {
 				fireball.renderer();
+				fireball.setFire(true);
 				fireballTriggered = true;
 				setTimeout(function () {
-					boySwitch = true;
-					document.getElementById('death').play();
-					setTimeout(function () {
-						fireball.setFire(false);
-					}, 1000);
-				}, 5000);
+					if ( fireballTriggered ) {
+						boySwitch = true;
+						document.getElementById('death').play();
+						setTimeout(function () {
+							fireball.setFire(false);
+						}, 2000);						
+					}
+
+				}, 6000);
 			}
 			renderer.render( scene, camera );
 		}		
