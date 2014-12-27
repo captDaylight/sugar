@@ -296,6 +296,7 @@ render = function() {
 				fireballTriggered = true;
 				setTimeout(function () {
 					boySwitch = true;
+					document.getElementById('death').play()
 					setTimeout(function () {
 						fireball.setFire(false);
 					}, 1000);
