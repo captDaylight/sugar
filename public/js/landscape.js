@@ -58,6 +58,8 @@ module.exports = function (scene, Physijs, loader, listener) {
 	cube.add(sound1);
 
 	cube.position.z = -200;
+	cube.position.y = -5;
+
 	scene.add( cube );
 
 
@@ -73,7 +75,7 @@ module.exports = function (scene, Physijs, loader, listener) {
 
 	cube2.add(sound2);
 
-	cube2.position.set(-260, 85, 45);
+	cube2.position.set(-260, 80, 45);
 	scene.add( cube2 );
 
 
@@ -89,7 +91,7 @@ module.exports = function (scene, Physijs, loader, listener) {
 
 	cube3.add(sound3);
 
-	cube3.position.set(141, 158, 295);
+	cube3.position.set(141, 150, 295);
 	scene.add( cube3 );
 
 

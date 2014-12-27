@@ -137,6 +137,15 @@ loader.load( "models/boy/newboy.js", function( obj, materials ) {
 	boyCam.lookAt( mesh.position );
 });
 
+//temporary fairy
+var geometry = new THREE.BoxGeometry( 2, 2, 2 );
+var material = new THREE.MeshBasicMaterial( {color: 0xff0000} );
+var fairy = new THREE.Mesh( geometry, material );
+var fairyY = 170;
+fairy.position.set(168, fairyY, 332);
+scene.add(fairy);
+
+
 function createCar(car, car_materials, wheel, wheel_materials) {
 	var mesh = new Physijs.BoxMesh(
 		car,
@@ -264,18 +273,23 @@ var test = document.getElementById("reload");
 
 test.addEventListener("click", function (evt) {
 
-	scene.remove(vehicle);
-    createCar(c, c_materials, w, w_materials);
+	// scene.remove(vehicle);
+ //    createCar(c, c_materials, w, w_materials);
 
 }, false);
+
+var renderCounter = 0;
 
 render = function() {
 	requestAnimationFrame( render );
 	
 
-	var delta = clock.getDelta();
+	renderCounter += .02;
+
 	if ( !boySwitch ) {
+		fairy.position.y = fairyY + (Math.sin(renderCounter) * 1.5);
 		if ( vehicle ) {
+
 			light.target.position.copy( vehicle.mesh.position );
 			light.position.addVectors( light.target.position, new THREE.Vector3( 20, 20, -15 ) );
 			
