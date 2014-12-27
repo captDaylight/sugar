@@ -35241,7 +35241,7 @@ module.exports = function (scene, Physijs, loader, listener) {
 	var cube = new THREE.Mesh( geometry, material );
 
 	var sound1 = new THREE.Audio( listener );
-	sound1.load( 'sounds/gone.mp3' );
+	sound1.load( 'sounds/1.mp3' );
 	sound1.setRefDistance( 5 );
 	sound1.setRolloffFactor(10);
 	sound1.setLoop(true);
