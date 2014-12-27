@@ -114,7 +114,7 @@ loader.load( "models/test/test.json", function( diamond, islands_material ) {
 
 // addVehicle(scene, Physijs, loader, input, vehicle);
 
-loader.load( "models/mustang/mustang.js", function( car, car_materials ) {
+loader.load( "models/gto/gto.js", function( car, car_materials ) {
 	loader.load( "models/mustang/mustang_wheel.js", function( wheel, wheel_materials ) {
 		
 		c = car;
@@ -297,7 +297,7 @@ render = function() {
 				fireballTriggered = true;
 				setTimeout(function () {
 					boySwitch = true;
-					document.getElementById('death').play()
+					document.getElementById('death').play();
 					setTimeout(function () {
 						fireball.setFire(false);
 					}, 1000);
