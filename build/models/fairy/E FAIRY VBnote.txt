@@ -1,0 +1,198 @@
+Summary Info for E FAIRY VB .max (at Frame 0)
+
+Desc:
+--------
+3'6.538" ORIGINAL BIPED SIZE
+26550 polygons 
+Please bear in mind that this is a nubile flexible fairy, as such the COM is higer than in a standard model,
+ for correct bendin of lower back the com should rotate followed by the legs and spine
+
+Hair has physique to help follow the body, but verices especially points can key frame, plus hair dynamics work
+unconventional but allows much more control over traditional methods.
+
+ALl 100 percent original art work by DigitalWarriorArtists
+
+please contact me through site of download for help
+
+
+
+
+Generated from file:-
+--------
+Objects:
+  				Cast	Receive	Motion			Generate	Receive	Generate	Receive	
+  Name	Type	Verts	Faces	Shadows	Shadows	Blur	Hidden	Frozen	Caustics	Caustics	GlobIllum	GlobIllum	Material (Type)
+  ------------	-----	-----	-----	-----	-----	-----	-----	-----	-----	-----	-----	-----	------------
+  E FAIRY 	PolyMesh	13277	14373	Yes	Yes	No	No	Yes	No	Yes	Yes	Yes	efSKIN (Subsurface Scattering Fast Skin)
+  Bip EF	Biped Ob	6	8	Yes	Yes	No	No	No	No	Yes	Yes	Yes	default (Std)
+  Bip EF Footsteps	Biped Ob	9	8	Yes	Yes	No	No	Yes	No	Yes	Yes	Yes	default (Std)
+  Bip EF Pelvis	Biped Ob	27	50	Yes	Yes	No	No	No	No	Yes	Yes	Yes	default (Std)
+  Bip EF Spine	Biped Ob	65	126	Yes	Yes	No	No	No	No	Yes	Yes	Yes	default (Std)
+  Bip EF Spine1	Biped Ob	65	126	Yes	Yes	No	No	No	No	Yes	Yes	Yes	default (Std)
+  Bip EF Spine2	Biped Ob	65	126	Yes	Yes	No	No	No	No	Yes	Yes	Yes	default (Std)
+  Bip EF Spine3	Biped Ob	65	126	Yes	Yes	No	No	No	No	Yes	Yes	Yes	default (Std)
+  Bip EF Neck	Biped Ob	31	58	Yes	Yes	No	No	No	No	Yes	Yes	Yes	default (Std)
+  Bip EF Head	Biped Ob	87	170	Yes	Yes	No	No	No	No	Yes	Yes	Yes	default (Std)
+  Bip EF Ponytail1	Biped Ob	25	46	Yes	Yes	No	No	No	No	Yes	Yes	Yes	default (Std)
+  Bip EF Ponytail11	Biped Ob	25	46	Yes	Yes	No	No	No	No	Yes	Yes	Yes	default (Std)
+  Bip EF Ponytail12	Biped Ob	25	46	Yes	Yes	No	No	No	No	Yes	Yes	Yes	default (Std)
+  teeth bot	Editable	360	625	Yes	Yes	No	No	No	No	Yes	Yes	Yes	teeth toung ef vb exp (Subsurface Scattering Fast Skin)
+  toung ef	Editable	126	248	Yes	Yes	No	No	No	No	Yes	Yes	Yes	teeth toung ef vb exp (Subsurface Scattering Fast Skin)
+  eyelid ef RIGHT	Object	258	512	Yes	Yes	No	No	No	No	Yes	Yes	Yes	efSKIN (Subsurface Scattering Fast Skin)
+  eye ef RIGHT	Editable	482	960	Yes	Yes	No	No	No	No	Yes	Yes	Yes	eye ef vb expo (Autodesk Ceramic)
+  eyelid ef LEFT	Object	258	512	Yes	Yes	No	No	No	No	Yes	Yes	Yes	efSKIN (Subsurface Scattering Fast Skin)
+  eye ef LEFT	Editable	482	960	Yes	Yes	No	No	No	No	Yes	Yes	Yes	eye ef vb expo (Autodesk Ceramic)
+  teeth top ef	Editable	360	642	Yes	Yes	No	No	No	No	Yes	Yes	Yes	teeth toung ef vb exp (Subsurface Scattering Fast Skin)
+  Bip EF L Clavicle	Biped Ob	18	32	Yes	Yes	No	No	No	No	Yes	Yes	Yes	default (Std)
+  Bip EF L UpperArm	Biped Ob	41	78	Yes	Yes	No	No	No	No	Yes	Yes	Yes	default (Std)
+  Bip EF L Forearm	Biped Ob	45	86	Yes	Yes	No	No	No	No	Yes	Yes	Yes	default (Std)
+  Bip EF L Hand	Biped Ob	14	24	Yes	Yes	No	No	No	No	Yes	Yes	Yes	default (Std)
+  Bip EF L Finger0	Biped Ob	45	86	Yes	Yes	No	No	No	No	Yes	Yes	Yes	default (Std)
+  Bip EF L Finger01	Biped Ob	45	86	Yes	Yes	No	No	No	No	Yes	Yes	Yes	default (Std)
+  Bip EF L Finger02	Biped Ob	45	86	Yes	Yes	No	No	No	No	Yes	Yes	Yes	default (Std)
+  Bip EF L Finger1	Biped Ob	45	86	Yes	Yes	No	No	No	No	Yes	Yes	Yes	default (Std)
+  Bip EF L Finger11	Biped Ob	45	86	Yes	Yes	No	No	No	No	Yes	Yes	Yes	default (Std)
+  Bip EF L Finger12	Biped Ob	45	86	Yes	Yes	No	No	No	No	Yes	Yes	Yes	default (Std)
+  Bip EF L Finger13	Biped Ob	45	86	Yes	Yes	No	No	No	No	Yes	Yes	Yes	default (Std)
+  Bip EF L Finger2	Biped Ob	45	86	Yes	Yes	No	No	No	No	Yes	Yes	Yes	default (Std)
+  Bip EF L Finger21	Biped Ob	45	86	Yes	Yes	No	No	No	No	Yes	Yes	Yes	default (Std)
+  Bip EF L Finger22	Biped Ob	45	86	Yes	Yes	No	No	No	No	Yes	Yes	Yes	default (Std)
+  Bip EF L Finger23	Biped Ob	45	86	Yes	Yes	No	No	No	No	Yes	Yes	Yes	default (Std)
+  Bip EF L Finger3	Biped Ob	45	86	Yes	Yes	No	No	No	No	Yes	Yes	Yes	default (Std)
+  Bip EF L Finger31	Biped Ob	45	86	Yes	Yes	No	No	No	No	Yes	Yes	Yes	default (Std)
+  Bip EF L Finger32	Biped Ob	45	86	Yes	Yes	No	No	No	No	Yes	Yes	Yes	default (Std)
+  Bip EF L Finger33	Biped Ob	45	86	Yes	Yes	No	No	No	No	Yes	Yes	Yes	default (Std)
+  Bip EF L Finger4	Biped Ob	45	86	Yes	Yes	No	No	No	No	Yes	Yes	Yes	default (Std)
+  Bip EF L Finger41	Biped Ob	45	86	Yes	Yes	No	No	No	No	Yes	Yes	Yes	default (Std)
+  Bip EF L Finger42	Biped Ob	45	86	Yes	Yes	No	No	No	No	Yes	Yes	Yes	default (Std)
+  Bip EF L Finger43	Biped Ob	45	86	Yes	Yes	No	No	No	No	Yes	Yes	Yes	default (Std)
+  Bip EF R Clavicle	Biped Ob	18	32	Yes	Yes	No	No	No	No	Yes	Yes	Yes	default (Std)
+  Bip EF R UpperArm	Biped Ob	41	78	Yes	Yes	No	No	No	No	Yes	Yes	Yes	default (Std)
+  Bip EF R Forearm	Biped Ob	45	86	Yes	Yes	No	No	No	No	Yes	Yes	Yes	default (Std)
+  Bip EF R Hand	Biped Ob	14	24	Yes	Yes	No	No	No	No	Yes	Yes	Yes	default (Std)
+  Bip EF R Finger0	Biped Ob	45	86	Yes	Yes	No	No	No	No	Yes	Yes	Yes	default (Std)
+  Bip EF R Finger01	Biped Ob	45	86	Yes	Yes	No	No	No	No	Yes	Yes	Yes	default (Std)
+  Bip EF R Finger02	Biped Ob	45	86	Yes	Yes	No	No	No	No	Yes	Yes	Yes	default (Std)
+  Bip EF R Finger1	Biped Ob	45	86	Yes	Yes	No	No	No	No	Yes	Yes	Yes	default (Std)
+  Bip EF R Finger11	Biped Ob	45	86	Yes	Yes	No	No	No	No	Yes	Yes	Yes	default (Std)
+  Bip EF R Finger12	Biped Ob	45	86	Yes	Yes	No	No	No	No	Yes	Yes	Yes	default (Std)
+  Bip EF R Finger13	Biped Ob	45	86	Yes	Yes	No	No	No	No	Yes	Yes	Yes	default (Std)
+  Bip EF R Finger2	Biped Ob	45	86	Yes	Yes	No	No	No	No	Yes	Yes	Yes	default (Std)
+  Bip EF R Finger21	Biped Ob	45	86	Yes	Yes	No	No	No	No	Yes	Yes	Yes	default (Std)
+  Bip EF R Finger22	Biped Ob	45	86	Yes	Yes	No	No	No	No	Yes	Yes	Yes	default (Std)
+  Bip EF R Finger23	Biped Ob	45	86	Yes	Yes	No	No	No	No	Yes	Yes	Yes	default (Std)
+  Bip EF R Finger3	Biped Ob	45	86	Yes	Yes	No	No	No	No	Yes	Yes	Yes	default (Std)
+  Bip EF R Finger31	Biped Ob	45	86	Yes	Yes	No	No	No	No	Yes	Yes	Yes	default (Std)
+  Bip EF R Finger32	Biped Ob	45	86	Yes	Yes	No	No	No	No	Yes	Yes	Yes	default (Std)
+  Bip EF R Finger33	Biped Ob	45	86	Yes	Yes	No	No	No	No	Yes	Yes	Yes	default (Std)
+  Bip EF R Finger4	Biped Ob	45	86	Yes	Yes	No	No	No	No	Yes	Yes	Yes	default (Std)
+  Bip EF R Finger41	Biped Ob	45	86	Yes	Yes	No	No	No	No	Yes	Yes	Yes	default (Std)
+  Bip EF R Finger42	Biped Ob	45	86	Yes	Yes	No	No	No	No	Yes	Yes	Yes	default (Std)
+  Bip EF R Finger43	Biped Ob	45	86	Yes	Yes	No	No	No	No	Yes	Yes	Yes	default (Std)
+  wing outer MASTER	Editable	1424	2671	Yes	Yes	No	No	No	No	Yes	Yes	Yes	WING E FAIRY vb expo (Double Sided)
+  wing outer MASTER001	Editable	1424	2671	Yes	Yes	No	No	No	No	Yes	Yes	Yes	WING E FAIRY vb expo (Double Sided)
+  Bip EF L Thigh	Biped Ob	53	108	Yes	Yes	No	No	No	No	Yes	Yes	Yes	default (Std)
+  Bip EF L Calf	Biped Ob	51	98	Yes	Yes	No	No	No	No	Yes	Yes	Yes	default (Std)
+  Bip EF L Foot	Biped Ob	54	104	Yes	Yes	No	No	No	No	Yes	Yes	Yes	default (Std)
+  Bip EF L Toe0	Biped Ob	16	28	Yes	Yes	No	No	No	No	Yes	Yes	Yes	default (Std)
+  Bip EF L Toe01	Biped Ob	16	28	Yes	Yes	No	No	No	No	Yes	Yes	Yes	default (Std)
+  Bip EF L Toe1	Biped Ob	16	28	Yes	Yes	No	No	No	No	Yes	Yes	Yes	default (Std)
+  Bip EF L Toe11	Biped Ob	16	28	Yes	Yes	No	No	No	No	Yes	Yes	Yes	default (Std)
+  Bip EF R Thigh	Biped Ob	53	108	Yes	Yes	No	No	No	No	Yes	Yes	Yes	default (Std)
+  Bip EF R Calf	Biped Ob	51	98	Yes	Yes	No	No	No	No	Yes	Yes	Yes	default (Std)
+  Bip EF R Foot	Biped Ob	54	104	Yes	Yes	No	No	No	No	Yes	Yes	Yes	default (Std)
+  Bip EF R Toe0	Biped Ob	16	28	Yes	Yes	No	No	No	No	Yes	Yes	Yes	default (Std)
+  Bip EF R Toe01	Biped Ob	16	28	Yes	Yes	No	No	No	No	Yes	Yes	Yes	default (Std)
+  Bip EF R Toe1	Biped Ob	16	28	Yes	Yes	No	No	No	No	Yes	Yes	Yes	default (Std)
+  Bip EF R Toe11	Biped Ob	16	28	Yes	Yes	No	No	No	No	Yes	Yes	Yes	default (Std)
+  hair pointy ef	Object	528	0	Yes	Yes	No	No	No	No	Yes	Yes	Yes	default (Std)
+  clothing	PolyMesh	1449	1416	Yes	Yes	No	No	No	No	Yes	Yes	Yes	WING E FAIRY vb expo (Double Sided)
+  Camera001.Target	Target	-	-	Yes	Yes	No	No	No	No	Yes	Yes	Yes	default (Std)
+
+
+Shapes:
+  					Cast	Receive	Motion			Generate	Receive	Generate	Receive
+  Name	Type	Verts	Polygons	Render	Shadows	Shadows	Blur	Hidden	Frozen	Caustics	Caustics	GlobIllum	GlobIllum
+  ------------	-----	-----	-----	-----	-----	-----	-----	-----	-----	-----	-----	-----	------------
+  Lash shape	Editable	6	2	No	n/a	n/a	n/a	Yes	No	No	Yes	Yes	Yes
+  Lash shape001	Editable	6	2	No	n/a	n/a	n/a	Yes	No	No	Yes	Yes	Yes
+
+
+Cameras:
+  		
+  Name	Type	Hidden	Frozen
+  ------------	-----	-----	-----
+  Camera001	Target C	No	No
+
+
+Lights:
+  		
+  Name	Type	Hidden	Frozen
+  ------------	-----	-----	-----
+  Sun001	mr Sun	No	No
+  Sky002	mr Sky	No	No
+
+
+Helpers:
+  		
+  Name	Type	Hidden	Frozen
+  ------------	-----	-----	-----
+  Bip EF HeadNub	Dummy	Yes	No
+  Bip EF Ponytail1Nub	Dummy	Yes	No
+  Bip EF L Finger0Nub	Dummy	Yes	No
+  Bip EF L Finger1Nub	Dummy	Yes	No
+  Bip EF L Finger2Nub	Dummy	Yes	No
+  Bip EF L Finger3Nub	Dummy	Yes	No
+  Bip EF L Finger4Nub	Dummy	Yes	No
+  Bip EF R Finger0Nub	Dummy	Yes	No
+  Bip EF R Finger1Nub	Dummy	Yes	No
+  Bip EF R Finger2Nub	Dummy	Yes	No
+  Bip EF R Finger3Nub	Dummy	Yes	No
+  Bip EF R Finger4Nub	Dummy	Yes	No
+  Bip EF L Toe0Nub	Dummy	Yes	No
+  Bip EF L Toe1Nub	Dummy	Yes	No
+  Bip EF R Toe0Nub	Dummy	Yes	No
+  Bip EF R Toe1Nub	Dummy	Yes	No
+  Compass001	Compass	No	No
+  Daylight001	Daylight	No	No
+
+
+Scene Totals:
+  Objects: 85
+  Shapes: 2
+  Cameras: 1
+  Lights: 2
+  Helpers: 18
+  Space Warps: 0
+  Total: 108
+
+Mesh Totals:
+
+  Verts: 23313
+  Faces: 31078
+Materials:
+
+  efSKIN  ( Subsurface Scattering Fast Skin )
+         C:\3D\characters\FAIRIES\EFAIRY VBexpo\E fairy FBS VB EXPO.jpg
+
+  teeth toung ef vb exp  ( Subsurface Scattering Fast Skin )
+         C:\3D\characters\FAIRIES\EFAIRY VBexpo\TEETH N TOUNGE MAP ef vbexp.jpg
+
+  eye ef vb expo  ( Autodesk Ceramic )
+         C:\3D\characters\FAIRIES\EFAIRY VBexpo\EYE E FAIRY vb exo.jpg
+
+  WING E FAIRY vb expo  ( Double Sided )
+         C:\3D\characters\FAIRIES\EFAIRY VBexpo\WING COLOU Refvbex.jpg
+         C:\3D\characters\FAIRIES\EFAIRY VBexpo\WING COLOUR MASK efvbex.jpg
+
+
+Environment Map:
+  Map #3  ( mr Physical Sky )
+
+Other Maps:
+C:\3D\characters\FAIRIES\EFAIRY VBexpo\TEETH N TOUNGE MAP ef vbexp.jpg
+C:\3D\characters\FAIRIES\EFAIRY VBexpo\E fairy FBS VB EXPO.jpg
+C:\3D\characters\FAIRIES\EFAIRY VBexpo\EYE E FAIRY vb exo.jpg
+C:\3D\characters\FAIRIES\EFAIRY VBexpo\WING COLOU Refvbex.jpg
+C:\3D\characters\FAIRIES\EFAIRY VBexpo\WING COLOUR MASK efvbex.jpg
+

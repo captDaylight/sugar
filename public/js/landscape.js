@@ -11,38 +11,54 @@ module.exports = function (scene, Physijs, loader, listener) {
 	ground_material.map.wrapS = ground_material.map.wrapT = THREE.RepeatWrapping;
 	ground_material.map.repeat.set( 1, 1 );
 
-	// MATERIALS
-	var granite_material = Physijs.createMaterial(
-		new THREE.MeshLambertMaterial({ map: THREE.ImageUtils.loadTexture( 'images/granite.jpeg' ) }),
+	var satin_material = Physijs.createMaterial(
+		new THREE.MeshLambertMaterial({ map: THREE.ImageUtils.loadTexture( 'images/satin.jpg' ) }),
 		.8, // high friction
 		.4 // low restitution
 	);
 	ground_material.map.wrapS = ground_material.map.wrapT = THREE.RepeatWrapping;
 	ground_material.map.repeat.set( 1, 1 );
 
-	var wood_material = Physijs.createMaterial(
-		new THREE.MeshLambertMaterial({ map: THREE.ImageUtils.loadTexture( 'images/plywood.jpg' ) }),
+	var slate_material = Physijs.createMaterial(
+		new THREE.MeshLambertMaterial({ map: THREE.ImageUtils.loadTexture( 'images/slate.jpg' ) }),
 		.8, // high friction
 		.4 // low restitution
 	);
-	wood_material.map.wrapS = ground_material.map.wrapT = THREE.RepeatWrapping;
-	wood_material.map.repeat.set( 1, 1 );
+	slate_material.map.wrapS = ground_material.map.wrapT = THREE.RepeatWrapping;
+	slate_material.map.repeat.set( 1, 1 );
 
-	var rocks_material = Physijs.createMaterial(
-		new THREE.MeshLambertMaterial({ map: THREE.ImageUtils.loadTexture( 'images/rocks.jpg' ) }),
-		.8, // high friction
-		.4 // low restitution
-	);
-	rocks_material.map.wrapS = ground_material.map.wrapT = THREE.RepeatWrapping;
-	rocks_material.map.repeat.set( 1, 1 );
+	// // MATERIALS
+	// var granite_material = Physijs.createMaterial(
+	// 	new THREE.MeshLambertMaterial({ map: THREE.ImageUtils.loadTexture( 'images/granite.jpeg' ) }),
+	// 	.8, // high friction
+	// 	.4 // low restitution
+	// );
+	// ground_material.map.wrapS = ground_material.map.wrapT = THREE.RepeatWrapping;
+	// ground_material.map.repeat.set( 1, 1 );
 
-	var grass_material = Physijs.createMaterial(
-		new THREE.MeshLambertMaterial({ map: THREE.ImageUtils.loadTexture( 'images/grass.png' ) }),
-		.8, // high friction
-		.4 // low restitution
-	);
-	grass_material.map.wrapS = ground_material.map.wrapT = THREE.RepeatWrapping;
-	grass_material.map.repeat.set( 10, 10 );
+	// var wood_material = Physijs.createMaterial(
+	// 	new THREE.MeshLambertMaterial({ map: THREE.ImageUtils.loadTexture( 'images/plywood.jpg' ) }),
+	// 	.8, // high friction
+	// 	.4 // low restitution
+	// );
+	// wood_material.map.wrapS = ground_material.map.wrapT = THREE.RepeatWrapping;
+	// wood_material.map.repeat.set( 1, 1 );
+
+	// var rocks_material = Physijs.createMaterial(
+	// 	new THREE.MeshLambertMaterial({ map: THREE.ImageUtils.loadTexture( 'images/rocks.jpg' ) }),
+	// 	.8, // high friction
+	// 	.4 // low restitution
+	// );
+	// rocks_material.map.wrapS = ground_material.map.wrapT = THREE.RepeatWrapping;
+	// rocks_material.map.repeat.set( 1, 1 );
+
+	// var grass_material = Physijs.createMaterial(
+	// 	new THREE.MeshLambertMaterial({ map: THREE.ImageUtils.loadTexture( 'images/grass.png' ) }),
+	// 	.8, // high friction
+	// 	.4 // low restitution
+	// );
+	// grass_material.map.wrapS = ground_material.map.wrapT = THREE.RepeatWrapping;
+	// grass_material.map.repeat.set( 10, 10 );
 
 
 
@@ -119,13 +135,26 @@ module.exports = function (scene, Physijs, loader, listener) {
 		
 		var mesh = new Physijs.ConvexMesh(
 			islands,
-			ground_material,
+			satin_material,
 			0
 		);
 		mesh.receiveShadow = true;
 		scene.add(mesh);
 
 	});
+
+	// CASTLE ROOF
+	loader.load( "models/islands/islands12.json", function( islands, islands_material ) {
+		
+		var mesh = new Physijs.ConvexMesh(
+			islands,
+			slate_material,
+			0
+		);
+		mesh.receiveShadow = true;
+		scene.add(mesh);
+
+	});	
 
 	// FOREGROUND CONES, ISLAND 1
 	loader.load( "models/islands/islands07.json", function( islands, islands_material ) {
