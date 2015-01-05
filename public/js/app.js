@@ -44,6 +44,14 @@ var loader = new THREE.JSONLoader(),
 		vehicle_body, vehicle, input, listener,
 		c, c_materials, w, w_materials;
 
+
+var ambient = document.getElementById('ambient'); // ambient music that plays throughought 
+ambient.addEventListener('ended', function () {
+	this.currentTime = 0;
+	this.play();
+}, false);
+
+
 function getCameraVector(objYRotation, distance) {
 
 	var coords = {x:0, z:0};
@@ -307,7 +315,7 @@ function randomDiamonds(diamond) {
 			1
 		);
 
-		// mesh.castShadow = true;
+		mesh.castShadow = true;
 		mesh.position.set(
 			Math.random() * 30 - 120,
 			Math.random() * 50 + 50,
@@ -340,7 +348,10 @@ reload.addEventListener("click", function (evt) {
 	audio.pause();
 	audio.currentTime = 0;
 	fireball.setFire(false);
+	ambient.currentTime = 0;
+	ambient.play();
 }, false);
+
 
 var renderCounter = 0;
 
@@ -355,8 +366,8 @@ render = function() {
 		if ( vehicle ) {
 
 			light.target.position.copy( vehicle.mesh.position );
-			light.position.addVectors( light.target.position, new THREE.Vector3( 20, 20, -15 ) );
-			
+			light.position.addVectors( light.target.position, new THREE.Vector3( 100, 100, -105 ) );
+
 			if ( !diamondsTriggered  && ( vehicle.mesh.position.x < -35 || vehicle.mesh.position.z < -220) ) {
 				randomDiamonds(diamondMesh);
 				diamondsTriggered = true;
@@ -367,12 +378,14 @@ render = function() {
 				d.className = d.className + ' remove';
 
 				splash = false;
+				ambient.play();
 			}
 
 			if ( vehicle.mesh.position.y < -1500 && !fireballTriggered ) {
 				fireball.renderer();
 				fireball.setFire(true);
 				fireballTriggered = true;
+				ambient.pause();
 				setTimeout(function () {
 					if ( fireballTriggered ) {
 						boySwitch = true;

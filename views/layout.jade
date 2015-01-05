@@ -4,8 +4,12 @@ html
     link(rel='stylesheet', href='/css/style.css')
   body
     #cover
-      div(class="grapes" style="background-image: url(/images/grapes_400.gif)")
+      div(class="grapes" style="background-image: url(/images/Hot-Sugar-computer-Game-loading-screen.gif)")
     #container
       img(src="images/reload.svg" class="reload" id="reload")
-    audio(id="death" src="sounds/11_Not_Afraid_To_Die_FINAL_10.2.14.mp3" preload="auto" controls)
+    audio(id="ambient" preload="auto" controls)
+      source(src="sounds/amb.mp3")
+      source(src="sounds/amb.ogg")
+    audio(id="death" preload="auto" controls)
+      source(src="sounds/11_Not_Afraid_To_Die_FINAL_10.2.14.mp3")
     script(src="/js/app.js")

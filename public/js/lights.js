@@ -4,7 +4,7 @@ module.exports = function (scene) {
 
 	// Light
 	var light = new THREE.DirectionalLight( 0xFFFFFF );
-	light.position.set( 20, 20, -15 );
+	light.position.set( 20, 20, -205 );
 	light.target.position.copy( scene.position );
 	light.castShadow = true;
 	light.shadowCameraLeft = -150;

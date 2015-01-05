@@ -8,7 +8,7 @@ audio{
 	height: 100%;
 	position: absolute;
 	width: 100%;
-	background-color: #00ffd7;
+	background-color: black;
 	-webkit-transition: all 1s ease-in-out;
 	-moz-transition: all 1s ease-in-out;
 	-ms-transition: all 1s ease-in-out;
@@ -36,10 +36,11 @@ canvas{
 	-ms-transition: all 1s ease-in-out;
 	-o-transition: all 1s ease-in-out;
 	transition: all 1s ease-in-out;
-	-webkit-background-size: cover;
+/*	-webkit-background-size: cover;
 	-moz-background-size: cover;
 	-o-background-size: cover;
-	background-size: cover;
+	background-size: cover;*/
+	background-repeat: no-repeat;
 	background-position: center center;
 	height: 100%;
 	width: 100%;
