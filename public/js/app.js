@@ -153,8 +153,8 @@ function createCar(car, car_materials, wheel, wheel_materials) {
 	);
 	mesh.position.y = 5;
 	mesh.castShadow = mesh.receiveShadow = true;
-	camera.position.y = 3;
-	camera.position.z = -25;
+	camera.position.y = 10;
+	camera.position.z = -40;
 	camera.lookAt( mesh.position );
 	mesh.add(camera);
 
