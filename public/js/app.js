@@ -8,6 +8,7 @@ var Physijs = require('./vendor/physi');
 // var SimplexNoise = require('./vendor/simplex-noise');
 Physijs.scripts.worker = './worker/physijs_worker.js';
 Physijs.scripts.ammo = './ammo.js';
+var $ = require('jquery-browserify')
 
 var fireball = require('./fireball');
 var fireballTriggered = false;
@@ -71,9 +72,6 @@ renderer.setSize( window.innerWidth, window.innerHeight );
 renderer.shadowMapEnabled = true;
 renderer.shadowMapSoft = true;
 document.getElementById( 'container' ).appendChild( renderer.domElement );
-// add fireball scene above container
-// fireball();
-// boy();
 
 scene = new Physijs.Scene;
 scene.setGravity(new THREE.Vector3( 0, -30, 0 ));
@@ -141,7 +139,6 @@ loader.load( "models/boy/newboy.js", function( obj, materials ) {
 
 	mesh.position.y = 1000;
 	boy = mesh;
-	console.log(boy);
 	boyCam.lookAt( mesh.position );
 });
 
@@ -353,6 +350,13 @@ reload.addEventListener("click", function (evt) {
 }, false);
 
 
+var shape = new THREE.TextGeometry("Game Over", {font: 'helvetiker'});
+var textwrapper = new THREE.MeshNormalMaterial({color: 0x00ff00});
+var words = new THREE.Mesh(textshape, textwrapper);
+scene.add(words);
+
+
+
 var renderCounter = 0;
 
 render = function() {
@@ -385,7 +389,11 @@ render = function() {
 				fireball.renderer();
 				fireball.setFire(true);
 				fireballTriggered = true;
-				ambient.pause();
+
+				$('#ambient').animate({volume:0},4000, function () {
+					ambient.pause();
+					$(this).animate({volume:1},10);
+				});
 				setTimeout(function () {
 					if ( fireballTriggered ) {
 						boySwitch = true;
