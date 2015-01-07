@@ -49,6 +49,8 @@ var loader = new THREE.JSONLoader(),
 var ambient = document.getElementById('ambient'); // ambient music that plays throughought 
 ambient.addEventListener('ended', function () {
 	this.currentTime = 0;
+	this.volume = 0.3;
+	console.log(this);
 	this.play();
 }, false);
 
@@ -250,9 +252,9 @@ function createCar(car, car_materials, wheel, wheel_materials) {
 	var cube = new THREE.Mesh( geometry, material );
 
 	var sound1 = new THREE.Audio( listener );
-	sound1.load( 'sounds/1.ogg' );
-	sound1.setRefDistance( 5 );
-	sound1.setRolloffFactor(10);
+	sound1.load( 'sounds/island01.ogg' );
+	sound1.setRefDistance( 100 );
+	sound1.setRolloffFactor(20);
 	sound1.setLoop(true);
 
 	cube.add(sound1);
@@ -268,9 +270,9 @@ function createCar(car, car_materials, wheel, wheel_materials) {
 	var cube2 = new THREE.Mesh( geometry2, material2 );
 
 	var sound2 = new THREE.Audio( listener );
-	sound2.load( 'sounds/6.ogg' );
-	sound2.setRefDistance( 5 );
-	sound2.setRolloffFactor(10);
+	sound2.load( 'sounds/island02.ogg' );
+	sound2.setRefDistance( 100 );
+	sound2.setRolloffFactor(50);
 	sound2.setLoop(true);
 
 	cube2.add(sound2);
@@ -284,9 +286,9 @@ function createCar(car, car_materials, wheel, wheel_materials) {
 	var cube3 = new THREE.Mesh( geometry3, material3 );
 
 	var sound3 = new THREE.Audio( listener );
-	sound3.load( 'sounds/6.ogg' );
-	sound3.setRefDistance( 5 );
-	sound3.setRolloffFactor(10);
+	sound3.load( 'sounds/island03.ogg' );
+	sound3.setRefDistance( 120 );
+	sound3.setRolloffFactor(50);
 	sound3.setLoop(true);
 
 	cube3.add(sound3);
@@ -349,11 +351,13 @@ reload.addEventListener("click", function (evt) {
 	ambient.play();
 }, false);
 
+$.getScript('http://mrdoob.github.io/three.js/examples/fonts/helvetiker_regular.typeface.js',function () {
+	var shape = new THREE.TextGeometry("Game Over", {font: 'helvetiker'});
+	var textwrapper = new THREE.MeshNormalMaterial({color: 0x00ff00});
+	var words = new THREE.Mesh(textshape, textwrapper);
+	scene.add(words);	
+});
 
-var shape = new THREE.TextGeometry("Game Over", {font: 'helvetiker'});
-var textwrapper = new THREE.MeshNormalMaterial({color: 0x00ff00});
-var words = new THREE.Mesh(textshape, textwrapper);
-scene.add(words);
 
 
 
@@ -382,6 +386,7 @@ render = function() {
 				d.className = d.className + ' remove';
 
 				splash = false;
+				ambient.volume = 0.3;
 				ambient.play();
 			}
 
@@ -390,9 +395,9 @@ render = function() {
 				fireball.setFire(true);
 				fireballTriggered = true;
 
-				$('#ambient').animate({volume:0},4000, function () {
+				$('#ambient').animate({volume:0},6000, function () {
 					ambient.pause();
-					$(this).animate({volume:1},10);
+					$(this).animate({volume:0.3},10);
 				});
 				setTimeout(function () {
 					if ( fireballTriggered ) {
