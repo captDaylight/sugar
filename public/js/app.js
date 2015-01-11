@@ -43,7 +43,7 @@ var loader = new THREE.JSONLoader(),
 	ground_material, box_material,
 	projector, renderer, scene, ground, light, camera,
 		vehicle_body, vehicle, input, listener,
-		c, c_materials, w, w_materials;
+		c, c_materials, w, w_materials, mesh1;
 
 
 var ambient = document.getElementById('ambient'); // ambient music that plays throughought 
@@ -351,15 +351,68 @@ reload.addEventListener("click", function (evt) {
 	ambient.play();
 }, false);
 
-$.getScript('http://mrdoob.github.io/three.js/examples/fonts/helvetiker_regular.typeface.js',function () {
-	var shape = new THREE.TextGeometry("Game Over", {font: 'helvetiker'});
-	var textwrapper = new THREE.MeshNormalMaterial({color: 0x00ff00});
-	var words = new THREE.Mesh(textshape, textwrapper);
-	scene.add(words);	
-});
 
 
+// create the text behind the castle
+// via stemkoski
+// create a canvas element
+function daysUntil(year, month, day) {
+  var now = new Date(),
+      dateEnd = new Date(year, month - 1, day), // months are zero-based
+      days = (dateEnd - now) / 1000/60/60/24;   // convert milliseconds to days
 
+  return Math.round(days);
+}
+
+// setTimeout(function () {
+
+// var canvas1 = document.createElement('canvas');
+// var context1 = canvas1.getContext('2d');
+// context1.font = "Bold 50px chopin";
+// context1.textAlign="center"; 
+// context1.fillStyle = "rgba(0,0,0,0.95)";
+// context1.fillText(daysUntil(2015, 2, 23), 150, 60);
+
+// // canvas contents will be used for a texture
+// var texture1 = new THREE.Texture(canvas1) 
+// texture1.needsUpdate = true;
+  
+// var material1 = new THREE.MeshBasicMaterial( {map: texture1, side:THREE.DoubleSide } );
+// material1.transparent = true;
+
+// var mesh1 = new THREE.Mesh(
+//     new THREE.PlaneBufferGeometry(canvas1.width, canvas1.height),
+//     material1
+//   );
+// mesh1.scale.set(0.1,0.1,0.1);
+// mesh1.position.set(0,0,-150);
+// // mesh1.position.set(263,172,381);
+// scene.add( mesh1 );
+// },0);
+function addText() {
+	var canvas1 = document.createElement('canvas');
+	var context1 = canvas1.getContext('2d');
+	context1.font = "Bold 150px chopin";
+	context1.textAlign="center"; 
+	context1.fillStyle = "rgba(0,0,0,0.95)";
+	context1.fillText(daysUntil(2015, 2, 23), 150, 100);
+
+	// canvas contents will be used for a texture
+	var texture1 = new THREE.Texture(canvas1) 
+	texture1.needsUpdate = true;
+	  
+	var material1 = new THREE.MeshBasicMaterial( {map: texture1, side:THREE.DoubleSide } );
+	material1.transparent = true;
+
+	mesh1 = new THREE.Mesh(
+	    new THREE.PlaneBufferGeometry(canvas1.width, canvas1.height),
+	    material1
+	  );
+	mesh1.scale.set(0.1,0.1,0.1);
+	// mesh1.position.set(0,10,-150);
+	mesh1.position.set(263,172,381);
+	scene.add( mesh1 );
+}
 
 var renderCounter = 0;
 
@@ -388,6 +441,8 @@ render = function() {
 				splash = false;
 				ambient.volume = 0.3;
 				ambient.play();
+
+				addText()
 			}
 
 			if ( vehicle.mesh.position.y < -1500 && !fireballTriggered ) {
@@ -410,7 +465,12 @@ render = function() {
 
 				}, 6000);
 			}
+			if (!splash){
+				mesh1.rotation.y = mesh1.rotation.y + 0.01;				
+			}
+			
 			renderer.render( scene, camera );
+
 		}		
 	} else {
 		boy.rotation.x = boy.rotation.x + 0.01;

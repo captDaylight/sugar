@@ -64,3 +64,10 @@ canvas{
   -moz-opacity: 0;
   opacity: 0;
 }
+@font-face {
+    font-family: 'chopin'; /*a name to be used later*/
+    src: url('/fonts/ChopinScript.otf'); /*URL to font*/
+}
+div{
+	font-family: 'chopin';
+}
