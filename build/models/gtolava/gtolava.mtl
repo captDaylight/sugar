@@ -1,0 +1,177 @@
+newmtl gto:Body_001
+illum 4
+Kd 0.04 0.08 0.22
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+Ni 1.50
+Ks 0.70 0.70 0.70
+Ns 23.53
+newmtl gto:Body_text_001
+illum 4
+Kd 0.81 0.81 0.81
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+Ni 1.50
+Ks 0.50 0.50 0.50
+Ns 76.47
+newmtl gto:Chrome_001
+illum 4
+Kd 0.44 0.44 0.44
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+Ni 1.00
+Ks 0.89 0.89 0.89
+Ns 37.25
+newmtl gto:Dessous_001
+illum 4
+Kd 0.19 0.19 0.19
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+Ni 1.00
+Ks 0.00 0.00 0.00
+Ns 131.37
+newmtl gto:Feux_blanc_001
+illum 4
+Kd 0.61 0.60 0.60
+Ka 0.00 0.00 0.00
+Tf 0.76 0.76 0.76
+Ni 1.00
+Ks 0.25 0.25 0.25
+Ns 131.37
+newmtl gto:Feux_chrome_001
+illum 4
+Kd 0.19 0.19 0.19
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+Ni 1.00
+Ks 0.65 0.65 0.65
+Ns 131.37
+newmtl gto:Feux_rouge_001
+illum 4
+Kd 0.55 0.06 0.06
+Ka 0.00 0.00 0.00
+Tf 0.88 0.88 0.88
+Ni 1.00
+Ks 0.25 0.25 0.25
+Ns 131.37
+newmtl gto:Grille_001
+illum 4
+Kd 0.17 0.17 0.17
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+Ni 1.00
+Ks 0.05 0.05 0.05
+Ns 131.37
+newmtl gto:Interieur_001
+illum 4
+Kd 0.18 0.18 0.18
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+Ni 1.00
+Ks 0.10 0.10 0.10
+Ns 37.25
+newmtl gto:Interieur_Text_001
+illum 4
+Kd 0.18 0.18 0.18
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+Ni 1.50
+Ks 0.00 0.00 0.00
+Ns 13.73
+newmtl gto:Logo_FORD_001
+illum 4
+Kd 0.57 0.57 0.57
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+Ni 1.50
+Ks 0.15 0.15 0.15
+Ns 131.37
+newmtl gto:Metal_alu_001
+illum 4
+Kd 0.50 0.50 0.50
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+Ni 1.00
+Ks 0.60 0.60 0.60
+Ns 37.25
+newmtl gto:Miroir_001
+illum 4
+Kd 0.25 0.25 0.25
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+Ni 1.00
+Ks 0.60 0.60 0.60
+Ns 131.37
+newmtl gto:Moteur_001
+illum 4
+Kd 0.18 0.18 0.18
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+Ni 1.50
+Ks 0.00 0.00 0.00
+Ns 13.73
+newmtl gto:Partie_noir_001
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+Ni 1.00
+Ks 0.00 0.00 0.00
+Ns 131.37
+newmtl gto:Phare_001
+illum 4
+Kd 0.23 0.23 0.23
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+Ni 1.00
+Ks 0.65 0.65 0.65
+Ns 131.37
+newmtl gto:Phare_chrome_001
+illum 4
+Kd 0.24 0.24 0.24
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+Ni 1.00
+Ks 0.65 0.65 0.65
+Ns 131.37
+newmtl gto:Phare_vitre_001
+illum 4
+Kd 0.44 0.46 0.47
+Ka 0.00 0.00 0.00
+Tf 0.40 0.40 0.40
+Ni 1.00
+Ks 0.32 0.32 0.32
+Ns 37.25
+newmtl gto:Plastique_noir_001
+illum 4
+Kd 0.25 0.25 0.25
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+Ni 1.00
+Ks 0.15 0.15 0.15
+Ns 131.37
+newmtl gto:Vitre_001
+illum 4
+Kd 0.12 0.18 0.19
+Ka 0.00 0.00 0.00
+Tf 0.38 0.38 0.38
+Ni 1.00
+Ks 0.60 0.60 0.60
+Ns 37.25
+newmtl gto:Vitre_noir_001
+illum 4
+Kd 0.04 0.04 0.04
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+Ni 1.00
+Ks 0.70 0.70 0.70
+Ns 37.25
+newmtl phong1SG
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.48 0.48 0.48
+Tf 1.00 1.00 1.00
+map_Kd Lava-car.jpeg
+Ni 1.00
+Ks 0.50 0.50 0.50
+Ns 18.00

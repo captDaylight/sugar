@@ -122,7 +122,7 @@ loader.load( "models/test/test.json", function( diamond, islands_material ) {
 
 // addVehicle(scene, Physijs, loader, input, vehicle);
 
-loader.load( "models/gto/gto.js", function( car, car_materials ) {
+loader.load( "models/gtolava/gtolava.js", function( car, car_materials ) {
 	loader.load( "models/mustang/mustang_wheel.js", function( wheel, wheel_materials ) {
 		
 		c = car;
@@ -148,10 +148,22 @@ loader.load( "models/boy/newboy.js", function( obj, materials ) {
 //temporary fairy
 var geometry = new THREE.BoxGeometry( 2, 2, 2 );
 var material = new THREE.MeshBasicMaterial( {color: 0xff0000} );
-var fairy = new THREE.Mesh( geometry, material );
-var fairyY = 170;
-fairy.position.set(168, fairyY, 332);
-scene.add(fairy);
+var  fairyY = 170, 
+	fairy;
+
+loader.load( "models/elf/elf.js", function( obj, materials ) {
+	var fairy = new THREE.Mesh( obj, new THREE.MeshFaceMaterial( materials ) );
+	scene.add( fairy );
+	fairy.position.set(157, fairyY, 327);
+	fairy.rotation.y = 0.5;
+
+		// Light
+	// var light1 = new THREE.DirectionalLight( 0xFFFFFF );
+	// light1.position.addVectors( fairy.position, new THREE.Vector3( 10, 10, -10 ) );
+	// light1.target.position.copy( fairy.position );
+	// scene.add( light1 );
+
+});
 
 
 function createCar(car, car_materials, wheel, wheel_materials) {
@@ -267,8 +279,7 @@ function createCar(car, car_materials, wheel, wheel_materials) {
 
 
 	var geometry2 = new THREE.BoxGeometry( 2, 2, 2 );
-	var material2 = new THREE.MeshBasicMaterial( {color: 0xff0000} );
-	var cube2 = new THREE.Mesh( geometry2, material2 );
+	var cube2 = new THREE.Mesh( geometry2, material );
 
 	var sound2 = new THREE.Audio( listener );
 	sound2.load( 'sounds/island02.ogg' );
@@ -283,8 +294,7 @@ function createCar(car, car_materials, wheel, wheel_materials) {
 
 
 	var geometry3 = new THREE.BoxGeometry( 2, 2, 2 );
-	var material3 = new THREE.MeshBasicMaterial( {color: 0xff0000} );
-	var cube3 = new THREE.Mesh( geometry3, material3 );
+	var cube3 = new THREE.Mesh( geometry3, material );
 
 	var sound3 = new THREE.Audio( listener );
 	sound3.load( 'sounds/island03.ogg' );
@@ -296,6 +306,20 @@ function createCar(car, car_materials, wheel, wheel_materials) {
 
 	cube3.position.set(141, 150, 295);
 	scene.add( cube3 );
+
+	var geometry4 = new THREE.BoxGeometry( 2, 2, 2 );
+	var cube4 = new THREE.Mesh( geometry4, material );
+
+	var sound4 = new THREE.Audio( listener );
+	sound4.load( 'sounds/fairy_speech.ogg' );
+	sound4.setRefDistance( 120 );
+	sound4.setRolloffFactor(50);
+	sound4.setLoop(true);
+
+	cube4.add(sound4);
+
+	cube4.position.set(141, 150, 295);
+	scene.add( cube4 );
 
 }
 
@@ -424,7 +448,10 @@ render = function() {
 	renderCounter += .02;
 
 	if ( !boySwitch ) {
-		fairy.position.y = fairyY + (Math.sin(renderCounter) * 1.5);
+		if (fairy) {
+			fairy.position.y = fairyY + (Math.sin(renderCounter) * 1.5);	
+		}
+		
 		if ( vehicle ) {
 
 			light.target.position.copy( vehicle.mesh.position );

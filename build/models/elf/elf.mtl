@@ -1,0 +1,72 @@
+# Blender MTL File: 'None'
+# Material Count: 7
+
+newmtl _0d5d7ec_dds
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.558431 0.558431 0.558431
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd /Users/paulchristophe/Downloads/DarkElf 2/90d5d7ec.bmp
+
+newmtl foot
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.374510 0.374510 0.374510
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd /Users/paulchristophe/Downloads/DarkElf 2/FDarkElf.bmp
+
+newmtl hair
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.374510 0.374510 0.374510
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd /Users/paulchristophe/Downloads/DarkElf 2/FDarkEl5.bmp
+
+newmtl hand
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.374510 0.374510 0.374510
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd /Users/paulchristophe/Downloads/DarkElf 2/FDarkEl3.bmp
+
+newmtl head
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.374510 0.374510 0.374510
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd /Users/paulchristophe/Downloads/DarkElf 2/FDarkEl1.bmp
+
+newmtl leg
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.374510 0.374510 0.374510
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd /Users/paulchristophe/Downloads/DarkElf 2/FDarkEl4.bmp
+
+newmtl upper.001
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.374510 0.374510 0.374510
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd /Users/paulchristophe/Downloads/DarkElf 2/FDarkEl2.bmp
