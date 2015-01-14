@@ -23,7 +23,6 @@ var boyCam = new THREE.PerspectiveCamera(
 boyCam.position.z = -50;
 boyCam.position.y = 1000;
 
-
 // project specific import
 var addLights = require('./lights');
 var addCamera = require('./camera');
@@ -154,7 +153,7 @@ loader.load( "models/elf/elf.js", function( obj, materials ) {
 	var fairy = new THREE.Mesh( obj, new THREE.MeshFaceMaterial( materials ) );
 	scene.add( fairy );
 	fairy.position.set(157, fairyY, 327);
-	fairy.rotation.y = 0.5;
+	fairy.rotation.y = 1;
 
 		// Light
 	// var light1 = new THREE.DirectionalLight( 0xFFFFFF );
@@ -189,7 +188,7 @@ function createCar(car, car_materials, wheel, wheel_materials) {
 	));
 
 	scene.add( vehicle );
-
+	console.log(vehicle);
 	var wheel_material = new THREE.MeshFaceMaterial( wheel_materials );
 
 	for ( var i = 0; i < 4; i++ ) {
@@ -264,7 +263,7 @@ function createCar(car, car_materials, wheel, wheel_materials) {
 	var cube = new THREE.Mesh( geometry, material );
 
 	var sound1 = new THREE.Audio( listener );
-	sound1.load( 'sounds/island01.ogg' );
+	sound1.load( 'sounds/island01.mp3' );
 	sound1.setRefDistance( 100 );
 	sound1.setRolloffFactor(20);
 	sound1.setLoop(true);
@@ -281,7 +280,7 @@ function createCar(car, car_materials, wheel, wheel_materials) {
 	var cube2 = new THREE.Mesh( geometry2, material );
 
 	var sound2 = new THREE.Audio( listener );
-	sound2.load( 'sounds/island02.ogg' );
+	sound2.load( 'sounds/island02.mp3' );
 	sound2.setRefDistance( 100 );
 	sound2.setRolloffFactor(50);
 	sound2.setLoop(true);
@@ -296,7 +295,7 @@ function createCar(car, car_materials, wheel, wheel_materials) {
 	var cube3 = new THREE.Mesh( geometry3, material );
 
 	var sound3 = new THREE.Audio( listener );
-	sound3.load( 'sounds/island03.ogg' );
+	sound3.load( 'sounds/island03.mp3' );
 	sound3.setRefDistance( 120 );
 	sound3.setRolloffFactor(50);
 	sound3.setLoop(true);
@@ -310,7 +309,7 @@ function createCar(car, car_materials, wheel, wheel_materials) {
 	var cube4 = new THREE.Mesh( geometry4, material );
 
 	var sound4 = new THREE.Audio( listener );
-	sound4.load( 'sounds/fairy_speech.ogg' );
+	sound4.load( 'sounds/fairy_speech_longer.mp3' );
 	sound4.setRefDistance( 120 );
 	sound4.setRolloffFactor(50);
 	sound4.setLoop(true);
@@ -388,31 +387,6 @@ function daysUntil(year, month, day) {
   return Math.round(days);
 }
 
-// setTimeout(function () {
-
-// var canvas1 = document.createElement('canvas');
-// var context1 = canvas1.getContext('2d');
-// context1.font = "Bold 50px chopin";
-// context1.textAlign="center"; 
-// context1.fillStyle = "rgba(0,0,0,0.95)";
-// context1.fillText(daysUntil(2015, 2, 23), 150, 60);
-
-// // canvas contents will be used for a texture
-// var texture1 = new THREE.Texture(canvas1) 
-// texture1.needsUpdate = true;
-  
-// var material1 = new THREE.MeshBasicMaterial( {map: texture1, side:THREE.DoubleSide } );
-// material1.transparent = true;
-
-// var mesh1 = new THREE.Mesh(
-//     new THREE.PlaneBufferGeometry(canvas1.width, canvas1.height),
-//     material1
-//   );
-// mesh1.scale.set(0.1,0.1,0.1);
-// mesh1.position.set(0,0,-150);
-// // mesh1.position.set(263,172,381);
-// scene.add( mesh1 );
-// },0);
 function addText() {
 	var canvas1 = document.createElement('canvas');
 	var context1 = canvas1.getContext('2d');
@@ -448,7 +422,7 @@ render = function() {
 
 	if ( !boySwitch ) {
 		if (fairy) {
-			fairy.position.y = fairyY + (Math.sin(renderCounter) * 1.5);	
+			fairy.position.y = fairyY + (Math.sin(renderCounter) * 3);	
 		}
 		
 		if ( vehicle ) {
