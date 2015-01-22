@@ -484,8 +484,8 @@ render = function() {
 
 };
 
-requestAnimationFrame( render );
-scene.simulate();
+// requestAnimationFrame( render );
+// scene.simulate();
 
 // window.onload = initScene;
 
