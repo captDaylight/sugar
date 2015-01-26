@@ -393,7 +393,7 @@ function addText() {
 	context1.font = "Bold 150px chopin";
 	context1.textAlign="center"; 
 	context1.fillStyle = "rgba(0,0,0,0.95)";
-	context1.fillText(daysUntil(2015, 2, 23), 150, 100);
+	context1.fillText(daysUntil(2015, 2, 24), 150, 100);
 
 	// canvas contents will be used for a texture
 	var texture1 = new THREE.Texture(canvas1) 
