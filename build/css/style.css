@@ -71,3 +71,16 @@ canvas{
 div{
 	font-family: 'chopin';
 }
+#built-by{
+	position: absolute;
+	bottom: 20px;
+	z-index: 1;
+	right: 20px;
+	font-size: 20px;
+	color: #666;
+
+}
+#built-by a{
+	color:black;
+	text-decoration: none;
+}
