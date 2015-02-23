@@ -20,6 +20,9 @@ var boyCam = new THREE.PerspectiveCamera(
 		1,
 		2000
 	);
+
+var finalScene = require('./final');
+var finalSwitch = true;
 boyCam.position.z = -50;
 boyCam.position.y = 1000;
 
@@ -308,16 +311,16 @@ function createCar(car, car_materials, wheel, wheel_materials) {
 	var geometry4 = new THREE.BoxGeometry( 2, 2, 2 );
 	var cube4 = new THREE.Mesh( geometry4, material );
 
-	var sound4 = new THREE.Audio( listener );
-	sound4.load( 'sounds/fairy_speech_longer.mp3' );
-	sound4.setRefDistance( 120 );
-	sound4.setRolloffFactor(50);
-	sound4.setLoop(true);
+	// var sound4 = new THREE.Audio( listener );
+	// sound4.load( 'sounds/fairy_speech_longer.mp3' );
+	// sound4.setRefDistance( 120 );
+	// sound4.setRolloffFactor(50);
+	// sound4.setLoop(true);
 
-	cube4.add(sound4);
+	// cube4.add(sound4);
 
-	cube4.position.set(141, 150, 295);
-	scene.add( cube4 );
+	// cube4.position.set(141, 150, 295);
+	// scene.add( cube4 );
 
 }
 
@@ -417,62 +420,68 @@ var renderCounter = 0;
 render = function() {
 	requestAnimationFrame( render );
 	
-
 	renderCounter += .02;
 
 	if ( !boySwitch ) {
-		if (fairy) {
-			fairy.position.y = fairyY + (Math.sin(renderCounter) * 3);	
-		}
-		
-		if ( vehicle ) {
-
-			light.target.position.copy( vehicle.mesh.position );
-			light.position.addVectors( light.target.position, new THREE.Vector3( 100, 100, -105 ) );
-
-			if ( !diamondsTriggered  && ( vehicle.mesh.position.x < -35 || vehicle.mesh.position.z < -220) ) {
-				randomDiamonds(diamondMesh);
-				diamondsTriggered = true;
-			}
-
-			if ( splash && vehicle.wheels[0].position.z < -10 ) {
-				var d = document.getElementById('cover');
-				d.className = d.className + ' remove';
-
-				splash = false;
-				ambient.volume = 0.3;
-				ambient.play();
-
-				addText()
-			}
-
-			if ( vehicle.mesh.position.y < -1500 && !fireballTriggered ) {
-				fireball.renderer();
-				fireball.setFire(true);
-				fireballTriggered = true;
-
-				$('#ambient').animate({volume:0},6000, function () {
-					ambient.pause();
-					$(this).animate({volume:0.3},10);
-				});
-				setTimeout(function () {
-					if ( fireballTriggered ) {
-						boySwitch = true;
-						document.getElementById('death').play();
-						setTimeout(function () {
-							fireball.setFire(false);
-						}, 2000);						
-					}
-
-				}, 6000);
-			}
-			if (!splash){
-				mesh1.rotation.y = mesh1.rotation.y + 0.01;				
+		if (!finalSwitch) {
+			if (fairy) {
+				fairy.position.y = fairyY + (Math.sin(renderCounter) * 3);	
 			}
 			
-			renderer.render( scene, camera );
+			if ( vehicle ) {
 
-		}		
+				light.target.position.copy( vehicle.mesh.position );
+				light.position.addVectors( light.target.position, new THREE.Vector3( 100, 100, -105 ) );
+
+				if ( !diamondsTriggered  && ( vehicle.mesh.position.x < -35 || vehicle.mesh.position.z < -220) ) {
+					randomDiamonds(diamondMesh);
+					diamondsTriggered = true;
+				}
+
+				if ( splash && vehicle.wheels[0].position.z < -10 ) {
+					var d = document.getElementById('cover');
+					d.className = d.className + ' remove';
+
+					splash = false;
+					ambient.volume = 0.3;
+					ambient.play();
+
+					addText()
+				}
+
+				if ( vehicle.mesh.position.y < -1500 && !fireballTriggered ) {
+					fireball.renderer();
+					fireball.setFire(true);
+					fireballTriggered = true;
+
+					$('#ambient').animate({volume:0},6000, function () {
+						ambient.pause();
+						$(this).animate({volume:0.3},10);
+					});
+					setTimeout(function () {
+						if ( fireballTriggered ) {
+							boySwitch = true;
+							document.getElementById('death').play();
+							setTimeout(function () {
+								fireball.setFire(false);
+							}, 2000);						
+						}
+
+					}, 6000);
+				}
+				if (!splash){
+					mesh1.rotation.y = mesh1.rotation.y + 0.01;				
+				}
+				
+				renderer.render( scene, camera );
+
+			}
+		} else {
+			// they have gotten to the castle and should switch to the final scene where the track plays
+			renderer.render( finalScene.scene, finalScene.camera );
+
+		}
+
 	} else {
 		boy.rotation.x = boy.rotation.x + 0.01;
 		boy.rotation.y = boy.rotation.y + 0.03;
