@@ -22,8 +22,7 @@ var boyCam = new THREE.PerspectiveCamera(
 		2000
 	);
 
-var finalScene = require('./final');
-var finalSwitch = true;
+
 boyCam.position.z = -50;
 boyCam.position.y = 1000;
 
@@ -77,6 +76,8 @@ renderer.setSize( window.innerWidth, window.innerHeight );
 renderer.shadowMapEnabled = true;
 renderer.shadowMapSoft = true;
 document.getElementById( 'container' ).appendChild( renderer.domElement );
+var finalRender = require('./final')(renderer);
+var finalSwitch = true;
 
 scene = new Physijs.Scene;
 scene.setGravity(new THREE.Vector3( 0, -30, 0 ));
@@ -479,8 +480,7 @@ render = function() {
 			}
 		} else {
 			// they have gotten to the castle and should switch to the final scene where the track plays
-			renderer.render( finalScene.scene, finalScene.camera );
-
+			finalRender();
 		}
 
 	} else {
@@ -44667,7 +44667,7 @@ var currentBackground = 0;
 
 // kickstart the application
 init();
-animate();
+// animate();
 
 function getSkyboxImageArray(location){
 	var path = 'images/skyboxes/' + location + '/';
@@ -44817,9 +44817,9 @@ function init() {
 		// CREATE RENDERER
 		////////////////////
 
-	    renderer = new THREE.WebGLRenderer({ antialiasing: false });
-	    renderer.setSize( window.innerWidth, window.innerHeight );
-	    renderer.autoClear = false;
+	    // renderer = new THREE.WebGLRenderer({ antialiasing: false });
+	    // renderer.setSize( window.innerWidth, window.innerHeight );
+	    // renderer.autoClear = false;
 	    // container.appendChild( renderer.domElement );
 		
 		////////////////////
@@ -44832,7 +44832,7 @@ function init() {
     var loader = new THREE.JSONLoader(); // init the loader util
 
     // init loading
-    loader.load('objects/Skull_0307.js', function (geometry) {
+    loader.load('models/Skull_0307.js', function (geometry) {
         // create a new material
 
         // this is the same as the other objects
@@ -44857,48 +44857,19 @@ function init() {
 
 
     // on window resize
-	window.addEventListener( 'resize', onWindowResize, false );
+	// window.addEventListener( 'resize', onWindowResize, false );
 	
-
 }
 
 
+// function onWindowResize() {
 
+// 	camera.aspect = window.innerWidth / window.innerHeight;
+// 	camera.updateProjectionMatrix();
 
-function render() {
-    var timer = 0.001 * Date.now();
-    
-    // move the light around the scene
-	lightMesh.position.x = 20000 * Math.cos( timer );
-	lightMesh.position.z = 20000 * Math.sin( timer );
+// 	renderer.setSize( window.innerWidth, window.innerHeight );
 
-    if(centralBeacon !== undefined){
-	    centralBeacon.position.y = -7000
-	    centralBeacon.position.x = -1000
-	    centralBeacon.position.z = 10000
-	    centralBeacon.rotation.y += .005
-	    centralBeacon.rotation.x += .000;
-    }
-
-    camera.position.x += ( mouseX - camera.position.x ) * .1;
-    camera.position.y += ( - mouseY - camera.position.y ) * .1;
-
-    camera.lookAt( scene.position );
-    cameraCube.rotation.copy( camera.rotation );
-
-    renderer.render( sceneCube, cameraCube );
-    renderer.render( scene, camera );
-}
-
-
-function onWindowResize() {
-
-	camera.aspect = window.innerWidth / window.innerHeight;
-	camera.updateProjectionMatrix();
-
-	renderer.setSize( window.innerWidth, window.innerHeight );
-
-}
+// }
 
 function onDocumentMouseMove(event) {
 
@@ -44912,18 +44883,41 @@ function onDocumentMouseMove(event) {
 
 }
 
-function animate() {
+// function animate() {
 
-    requestAnimationFrame( animate );
-    render();
+//     requestAnimationFrame( animate );
+//     render();
 
-}
+// }
 
 
 
-module.exports = {
-	scene: scene,
-	camera: camera
+module.exports = render = function (renderer) {
+	return function () {
+	    var timer = 0.001 * Date.now();
+	    
+	    // move the light around the scene
+		lightMesh.position.x = 20000 * Math.cos( timer );
+		lightMesh.position.z = 20000 * Math.sin( timer );
+
+	    if(centralBeacon !== undefined){
+		    centralBeacon.position.y = -7000
+		    centralBeacon.position.x = -1000
+		    centralBeacon.position.z = 10000
+		    centralBeacon.rotation.y += .005
+		    centralBeacon.rotation.x += .000;
+	    }
+
+	    camera.position.x += ( mouseX - camera.position.x ) * .1;
+	    camera.position.y += ( - mouseY - camera.position.y ) * .1;
+
+	    camera.lookAt( scene.position );
+	    cameraCube.rotation.copy( camera.rotation );
+
+	    renderer.render( sceneCube, cameraCube );
+	    renderer.render( scene, camera );		
+	};
+
 };
 },{"three":3}],7:[function(require,module,exports){
 var THREE = require('three');

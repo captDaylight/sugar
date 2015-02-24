@@ -21,8 +21,7 @@ var boyCam = new THREE.PerspectiveCamera(
 		2000
 	);
 
-var finalScene = require('./final');
-var finalSwitch = true;
+
 boyCam.position.z = -50;
 boyCam.position.y = 1000;
 
@@ -76,6 +75,8 @@ renderer.setSize( window.innerWidth, window.innerHeight );
 renderer.shadowMapEnabled = true;
 renderer.shadowMapSoft = true;
 document.getElementById( 'container' ).appendChild( renderer.domElement );
+var finalRender = require('./final')(renderer);
+var finalSwitch = true;
 
 scene = new Physijs.Scene;
 scene.setGravity(new THREE.Vector3( 0, -30, 0 ));
@@ -478,8 +479,7 @@ render = function() {
 			}
 		} else {
 			// they have gotten to the castle and should switch to the final scene where the track plays
-			renderer.render( finalScene.scene, finalScene.camera );
-
+			finalRender();
 		}
 
 	} else {
