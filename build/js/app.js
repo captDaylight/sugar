@@ -21,6 +21,17 @@ var boyCam = new THREE.PerspectiveCamera(
 		1,
 		2000
 	);
+var finalThreshold = new THREE.Vector3( 150, 184, 322 );
+
+
+function distance (v1, v2) {
+	
+    var dx = v1.x - v2.x,
+    	dy = v1.y - v2.y,
+    	dz = v1.z - v2.z;
+
+    return Math.sqrt( dx*dx + dy*dy + dz*dz);
+}
 
 
 boyCam.position.z = -50;
@@ -52,7 +63,7 @@ var ambient = document.getElementById('ambient'); // ambient music that plays th
 ambient.addEventListener('ended', function () {
 	this.currentTime = 0;
 	this.volume = 0.3;
-	console.log(this);
+	
 	this.play();
 }, false);
 
@@ -76,8 +87,10 @@ renderer.setSize( window.innerWidth, window.innerHeight );
 renderer.shadowMapEnabled = true;
 renderer.shadowMapSoft = true;
 document.getElementById( 'container' ).appendChild( renderer.domElement );
+renderer.domElement.id = renderer.domElement.className = 'canvas';
+
 var finalRender = require('./final')(renderer);
-var finalSwitch = true;
+var finalSwitch = false;
 
 scene = new Physijs.Scene;
 scene.setGravity(new THREE.Vector3( 0, -30, 0 ));
@@ -114,7 +127,7 @@ scene.addEventListener(
 camera = addCamera(scene, listener);
 light = addLights(scene);
 addLandscape(scene, Physijs, loader, listener);
-addSkybox(scene);
+var firstSky = addSkybox(scene);
 	
 
 loader.load( "models/test/test.json", function( diamond, islands_material ) {
@@ -193,7 +206,7 @@ function createCar(car, car_materials, wheel, wheel_materials) {
 	));
 
 	scene.add( vehicle );
-	console.log(vehicle);
+	
 	var wheel_material = new THREE.MeshFaceMaterial( wheel_materials );
 
 	for ( var i = 0; i < 4; i++ ) {
@@ -419,6 +432,8 @@ function addText() {
 
 var renderCounter = 0;
 
+var aoeu = false;
+
 render = function() {
 	requestAnimationFrame( render );
 	
@@ -439,7 +454,21 @@ render = function() {
 					randomDiamonds(diamondMesh);
 					diamondsTriggered = true;
 				}
-
+				if (distance(finalThreshold, vehicle.mesh.position) < 200 && !aoeu) {
+						aoeu = true;
+						var d = document.getElementById('canvas');
+						d.className = d.className + ' remove';
+						setTimeout(function () {
+							console.log('first time out');
+							finalRender = finalRender();
+							finalSwitch = true;
+						}, 500);
+						setTimeout(function () {
+							console.log('second timeout');
+							var d = document.getElementById('canvas');
+							d.className = 'canvas';
+						},1500);
+				}
 				if ( splash && vehicle.wheels[0].position.z < -10 ) {
 					var d = document.getElementById('cover');
 					d.className = d.className + ' remove';
@@ -44623,7 +44652,7 @@ module.exports = function (camera, renderer) {
 }
 },{}],6:[function(require,module,exports){
 var THREE = require('three');
-
+// var addSkybox = require('./skybox');
 
 var clock = new THREE.Clock();
 
@@ -44648,6 +44677,8 @@ var windowHalfY = window.innerHeight / 2;
 
 document.addEventListener( 'mousemove', onDocumentMouseMove, false );
 
+
+
 // the first one will be the default, the rest for each object
 var skyboxDirectories = [
 	'NeoShade',
@@ -44666,7 +44697,7 @@ var skyMaterials = [];
 var currentBackground = 0;
 
 // kickstart the application
-init();
+// init();
 // animate();
 
 function getSkyboxImageArray(location){
@@ -44735,7 +44766,7 @@ function init() {
     scene = new THREE.Scene();
     sceneCube = new THREE.Scene();
     projector = new THREE.Projector();
-			    
+		    
     var hemiLight1 = new THREE.HemisphereLight( 0xffffff, 0xffffff, 1 );
 
     hemiLight1.color.setHSL( 0.6, 1, 0.6 );
@@ -44757,32 +44788,28 @@ function init() {
 
 
 
-    // START UP ALL OF THE SKY MATERIALS
-    ////////////////////
-    var count = 0;
-    for(var i = 0; i < skyboxDirectories.length; i++){
+
+
+	// START UP ALL OF THE SKY MATERIALS
+	////////////////////
+	for(var i = 0; i < 5; i++){
 		var urls = getSkyboxImageArray(skyboxDirectories[i]);
-    	var textureCube = THREE.ImageUtils.loadTextureCube( urls, new THREE.CubeRefractionMapping(), function(){
-    		count++;
+		var textureCube = THREE.ImageUtils.loadTextureCube( urls, new THREE.CubeRefractionMapping());
+		var material = new THREE.MeshBasicMaterial( { color: 0xeeeeee, envMap: textureCube, refractionRatio: 0.99 } );
+		// var material = new THREE.MeshBasicMaterial( { color: 0xaaaaff, envMap: textureCube } );
+		// var material = new THREE.MeshLambertMaterial( { color: 0xffffff, emissive: 0x0000ff, shading: THREE.FlatShading } );
+		skyMaterials.push({material: material, textureCube: textureCube});
+	}
 
-    		if ( skyboxDirectories.length === count ) {
-    			// buzz.defaults.preload = 'auto';
-    		}
-    	} );
-    	var material = new THREE.MeshBasicMaterial( { color: 0xeeeeee, envMap: textureCube, refractionRatio: 0.99 } );
-    	// var material = new THREE.MeshBasicMaterial( { color: 0xaaaaff, envMap: textureCube } );
-    	// var material = new THREE.MeshLambertMaterial( { color: 0xffffff, emissive: 0x0000ff, shading: THREE.FlatShading } );
-    	skyMaterials.push({material: material, textureCube: textureCube});
-    }
+	////////////////////
 
-    ////////////////////
 
 
 
     // CREATE THE SKYBOX MATERIAL AND CUBE
     ////////////////////
 
-    var geometry = new THREE.SphereGeometry( 800, 4, 4 );
+    var geometry = new THREE.SphereGeometry( 8000, 4, 4 );
     var material = skyMaterials[currentBackground]['material'];
 
 
@@ -44801,29 +44828,11 @@ function init() {
         side: THREE.BackSide
 
     } )
-    mesh = new THREE.Mesh( new THREE.BoxGeometry( 100, 100, 100 ), material );
+    mesh = new THREE.Mesh( new THREE.BoxGeometry( 10000, 10000, 10000 ), material );
 
     sceneCube.add( mesh );
 
-	////////////////////
-
-
-
-
-
-
-
-
-		// CREATE RENDERER
-		////////////////////
-
-	    // renderer = new THREE.WebGLRenderer({ antialiasing: false });
-	    // renderer.setSize( window.innerWidth, window.innerHeight );
-	    // renderer.autoClear = false;
-	    // container.appendChild( renderer.domElement );
-		
-		////////////////////
-
+    createSkybox();
 
 
     // LOAD THE CENTRAL OBJECT TO THE SCENE
@@ -44831,34 +44840,38 @@ function init() {
 
     var loader = new THREE.JSONLoader(); // init the loader util
 
-    // init loading
-    loader.load('models/Skull_0307.js', function (geometry) {
-        // create a new material
+	// init loading
+	loader.load('models/Skull_0307.js', function (geometry) {
+	    // create a new material
 
-        // this is the same as the other objects
-        var material = new THREE.MeshBasicMaterial( { color: 0x666666, envMap: skyMaterials[0], refractionRatio: 0.99 } );
-        var material = new THREE.MeshPhongMaterial( { ambient: 0x030303, color: 0xdddddd, specular: 0xff0000, shininess: 50, shading: THREE.FlatShading } )
-		var material = new THREE.MeshLambertMaterial( { color: 0xffffff, ambient: 0xaaaaaa, envMap: skyMaterials[0] } )
+	    // this is the same as the other objects
+	    
+	    
+		
 		var material = new THREE.MeshLambertMaterial( { color: 0xff0000, ambient: 0xffffff, envMap: skyMaterials[3], refractionRatio: 0.95 } );
+		var material = new THREE.MeshBasicMaterial( { color: 0x666666, envMap: skyMaterials[0], refractionRatio: 0.99 } );
+		var material = new THREE.MeshPhongMaterial( { ambient: 0x030303, color: 0xdddddd, specular: 0xff0000, shininess: 50, shading: THREE.FlatShading } )
+		var material = new THREE.MeshLambertMaterial( { color: 0xffffff, ambient: 0xaaaaaa, envMap: skyMaterials[0] } )
 		//var material = new THREE.MeshLambertMaterial( { color: 0xff6600, ambient: 0x993300, envMap: skyMaterials[0], combine: THREE.MixOperation, reflectivity: 0.3 } );
-        var material = offMaterial;
-        // create a mesh with models geometry and material
-        var mesh = new THREE.Mesh(
-            geometry,
-            material
-        );
+	    // var material = offMaterial;
+	    // create a mesh with models geometry and material
+	    var mesh = new THREE.Mesh(
+	        geometry,
+	        material
+	    );
 
-        centralBeacon = mesh;
-        centralBeacon.scale.x = centralBeacon.scale.y = centralBeacon.scale.z = 38;
+	    centralBeacon = mesh;
+	    centralBeacon.scale.x = centralBeacon.scale.y = centralBeacon.scale.z = 38;
 
-        scene.add(centralBeacon);
-    });
+	    scene.add(centralBeacon);
+	});
 
 
-
+	// addSkybox(scene);
+	
     // on window resize
 	// window.addEventListener( 'resize', onWindowResize, false );
-	
+
 }
 
 
@@ -44883,42 +44896,65 @@ function onDocumentMouseMove(event) {
 
 }
 
-// function animate() {
+function createSkybox() {
+	var mesh, shader, material, textureCube; 
+	textureCube = THREE.ImageUtils.loadTextureCube( getSkyboxImageArray(skyboxDirectories[3]), new THREE.CubeRefractionMapping());
+	shader = THREE.ShaderLib.cube;
+	shader.uniforms.tCube.value = textureCube;
 
-//     requestAnimationFrame( animate );
-//     render();
+	material = new THREE.ShaderMaterial( {
 
-// }
+	    fragmentShader: shader.fragmentShader,
+	    vertexShader: shader.vertexShader,
+	    uniforms: shader.uniforms,
+	    depthWrite: false,
+	    side: THREE.BackSide
+
+	} );
+
+	mesh = new THREE.Mesh( new THREE.BoxGeometry( 100000, 100000, 100000 ), material );
+
+	scene.add(mesh);
+
+	return mesh;
+
+}
+
 
 
 
 module.exports = render = function (renderer) {
 	return function () {
-	    var timer = 0.001 * Date.now();
-	    
-	    // move the light around the scene
-		lightMesh.position.x = 20000 * Math.cos( timer );
-		lightMesh.position.z = 20000 * Math.sin( timer );
+		init();
+		return function () {
+		    var timer = 0.001 * Date.now();
+		    // move the light around the scene
+			lightMesh.position.x = 20000 * Math.cos( timer );
+			lightMesh.position.z = 20000 * Math.sin( timer );
 
-	    if(centralBeacon !== undefined){
-		    centralBeacon.position.y = -7000
-		    centralBeacon.position.x = -1000
-		    centralBeacon.position.z = 10000
-		    centralBeacon.rotation.y += .005
-		    centralBeacon.rotation.x += .000;
-	    }
+		    if(centralBeacon !== undefined){
+			    centralBeacon.position.y = -7000
+			    centralBeacon.position.x = -1000
+			    centralBeacon.position.z = 10000
+			    centralBeacon.rotation.y += .005
+			    centralBeacon.rotation.x += .000;
+		    }
 
-	    camera.position.x += ( mouseX - camera.position.x ) * .1;
-	    camera.position.y += ( - mouseY - camera.position.y ) * .1;
+		    camera.position.x += ( mouseX - camera.position.x ) * .1;
+		    camera.position.y += ( - mouseY - camera.position.y ) * .1;
 
-	    camera.lookAt( scene.position );
-	    cameraCube.rotation.copy( camera.rotation );
+		    camera.lookAt( scene.position );
+		    cameraCube.rotation.copy( camera.rotation );
 
-	    renderer.render( sceneCube, cameraCube );
-	    renderer.render( scene, camera );		
+		    renderer.render( sceneCube, cameraCube );
+		    renderer.render( scene, camera );				
+		}
+	
 	};
 
 };
+
+
 },{"three":3}],7:[function(require,module,exports){
 var THREE = require('three');
 

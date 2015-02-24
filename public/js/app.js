@@ -20,6 +20,17 @@ var boyCam = new THREE.PerspectiveCamera(
 		1,
 		2000
 	);
+var finalThreshold = new THREE.Vector3( 150, 184, 322 );
+
+
+function distance (v1, v2) {
+	
+    var dx = v1.x - v2.x,
+    	dy = v1.y - v2.y,
+    	dz = v1.z - v2.z;
+
+    return Math.sqrt( dx*dx + dy*dy + dz*dz);
+}
 
 
 boyCam.position.z = -50;
@@ -51,7 +62,7 @@ var ambient = document.getElementById('ambient'); // ambient music that plays th
 ambient.addEventListener('ended', function () {
 	this.currentTime = 0;
 	this.volume = 0.3;
-	console.log(this);
+	
 	this.play();
 }, false);
 
@@ -75,8 +86,10 @@ renderer.setSize( window.innerWidth, window.innerHeight );
 renderer.shadowMapEnabled = true;
 renderer.shadowMapSoft = true;
 document.getElementById( 'container' ).appendChild( renderer.domElement );
+renderer.domElement.id = renderer.domElement.className = 'canvas';
+
 var finalRender = require('./final')(renderer);
-var finalSwitch = true;
+var finalSwitch = false;
 
 scene = new Physijs.Scene;
 scene.setGravity(new THREE.Vector3( 0, -30, 0 ));
@@ -113,7 +126,7 @@ scene.addEventListener(
 camera = addCamera(scene, listener);
 light = addLights(scene);
 addLandscape(scene, Physijs, loader, listener);
-addSkybox(scene);
+var firstSky = addSkybox(scene);
 	
 
 loader.load( "models/test/test.json", function( diamond, islands_material ) {
@@ -192,7 +205,7 @@ function createCar(car, car_materials, wheel, wheel_materials) {
 	));
 
 	scene.add( vehicle );
-	console.log(vehicle);
+	
 	var wheel_material = new THREE.MeshFaceMaterial( wheel_materials );
 
 	for ( var i = 0; i < 4; i++ ) {
@@ -418,6 +431,8 @@ function addText() {
 
 var renderCounter = 0;
 
+var aoeu = false;
+
 render = function() {
 	requestAnimationFrame( render );
 	
@@ -438,7 +453,21 @@ render = function() {
 					randomDiamonds(diamondMesh);
 					diamondsTriggered = true;
 				}
-
+				if (distance(finalThreshold, vehicle.mesh.position) < 200 && !aoeu) {
+						aoeu = true;
+						var d = document.getElementById('canvas');
+						d.className = d.className + ' remove';
+						setTimeout(function () {
+							console.log('first time out');
+							finalRender = finalRender();
+							finalSwitch = true;
+						}, 500);
+						setTimeout(function () {
+							console.log('second timeout');
+							var d = document.getElementById('canvas');
+							d.className = 'canvas';
+						},1500);
+				}
 				if ( splash && vehicle.wheels[0].position.z < -10 ) {
 					var d = document.getElementById('cover');
 					d.className = d.className + ' remove';
