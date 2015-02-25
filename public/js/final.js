@@ -142,7 +142,7 @@ function init() {
 	for(var i = 0; i < 5; i++){
 		var urls = getSkyboxImageArray(skyboxDirectories[i]);
 		var textureCube = THREE.ImageUtils.loadTextureCube( urls, new THREE.CubeRefractionMapping());
-		var material = new THREE.MeshBasicMaterial( { color: 0xeeeeee, envMap: textureCube, refractionRatio: 0.99 } );
+		var material = new THREE.MeshBasicMaterial( { color: 0x, envMap: textureCube, refractionRatio: 0.99 } );
 		// var material = new THREE.MeshBasicMaterial( { color: 0xaaaaff, envMap: textureCube } );
 		// var material = new THREE.MeshLambertMaterial( { color: 0xffffff, emissive: 0x0000ff, shading: THREE.FlatShading } );
 		skyMaterials.push({material: material, textureCube: textureCube});

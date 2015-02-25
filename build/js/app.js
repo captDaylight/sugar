@@ -56,7 +56,7 @@ var loader = new THREE.JSONLoader(),
 	ground_material, box_material,
 	projector, renderer, scene, ground, light, camera,
 		vehicle_body, vehicle, input, listener,
-		c, c_materials, w, w_materials, mesh1;
+		c, c_materials, w, w_materials, mesh1, sound1,sound2,sound3, cube1,cube2,cube3;
 
 
 var ambient = document.getElementById('ambient'); // ambient music that plays throughought 
@@ -66,6 +66,7 @@ ambient.addEventListener('ended', function () {
 	
 	this.play();
 }, false);
+console.log(ambient);
 
 
 function getCameraVector(objYRotation, distance) {
@@ -278,26 +279,25 @@ function createCar(car, car_materials, wheel, wheel_materials) {
 	// SOUNDS
 	var geometry = new THREE.BoxGeometry( 2, 2, 2 );
 	var material = new THREE.MeshBasicMaterial( {color: 0xff0000} );
-	var cube = new THREE.Mesh( geometry, material );
+	var cube1 = new THREE.Mesh( geometry, material );
 
-	var sound1 = new THREE.Audio( listener );
+	sound1 = new THREE.Audio( listener );
 	sound1.load( 'sounds/island01.mp3' );
 	sound1.setRefDistance( 100 );
 	sound1.setRolloffFactor(20);
 	sound1.setLoop(true);
 
-	cube.add(sound1);
+	cube1.add(sound1);
+	cube1.position.z = -200;
+	cube1.position.y = -5;
 
-	cube.position.z = -200;
-	cube.position.y = -5;
-
-	scene.add( cube );
+	scene.add( cube1 );
 
 
 	var geometry2 = new THREE.BoxGeometry( 2, 2, 2 );
 	var cube2 = new THREE.Mesh( geometry2, material );
 
-	var sound2 = new THREE.Audio( listener );
+	sound2 = new THREE.Audio( listener );
 	sound2.load( 'sounds/island02.mp3' );
 	sound2.setRefDistance( 100 );
 	sound2.setRolloffFactor(50);
@@ -312,7 +312,7 @@ function createCar(car, car_materials, wheel, wheel_materials) {
 	var geometry3 = new THREE.BoxGeometry( 2, 2, 2 );
 	var cube3 = new THREE.Mesh( geometry3, material );
 
-	var sound3 = new THREE.Audio( listener );
+	sound3 = new THREE.Audio( listener );
 	sound3.load( 'sounds/island03.mp3' );
 	sound3.setRefDistance( 120 );
 	sound3.setRolloffFactor(50);
@@ -323,8 +323,8 @@ function createCar(car, car_materials, wheel, wheel_materials) {
 	cube3.position.set(141, 150, 295);
 	scene.add( cube3 );
 
-	var geometry4 = new THREE.BoxGeometry( 2, 2, 2 );
-	var cube4 = new THREE.Mesh( geometry4, material );
+	// var geometry4 = new THREE.BoxGeometry( 2, 2, 2 );
+	// var cube4 = new THREE.Mesh( geometry4, material );
 
 	// var sound4 = new THREE.Audio( listener );
 	// sound4.load( 'sounds/fairy_speech_longer.mp3' );
@@ -454,20 +454,29 @@ render = function() {
 					randomDiamonds(diamondMesh);
 					diamondsTriggered = true;
 				}
-				if (distance(finalThreshold, vehicle.mesh.position) < 200 && !aoeu) {
-						aoeu = true;
+				if (distance(finalThreshold, vehicle.mesh.position) < 300 && !aoeu) {
+					aoeu = true;
+					var d = document.getElementById('canvas');
+					d.className = d.className + ' remove';
+					sound1.setRefDistance(0);
+					sound2.setRefDistance(0);
+					sound3.setRefDistance(0);
+					sound1.setRolloffFactor(0);
+					sound2.setRolloffFactor(0);
+					sound3.setRolloffFactor(0);
+					// ambient.stop();
+					console.log(ambient);
+					ambient.pause();
+					setTimeout(function () {
+						console.log('first time out');
+						finalRender = finalRender();
+						finalSwitch = true;
+					}, 500);
+					setTimeout(function () {
+						console.log('second timeout');
 						var d = document.getElementById('canvas');
-						d.className = d.className + ' remove';
-						setTimeout(function () {
-							console.log('first time out');
-							finalRender = finalRender();
-							finalSwitch = true;
-						}, 500);
-						setTimeout(function () {
-							console.log('second timeout');
-							var d = document.getElementById('canvas');
-							d.className = 'canvas';
-						},1500);
+						d.className = 'canvas';
+					},1500);
 				}
 				if ( splash && vehicle.wheels[0].position.z < -10 ) {
 					var d = document.getElementById('cover');
@@ -44795,7 +44804,7 @@ function init() {
 	for(var i = 0; i < 5; i++){
 		var urls = getSkyboxImageArray(skyboxDirectories[i]);
 		var textureCube = THREE.ImageUtils.loadTextureCube( urls, new THREE.CubeRefractionMapping());
-		var material = new THREE.MeshBasicMaterial( { color: 0xeeeeee, envMap: textureCube, refractionRatio: 0.99 } );
+		var material = new THREE.MeshBasicMaterial( { color: 0xffffff, envMap: textureCube, refractionRatio: 0.99 } );
 		// var material = new THREE.MeshBasicMaterial( { color: 0xaaaaff, envMap: textureCube } );
 		// var material = new THREE.MeshLambertMaterial( { color: 0xffffff, emissive: 0x0000ff, shading: THREE.FlatShading } );
 		skyMaterials.push({material: material, textureCube: textureCube});
