@@ -68,6 +68,7 @@ ambient.addEventListener('ended', function () {
 }, false);
 console.log(ambient);
 
+var finalSound = document.getElementById('final'); 
 
 function getCameraVector(objYRotation, distance) {
 
@@ -454,19 +455,19 @@ render = function() {
 					randomDiamonds(diamondMesh);
 					diamondsTriggered = true;
 				}
-				if (distance(finalThreshold, vehicle.mesh.position) < 300 && !aoeu) {
+				if (distance(finalThreshold, vehicle.mesh.position) < 50 && !aoeu) {
 					aoeu = true;
 					var d = document.getElementById('canvas');
 					d.className = d.className + ' remove';
 					sound1.setRefDistance(0);
 					sound2.setRefDistance(0);
 					sound3.setRefDistance(0);
-					sound1.setRolloffFactor(0);
-					sound2.setRolloffFactor(0);
-					sound3.setRolloffFactor(0);
-					// ambient.stop();
-					console.log(ambient);
+					
 					ambient.pause();
+					finalSound.play();
+					
+					reload.className = reload.className + ' remove';
+
 					setTimeout(function () {
 						console.log('first time out');
 						finalRender = finalRender();
@@ -44804,7 +44805,7 @@ function init() {
 	for(var i = 0; i < 5; i++){
 		var urls = getSkyboxImageArray(skyboxDirectories[i]);
 		var textureCube = THREE.ImageUtils.loadTextureCube( urls, new THREE.CubeRefractionMapping());
-		var material = new THREE.MeshBasicMaterial( { color: 0xffffff, envMap: textureCube, refractionRatio: 0.99 } );
+		var material = new THREE.MeshBasicMaterial( { color: 0xeeeeee, envMap: textureCube, refractionRatio: 0.99 } );
 		// var material = new THREE.MeshBasicMaterial( { color: 0xaaaaff, envMap: textureCube } );
 		// var material = new THREE.MeshLambertMaterial( { color: 0xffffff, emissive: 0x0000ff, shading: THREE.FlatShading } );
 		skyMaterials.push({material: material, textureCube: textureCube});

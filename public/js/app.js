@@ -67,6 +67,7 @@ ambient.addEventListener('ended', function () {
 }, false);
 console.log(ambient);
 
+var finalSound = document.getElementById('final'); 
 
 function getCameraVector(objYRotation, distance) {
 
@@ -453,19 +454,19 @@ render = function() {
 					randomDiamonds(diamondMesh);
 					diamondsTriggered = true;
 				}
-				if (distance(finalThreshold, vehicle.mesh.position) < 300 && !aoeu) {
+				if (distance(finalThreshold, vehicle.mesh.position) < 50 && !aoeu) {
 					aoeu = true;
 					var d = document.getElementById('canvas');
 					d.className = d.className + ' remove';
 					sound1.setRefDistance(0);
 					sound2.setRefDistance(0);
 					sound3.setRefDistance(0);
-					sound1.setRolloffFactor(0);
-					sound2.setRolloffFactor(0);
-					sound3.setRolloffFactor(0);
-					// ambient.stop();
-					console.log(ambient);
+					
 					ambient.pause();
+					finalSound.play();
+					
+					reload.className = reload.className + ' remove';
+
 					setTimeout(function () {
 						console.log('first time out');
 						finalRender = finalRender();
