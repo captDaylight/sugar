@@ -463,7 +463,10 @@ render = function() {
 					sound3.setRefDistance(0);
 					
 					ambient.pause();
-					finalSound.play();
+					setTimeout(function () {
+						finalSound.play();
+					},1500);
+					
 					
 					reload.className = reload.className + ' remove';
 
